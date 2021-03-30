@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./style.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -14,8 +14,18 @@ import ListGroup from "react-bootstrap/ListGroup";
 import API from "../API/index";
 
 function Dispatch() {
+  const [data, setData] = useState({
+    postCode: "",
+    address: "",
+    city: "",
+    province: "",
+  });
 
-const
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+    console.log(data);
+  };
 
   return (
     <div>
@@ -44,32 +54,40 @@ const
             <Form>
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Address</Form.Label>
-                <Form.Control placeholder="1234 Main St" />
+                <Form.Control
+                  name="address"
+                  onChange={handleInputChange}
+                  placeholder="1234 Main St"
+                />
               </Form.Group>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridCity">
                   <Form.Label>City</Form.Label>
-                  <Form.Control />
+                  <Form.Control name="city" onChange={handleInputChange} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>Province</Form.Label>
-                  <Form.Control as="select" defaultValue="Choose...">
-                    <option>Ontario</option>
-                    <option>Quebec</option>
+                  <Form.Control
+                    name="province"
+                    as="select"
+                    defaultValue="Choose..."
+                  >
+                    <option value="ontario">Ontario</option>
+                    <option value="quebec">Quebec</option>
                   </Form.Control>
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Postal Code</Form.Label>
-                  <Form.Control />
+                  <Form.Control name="postCode" onChange={handleInputChange} />
                 </Form.Group>
               </Form.Row>
             </Form>
           </Card.Body>
           <Card.Footer className="text-muted">
-            <Button onClick={API} variant="primary">
+            <Button onClick={() => API(data)} variant="primary">
               Submit
             </Button>
           </Card.Footer>
