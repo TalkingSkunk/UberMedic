@@ -5,6 +5,8 @@ import Card from 'react-bootstrap/Card';
 import CardColumns from 'react-bootstrap/CardColumns';
 import CardDeck from 'react-bootstrap/CardDeck';
 import CardText from 'react-bootstrap/CardDeck';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 
@@ -64,7 +66,7 @@ function Dispatch() {
   
 <div >
 <CardDeck >
-<Card style={{ width: '95vw', height: '1000vh', margin: 'auto', marginTop: '0.05vh',  }}>
+<Card style={{ width: '95vw', height: '100vh', margin: 'auto', marginTop: '0.05vh',  }}>
     
     {/* First card */}
       <Card style={{ width: '45rem', }}>
@@ -79,6 +81,10 @@ function Dispatch() {
       <small className="text-muted">Last updated 3 mins ago</small>
     </Card.Footer>
   </Card>
+
+
+
+
 
 
 {/* Second Card */}
@@ -125,18 +131,17 @@ function Dispatch() {
     </Card.Footer>
   </Card>
 
-  <Card style={{ marginLeft: '50vw',  marginTop: '-8vh' }}>
-    <Card.Img variant="top" src="holder.js/100px160" />
-    <Card.Body>
-      <Card.Title>Closest Unit available</Card.Title>
-      <Card.Text>
-      This is where the closest team will be shown .{' test'}
-      </Card.Text>
-    </Card.Body>
-    <Card.Footer>
-      <small className="text-muted">Last updated 3 mins ago</small>
-    </Card.Footer>
-  </Card>
+  <Card className="text-center">
+      <Card.Header>Card Header title Goes Here</Card.Header>
+      <Card.Body>
+        <Card.Title>Card Title Goes Here</Card.Title>
+        <Card.Text>
+          Some Card body content goes here
+        </Card.Text>
+        <Button variant="primary">Primary Button</Button>
+      </Card.Body>
+      <Card.Footer className="text-muted">Card footer title Goes Here</Card.Footer>
+    </Card>
 
 
   <div id="check">
