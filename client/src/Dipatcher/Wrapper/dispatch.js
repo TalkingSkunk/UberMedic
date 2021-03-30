@@ -8,6 +8,10 @@ import CardText from 'react-bootstrap/CardDeck';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import ListGroup from 'react-bootstrap/ListGroup';
+
 
 
 
@@ -26,7 +30,7 @@ function Dispatch() {
       <Card.Header>INCIDENT LOCATION</Card.Header>
       <Card.Body>
        
-      <form> 
+      {/* <form> 
          <div>
            <label> Street name</label>
          <input/>
@@ -39,11 +43,42 @@ function Dispatch() {
          <label> Postal/ZIP code</label>
          <input/>
          </div>
-       </form>
+       </form> */}
+
+<Form>
+  
+
+  <Form.Group controlId="formGridAddress1">
+    <Form.Label>Address</Form.Label>
+    <Form.Control placeholder="1234 Main St" />
+  </Form.Group>
+
+  <Form.Row>
+    <Form.Group as={Col} controlId="formGridCity">
+      <Form.Label>City</Form.Label>
+      <Form.Control />
+    </Form.Group>
+
+    <Form.Group as={Col} controlId="formGridState">
+      <Form.Label>Province</Form.Label>
+      <Form.Control as="select" defaultValue="Choose...">
+        <option>Ontario</option>
+        <option>Quebec</option>
+      </Form.Control>
+    </Form.Group>
+
+    <Form.Group as={Col} controlId="formGridZip">
+      <Form.Label>Postal Code</Form.Label>
+      <Form.Control />
+    </Form.Group>
+  </Form.Row>
+
+</Form>
       
       </Card.Body>
       <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
+
 
 
 {/* CALLER INFOMATION CARD*/}
@@ -140,11 +175,15 @@ function Dispatch() {
     <Card className="text-center" >
       <Card.Header>CALLER HISTORY</Card.Header>
       <Card.Body>
-        <Card.Title>Card Title Goes Here</Card.Title>
-        <Card.Text>
-          Some Card body content goes here
-        </Card.Text>
-        <Button variant="primary">Primary Button</Button>
+
+        <ListGroup>
+  <ListGroup.Item>Cras justo odio</ListGroup.Item>
+  <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+  <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+  <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+
+</ListGroup>
+     
       </Card.Body>
       <Card.Footer className="text-muted">Submitted/not submitted</Card.Footer>
     </Card>
