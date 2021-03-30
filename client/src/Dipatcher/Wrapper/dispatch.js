@@ -6,6 +6,8 @@ import CardColumns from 'react-bootstrap/CardColumns';
 import CardDeck from 'react-bootstrap/CardDeck';
 import CardText from 'react-bootstrap/CardDeck';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
 
 
 
@@ -19,56 +21,124 @@ function Dispatch() {
 
 <CardDeck >
 
+{/* INCIDENT LOCATION CARD */}
   <Card className="text-center" >
-      <Card.Header>Incident Location</Card.Header>
+      <Card.Header>INCIDENT LOCATION</Card.Header>
       <Card.Body>
-        <Card.Title>Enter Location below</Card.Title>
-        <Card.Text>
-          Some Card body content goes here
-        </Card.Text>
-       <form> 
+       
+      <form> 
+         <div>
+           <label> Street name</label>
          <input/>
+         </div>
+         <div>
+         <label > Municipality</label>
+         <input/>
+         </div>
+         <div>
+         <label> Postal/ZIP code</label>
+         <input/>
+         </div>
+       </form>
+      
+      </Card.Body>
+      <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
+    </Card>
+
+
+{/* CALLER INFOMATION CARD*/}
+    <Card className="text-center" >
+      <Card.Header>CALLER INFORMATION</Card.Header>
+      <Card.Body>
+      
+        <form> 
+         <div>
+           <label> Name of Caller</label>
+         <input/>
+         </div>
+         <div>
+         <label > Phone number</label>
+         <input/>
+         </div>
+         <div>
+         <label> Postal/ZIP code</label>
+         <input/>
+         </div>
        </form>
         
-        <Button variant="primary">Primary Button</Button>
       </Card.Body>
-      <Card.Footer className="text-muted">Card footer title Goes Here</Card.Footer>
-    </Card>
-    <Card className="text-center" >
-      <Card.Header>Card Header title Goes Here</Card.Header>
-      <Card.Body>
-        <Card.Title>Card Title Goes Here</Card.Title>
-        <Card.Text>
-          Some Card body content goes here
-        </Card.Text>
-        <Button variant="primary">Primary Button</Button>
-      </Card.Body>
-      <Card.Footer className="text-muted">Card footer title Goes Here</Card.Footer>
+      <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
 </CardDeck>
 
-
+{/* MEDICAL QUESTIONS */}
 <CardDeck >
 
 <Card className="text-center" >
-      <Card.Header>Card Header title Goes Here</Card.Header>
+      <Card.Header>ECHO SCRENNING</Card.Header>
       <Card.Body>
-        <Card.Title>Card Title Goes Here</Card.Title>
-        <Card.Text>
-          Some Card body content goes here
-        </Card.Text>
-        <Button variant="primary">Primary Button</Button>
+        <Card.Title> Medical Questions</Card.Title>
+    
+
+    
+
+<InputGroup className="mb-3">
+    <InputGroup.Prepend>
+    <div>
+    <label>  Bleeding?</label>
+    </div>
+      <InputGroup.Checkbox aria-label="Checkbox for following text input" />
+    </InputGroup.Prepend>
+    <FormControl aria-label="Text input with checkbox" />
+  </InputGroup>
+
+  <InputGroup className="mb-3">
+    <InputGroup.Prepend>
+    <div>
+    <label>  Breathing?</label>
+    </div>
+      <InputGroup.Checkbox aria-label="Checkbox for following text input" />
+    </InputGroup.Prepend>
+    <FormControl aria-label="Text input with checkbox" />
+  </InputGroup>
+
+  <InputGroup className="mb-3">
+    <InputGroup.Prepend>
+    <div>
+    <label> Comments?</label>
+    </div>
+     
+    </InputGroup.Prepend>
+    <FormControl aria-label="Text input with checkbox" />
+  </InputGroup>
+        
       </Card.Body>
-      <Card.Footer className="text-muted">Card footer title Goes Here</Card.Footer>
+      <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
+
 </CardDeck>
 
 
 
 <CardDeck>
 
+{/* POLICE/FIREFIGHTERS REQUIRED? */}
 <Card className="text-center" >
-      <Card.Header>Card Header title Goes Here</Card.Header>
+      <Card.Header>POLICE & FIREFIGHTERS ?</Card.Header>
+      <Card.Body >
+        <Card.Title>FOR ADDITIONAL ASSISTANCE ONLY</Card.Title>
+       
+        <Button variant="primary" >POLICE</Button>
+        <Button variant="danger">FIREFIGHTER</Button>
+      
+     
+      </Card.Body>
+      <Card.Footer className="text-muted">Submitted/not submitted</Card.Footer>
+    </Card>
+
+{/* CALLER HISTORY */}
+    <Card className="text-center" >
+      <Card.Header>CALLER HISTORY</Card.Header>
       <Card.Body>
         <Card.Title>Card Title Goes Here</Card.Title>
         <Card.Text>
@@ -76,7 +146,21 @@ function Dispatch() {
         </Card.Text>
         <Button variant="primary">Primary Button</Button>
       </Card.Body>
-      <Card.Footer className="text-muted">Card footer title Goes Here</Card.Footer>
+      <Card.Footer className="text-muted">Submitted/not submitted</Card.Footer>
+    </Card>
+
+
+{/* REGISTERED PATIENTS PROGRAM */}
+    <Card className="text-center" >
+      <Card.Header>REGISTERED PATIENTS PROGRAM</Card.Header>
+      <Card.Body>
+        <Card.Title>Card Title Goes Here</Card.Title>
+        <Card.Text>
+          Some Card body content goes here
+        </Card.Text>
+        <Button variant="primary">Primary Button</Button>
+      </Card.Body>
+      <Card.Footer className="text-muted">Submitted/not submitted</Card.Footer>
     </Card>
 
 </CardDeck>
