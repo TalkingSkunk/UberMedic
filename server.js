@@ -39,12 +39,11 @@ const io = socketio( server )
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
   
 io.on('connection', (socket)=>{
-   console.log(process.swd)
    console.log('user connected')
    socket.on('newLocationMessage', async (coords)=>{
       // to all sockets
       console.log('receiving messsage from react')
-      socket.emit ('returnLocation', coords)
+      io.emit ('returnLocation', coords)
       let data = {
          callID: 112,
          unitNumber: 2021,

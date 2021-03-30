@@ -17,10 +17,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
             longitude: position.coords.longitude,
             timestamp: position.timestamp,
         })
-        console.log('position:', position)
-        
-        
     }, (error)=>{
         alert('unable to fetch location; permission denied :(')
     })
+})
+
+socket.on('returnLocation', data=>{
+    console.log('your position:', data)
 })
