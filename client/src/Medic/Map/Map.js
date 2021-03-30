@@ -3,6 +3,8 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import { Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
@@ -48,20 +50,10 @@ useEffect(() => {
                 draggable: false,
                 }).setLngLat(userCoordinates)
                 .addTo(map)
-                map.addSource('my-data', {
-                    "type": "geojson",
-                    "data": {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": userCoordinates
-                    }
-                    }
-                });
-                map.flyTo({
-                    center: userCoordinates,
-                    zoom: 13
-                });
+            map.flyTo({
+                center: userCoordinates,
+                zoom: 13
+            });
         }, err=>{console.log(err)}, {enableHighAccuracy: true});
     })
 
@@ -86,13 +78,13 @@ useEffect(() => {
 
   // The mapContainer ref specifies that map should be drawn to the HTML page in a new <div> element.
   return (
-    <div>
+    <Col xs={12} md={6}>
     {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
     <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
     </div>
       <div className="map-container" ref={mapContainer} />
-    </div>
+    </Col>
   );
 }
 
