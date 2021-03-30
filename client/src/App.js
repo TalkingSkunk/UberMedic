@@ -3,6 +3,8 @@ import "./App.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import DispatcherWrapper from "./Dipatcher/Wrapper";
 import MedicalWrapper from "./UnitsPage/Wrapper";
+import Map from './Medic/Map';
+
 
 const App = () => {
   return (
@@ -10,7 +12,8 @@ const App = () => {
       <BrowserRouter>
         <Route path="/dispatcher" exact component={DispatcherWrapper} />
 
-        <Route path="/medical" exact component={MedicalWrapper} />
+        <Route path="/medical" exact component={Map} />
+        
       </BrowserRouter>
     </div>
   );

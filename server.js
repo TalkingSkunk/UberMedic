@@ -35,7 +35,6 @@ const server = app.listen(PORT, ()=>{
 
 
 const io = socketio( server )
-// io.origins(['*']);
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
   
 io.on('connection', (socket)=>{

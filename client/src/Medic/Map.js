@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+// eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
+import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
-
 
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
@@ -25,51 +26,45 @@ useEffect(() => {
         center: [lng, lat],
         zoom: zoom
     });
-    // Add navigation control (+/- top right, and directions on top left)
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.on('load', () => {
+        // Add navigation control (+/- top right, and directions on top left)
+        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    map.addControl(
-        new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            mapboxgl: mapboxgl
-        }), 'bottom-left'
-    );
+        map.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl
+            }), 'bottom-left'
+        );
 
-    if (!navigator.geolocation){
-        return alert('Geolocation not supported by your browser :(')
-    }
-    navigator.geolocation.watchPosition(position => {
-        const userCoordinates = [parseFloat(position.coords.longitude.toFixed(5)), parseFloat(position.coords.latitude.toFixed(5))];
-        console.log('your location:', userCoordinates)
-        var marker = new mapboxgl.Marker({
-            color: "#FFFFFF",
-            draggable: false,
-            }).setLngLat(userCoordinates)
-            .addTo(map)
-            // .setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>"))
-            map.addSource('my-data', {
-                "type": "geojson",
-                "data": {
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": userCoordinates
-                  }
-                }
-              });
-            map.flyTo({
-                center: userCoordinates,
-                zoom: 13
-            });
-}, errorLocation, {enableHighAccuracy: true});
-        const errorLocation = () => {
-            const map = new mapboxgl.Map({
-                container: mapContainer.current,
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center: [lng, lat],
-                zoom: zoom
-            });
+        if (!navigator.geolocation){
+            return alert('Geolocation not supported by your browser :(')
         }
+        navigator.geolocation.watchPosition(position => {
+            const userCoordinates = [parseFloat(position.coords.longitude.toFixed(5)), parseFloat(position.coords.latitude.toFixed(5))];
+            console.log('your location:', userCoordinates)
+            var marker = new mapboxgl.Marker({
+                color: "#FFFFFF",
+                draggable: false,
+                }).setLngLat(userCoordinates)
+                .addTo(map)
+                map.addSource('my-data', {
+                    "type": "geojson",
+                    "data": {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": userCoordinates
+                    }
+                    }
+                });
+                map.flyTo({
+                    center: userCoordinates,
+                    zoom: 13
+                });
+        }, err=>{console.log(err)}, {enableHighAccuracy: true});
+    })
+
 
 
         // getCenter(), a Mapbox GL JS method, to get the new longitude and latitude of the point at the center of the map.
