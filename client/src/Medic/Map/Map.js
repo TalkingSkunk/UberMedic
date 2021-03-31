@@ -1,3 +1,4 @@
+import openSocket from 'socket.io-client';
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -8,11 +9,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken =
-  "pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg";
+"pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg";
 
 
-  import openSocket from 'socket.io-client';
-  const socket = openSocket('http://localhost:8080');
+const socket = openSocket('http://localhost:8080');
   
   socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
