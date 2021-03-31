@@ -6,6 +6,7 @@ import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
 import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+// import getCoords from "../../Dispatcher/API/index";
 
 
 mapboxgl.workerClass = MapboxWorker;
@@ -41,7 +42,7 @@ const socket = openSocket('http://localhost:8080');
   
               const map = new mapboxgl.Map({
                   container: mapContainer.current,
-                  style: 'mapbox://styles/mapbox/streets-v11',
+                  style: 'mapbox://styles/mapbox/dark-v10',
                   center: [lng, lat],
                   zoom: zoom
               });
