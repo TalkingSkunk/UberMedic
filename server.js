@@ -37,7 +37,8 @@ const server = app.listen(PORT, ()=>{
 const io = socketio( server )
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
   
-io.on('connection', (socket)=>{
+io.on('connection', (client)=>{
+   
    console.log('user connected')
    socket.on('newLocationMessage', async (coords)=>{
       // to all sockets
@@ -56,8 +57,8 @@ io.on('connection', (socket)=>{
          coords: coords,
       }
       console.log(`longitude and latitude: ${coords.longitude},${coords.latitude} at ${coords.timestamp}`)
-      //send this thisloc to mongo
-      // await saveCoords(data);
+      send this thisloc to mongo
+      await saveCoords(data);
 
    })
 })
