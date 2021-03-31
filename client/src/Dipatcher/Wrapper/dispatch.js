@@ -24,7 +24,7 @@ function Dispatch() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setData({ ...data, [name]: value });
-    console.log(data);
+    // console.log(data);
   };
 
   return (

@@ -1,14 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+import React, { useRef, useEffect, useState } from "react";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
-import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
+import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 mapboxgl.workerClass = MapboxWorker;
-mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
-
+mapboxgl.accessToken =
+  "pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg";
 
 
 import openSocket from 'socket.io-client';
@@ -75,7 +75,35 @@ const Map = () => {
             
         }, err=>{console.log(err)}, {enableHighAccuracy: true});
 
+      if (!navigator.geolocation) {
+        return alert("Geolocation not supported by your browser :(");
+      }
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const userCoordinates = [
+            parseFloat(position.coords.longitude.toFixed(5)),
+            parseFloat(position.coords.latitude.toFixed(5)),
+          ];
+          console.log("your location:", userCoordinates);
+          var marker = new mapboxgl.Marker({
+            color: "#FFFFFF",
+            draggable: false,
+          })
+            .setLngLat(userCoordinates)
+            .addTo(map);
+          map.flyTo({
+            center: userCoordinates,
+            zoom: 13,
+          });
+        },
+        (err) => {
+          console.log(err);
+        },
+        { enableHighAccuracy: true }
+      );
+    });
 
+<<<<<<< HEAD
         map.on('load', () => {
             // Add navigation control (+/- top right, and directions on top left)
             map.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -86,17 +114,33 @@ const Map = () => {
         // Clean up on unmount
         return () => map.remove();
     }, []);
+=======
+    // getCenter(), a Mapbox GL JS method, to get the new longitude and latitude of the point at the center of the map.
+    // getZoom(), a Mapbox GL JS method, to determine the zoom level that the map is set to.
+    // toFixed(), a JavaScript method, to truncate the resulting floating point number to the specified number of digits.
+
+    // // you need to create a function that stores the new latitude, longitude, and zoom that you get when a user interacts with the map. You will write a Mapbox GL JS map.on('move') function that sets the state to these new values when a user moves the map.
+    map.on("move", () => {
+      setLng(map.getCenter().lng.toFixed(4));
+      setLat(map.getCenter().lat.toFixed(4));
+      setZoom(map.getZoom().toFixed(2));
+    });
+
+    // Clean up on unmount
+    return () => map.remove();
+  }, []);
+>>>>>>> 63a664a908847e99d72e02ff61a7ff34f7f90fc0
 
   // The mapContainer ref specifies that map should be drawn to the HTML page in a new <div> element.
   return (
     <Col xs={12} md={6}>
-    {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
-    <div className="sidebar">
+      {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
+      <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-    </div>
+      </div>
       <div className="map-container" ref={mapContainer} />
     </Col>
   );
-}
+};
 
 export default Map;
