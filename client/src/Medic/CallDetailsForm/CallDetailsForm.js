@@ -42,39 +42,39 @@ const CallDetailsForm = () => {
     return(
         <Col xs={12} md={6}>
           <form action="" id="readOnlyFromDispatch">
-            <label for="callID">Call ID</label>
-            <input type="text" id="callID" name="callID" value={details.callID} readonly required />
+            <label htmlFor="callID">Call ID</label>
+            <input type="text" id="callID" name="callID" value={details.callID} readOnly required />
             <br/>
-            <label for="unitNum">Unit Number</label>
-            <input type="text" id="unitNum" name="unitNum" value={details.unitNum} readonly required />
+            <label htmlFor="unitNum">Unit Number</label>
+            <input type="text" id="unitNum" name="unitNum" value={details.unitNum} readOnly required />
             <br/>
-            <label for="ctas">ctas</label>
-            <input type="text" id="ctas" name="ctas" value={details.ctas} readonly required />
+            <label htmlFor="ctas">ctas</label>
+            <input type="text" id="ctas" name="ctas" value={details.ctas} readOnly required />
             <br/>
-            <label for="cc">Chief Complaint</label>
-            <input type="text" id="cc" name="cc" value={details.cc} readonly required />
+            <label htmlFor="cc">Chief Complaint</label>
+            <input type="text" id="cc" name="cc" value={details.cc} readOnly required />
             <br/>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="location" value={details.location} readonly required />
+            <label htmlFor="location">Location</label>
+            <input type="text" id="location" name="location" value={details.location} readOnly required />
             <br/>
-            <label for="intersection">Intersection</label>
-            <input type="text" id="intersection" name="intersection" value={details.intersection} readonly required />
+            <label htmlFor="intersection">Intersection</label>
+            <input type="text" id="intersection" name="intersection" value={details.intersection} readOnly required />
             <br/>
-            <label for="police">Police</label>
-            <input type="text" id="police" name="police" value={details.police} readonly required />
+            <label htmlFor="police">Police</label>
+            <input type="text" id="police" name="police" value={details.police} readOnly required />
             <br/>
-            <label for="fire">Fire</label>
-            <input type="text" id="fire" name="fire" value={details.fire} readonly required />
+            <label htmlFor="fire">Fire</label>
+            <input type="text" id="fire" name="fire" value={details.fire} readOnly required />
             <br/>
-            <label for="medic">Additional Crew</label>
-            <input type="text" id="medic" name="medic" value={details.medic} readonly required />
+            <label htmlFor="medic">Additional Crew</label>
+            <input type="text" id="medic" name="medic" value={details.medic} readOnly required />
           </form>
 
           <div>
               <button className="lol" data-bs-toggle="modal" data-bs-target="#confirmMode">{title}</button>
           </div>
 
-          <div className="modal fade" id="confirmMode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmTitle" aria-hidden="true">
+          <div className="modal fade" id="confirmMode" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="confirmTitle" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
                 <div className="modal-header">

@@ -5,6 +5,8 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 import openSocket from 'socket.io-client';
 
@@ -40,7 +42,7 @@ useEffect(() => {
 
     const map = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
+        style: 'mapbox://styles/mapbox/streets-v10',
         center: [lng, lat],
         zoom: zoom
     });

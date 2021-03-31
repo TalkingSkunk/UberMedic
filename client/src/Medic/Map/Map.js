@@ -7,6 +7,7 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken =
 "pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg";

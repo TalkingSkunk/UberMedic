@@ -11,7 +11,7 @@ const Navbar = () => {
 
                 <li><button type="button" data-bs-toggle="modal" data-bs-target="#requestFor">Request +</button></li>
                 
-                <div className="modal fade" id="requestFor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className="modal fade" id="requestFor" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -31,7 +31,7 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                <div className="modal fade" id="confirmReq" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className="modal fade" id="confirmReq" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -51,7 +51,7 @@ const Navbar = () => {
                     10-2000
                     </button>
 
-                    <div className="modal fade" id="dangerBtn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div className="modal fade" id="dangerBtn" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
                         <div className="modal-header">
