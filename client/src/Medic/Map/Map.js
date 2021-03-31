@@ -49,15 +49,16 @@ const socket = openSocket('http://localhost:8080');
           if (!navigator.geolocation){
               return alert('Geolocation not supported by your browser :(')
           }
-          navigator.geolocation.watchPosition(position => {
+          navigator.geolocation.getCurrentPosition(position => {
               const userCoordinates = [parseFloat(position.coords.longitude.toFixed(5)), parseFloat(position.coords.latitude.toFixed(5))];
               console.log('your location:', userCoordinates)
               
-              socket.emit('medicPosition', {
+              setInterval( ()=>{socket.emit('medicPosition', {
                   longitude: userCoordinates[0],
                   latitude: userCoordinates[1],
                   timestamp: position.timestamp,
               })
+              }, 3000)
               console.log('after socket')
               new mapboxgl.Marker({
                   color: "#000066",
