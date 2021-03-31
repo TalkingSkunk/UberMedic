@@ -1,14 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Col } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 
 const CallDetailsForm = () => {
 
+
     //api call to the server which will retreieve our data from the database after the victim
     //puts the info
     //use effect does the api call and set the states
-    let dispatchCallDetailsForMedic = {
+    const dispatchCallDetailsForMedic = {
             callID: 30124,
             unitNum: 2021,
             ctas: "echo",
@@ -20,6 +20,24 @@ const CallDetailsForm = () => {
             medic: "en route"
     }
     const [ details, clearDetails ]=useState(dispatchCallDetailsForMedic)
+    const setDetails = (property, x) => {
+      dispatchCallDetailsForMedic.property = x
+    }
+
+    const buttonArray = ['Acknowledge', 'Mobile', 'Arrived at Destination', 'Contacted Patient','Depart Destination', 'Arrived at Hospital', 'Transfer of Care', 'Clear Call']
+
+    const [counter, setCounter] = useState(1)
+    const [title, setTitle] = useState(buttonArray[0])
+
+    const handleButton = () =>{
+      if (counter <7 ) {
+        setCounter(counter+1)
+      } else {
+        setCounter ( 0 )
+      }
+      setTitle(buttonArray[counter])
+    }
+
 
     return(
         <Col xs={12} md={6}>
@@ -50,15 +68,25 @@ const CallDetailsForm = () => {
             <br/>
             <label for="medic">Additional Crew</label>
             <input type="text" id="medic" name="medic" value={details.medic} readonly required />
-            <button id="acknowledgeBtn" className="d-none">Acknowledge</button>
-            <button id="mobilelBtn" className="d-none">Mobile</button>
-            <button id="arrivedBtn" className="d-none">Arrived at Destination</button>
-            <button id="contactBtn" className="d-none">Contacted Patient</button>
-            <button id="departBtn" className="d-none">Depart Destination</button>
-            <button id="hospitalBtn" className="d-none">Arrived at Hospital</button>
-            <button id="tocBtn" className="d-none">Transfer of Care</button>
-            <button id="clearBtn" className="d-none" onClick={ ()=>clearDetails(details={}) }>Clear Call</button>
           </form>
+
+          <div>
+              <button className="lol" data-bs-toggle="modal" data-bs-target="#confirmMode">{title}</button>
+          </div>
+
+          <div className="modal fade" id="confirmMode" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmTitle" aria-hidden="true">
+            <div className="modal-dialog">
+                <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title" id="confirmTitle">{title}</h5>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleButton}>Confirm</button>
+                </div>
+                </div>
+            </div>
+          </div>
         </Col>
     );
 }
