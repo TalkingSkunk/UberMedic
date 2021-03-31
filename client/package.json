@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -11,6 +12,8 @@
     "bootstrap": "^4.6.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jquery": "^3.6.0",
+    "mapbox-gl": "^2.2.0",
     "mongoose": "^5.12.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.5.2",
@@ -20,9 +23,7 @@
     "socket.io": "^4.0.0",
     "socket.io-client": "^4.0.0",
     "uuid": "^8.3.2",
-    "worker-loader": "^3.0.8",
-    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
-    "mapbox-gl": "^2.2.0"
+    "worker-loader": "^3.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
