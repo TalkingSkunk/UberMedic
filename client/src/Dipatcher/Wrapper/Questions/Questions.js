@@ -163,7 +163,7 @@ function Questions () {
         <Card.Title > SELECT ONE</Card.Title>
     
     <div>
-        <Button variant= 'primary'> Alpha </Button>
+        <Button className="display-none" variant= 'primary display-none'> Alpha </Button>
         <Button variant= 'info'> Bravo </Button>
         <Button variant= 'btn btn-success'> Charlie </Button>
         <Button variant= 'btn btn-warning'> Delta  </Button>
