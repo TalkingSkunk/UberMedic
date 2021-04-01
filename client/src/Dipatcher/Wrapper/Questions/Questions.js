@@ -9,15 +9,18 @@ import CardDeck from 'react-bootstrap/CardDeck';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import ModalInFunctionalComponent from '../../Wrapper/Questions/modal2/modal2'
+import '../Questions/Questions.css'
 
 
 function Questions () {
 
         return (
             <>
+
+          <h1 >Screening Form</h1>
             <ul>
         {/* QUESTION 1 */}
-                 <h1>1.) Is the patient conscious?</h1>
+                 <h2>1.) Is the patient conscious?</h2>
                  <InputGroup className="mb-3">
     <InputGroup.Prepend>
     <div>
@@ -49,7 +52,7 @@ function Questions () {
 
   {/* QUESTION 2 */}
 
-  <h1>2.) Is the Patient breathing? </h1>
+  <h2>2.) Is the Patient breathing? </h2>
                  <InputGroup className="mb-3">
     <InputGroup.Prepend>
     <div>
@@ -78,7 +81,7 @@ function Questions () {
     {/* QUESTION 3 */}
 
 
-    <h1>3.) Is the patient bleeding? </h1>
+    <h2>3.) Is the patient bleeding? </h2>
                  <InputGroup className="mb-3">
     <InputGroup.Prepend>
     <div>
