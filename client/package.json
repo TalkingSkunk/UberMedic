@@ -19,6 +19,7 @@
     "react-bootstrap": "^1.5.2",
     "react-dom": "^16.13.1",
     "react-map-gl": "^6.1.11",
+    "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "socket.io": "^4.0.0",
