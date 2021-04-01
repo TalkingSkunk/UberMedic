@@ -15,13 +15,6 @@ import Modal from 'react-bootstrap/Modal';
 import ModalInFunctionalComponent from '../Wrapper/modal/modal'
 
 
-
-
-
-
-
-
-
 function Dispatch() {
   
     return (
@@ -103,11 +96,13 @@ function Dispatch() {
 <Card className="text-center" >
       <Card.Header>ECHO SCRENNING</Card.Header>
       <Card.Body>
-        <Card.Title > Medical Questions</Card.Title>
+        <Card.Title > Severity of Situation</Card.Title>
     
-        <Button variant="primary"  ><ModalInFunctionalComponent /></Button>
-  
+   
+        <Button variant="light"  ><ModalInFunctionalComponent /></Button>
+
       </Card.Body>
+     
       <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
 
@@ -126,7 +121,7 @@ function Dispatch() {
     </Card>
 
 </CardDeck>
-{/* conditional rendering - > put stuff in the return. It only renders when action is taken  */}
+
 
 
 <CardDeck>
