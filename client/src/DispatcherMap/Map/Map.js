@@ -42,6 +42,7 @@ const Map = () => {
 useEffect(() => {
     
 
+
     const map = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/streets-v11',
@@ -105,12 +106,21 @@ useEffect(() => {
     map.resize()
      // Clean up on unmount
      return () => map.remove();
-}, []);
+}, [zoom]);
 
   // The mapContainer ref specifies that map should be drawn to the HTML page in a new <div> element.
   return (
-    <Col xs={12} md={6}>
+    <Col>
     {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
+    <h1>hello tehree</h1>
+    <br/>
+    <h1>don't be shy. step into the light</h1>
+    <h1>hello tehree</h1>
+    <br/>
+    <h1>don't be shy. step into the light</h1>
+    <h1>hello tehree</h1>
+    <br/>
+    <h1>don't be shy. step into the light</h1>
     <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
     </div>

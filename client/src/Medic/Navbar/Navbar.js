@@ -22,10 +22,11 @@ const Navbar = () => {
                         Dispatch will respond to your request.
                         </div>
                         <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Police</button>
-                        <button type="button" className="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Fire</button>
-                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">PCP Backup</button>
-                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">ACP Backup</button>
+                        <button type="button" className="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Consult BHP</button>
+                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Police</button>
+                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Fire</button>
+                        <button type="button" className="btn btn-secdonary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">PCP Backup</button>
+                        <button type="button" className="btn btn-dark" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">ACP Backup</button>
                         </div>
                     </div>
                     </div>
@@ -47,7 +48,7 @@ const Navbar = () => {
                 </div>
                 <li>
 
-                    <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dangerBtn">
+                    <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#dangerBtn">
                     10-2000
                     </button>
 

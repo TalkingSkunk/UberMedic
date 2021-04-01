@@ -13,7 +13,7 @@ const App = () => {
       <BrowserRouter>
         <Route path="/dispatcher" exact component={DispatcherWrapper} />
 
-        <Route path="/dispatcher/map" exact component={DispatcherMapWrapper} />
+        <Route path="/dispatcher/map" component={DispatcherMapWrapper} />
         
         <Route path="/medical" exact component={MedicWrapper} />
         <Route path="/" exact component={Login} />
