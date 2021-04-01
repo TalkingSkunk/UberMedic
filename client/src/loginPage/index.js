@@ -1,13 +1,8 @@
-import { Button } from "react-bootstrap";
+import { Button, FormGroup } from "react-bootstrap";
 import React from "react";
-import ReactBootstrap, { Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
-// import Test from "./test";
-import RegisterForm from "./RegisterForm";
+import { Form } from "react-bootstrap";
 
-function registerModal() {
-  return RegisterForm();
-}
+import RegisterForm from "./RegisterForm";
 
 function Login() {
   return (
@@ -28,17 +23,12 @@ function Login() {
         <Form.Group controlId="formBasicCheckbox">
           <Form.Check type="checkbox" label="Check me out" />
         </Form.Group>
-        <Button variant="primary" type="submit">
-          Login
-        </Button>
-        <Button
-          onClick={<RegisterForm />}
-          style={{ position: "relative", right: "-850px" }}
-          variant="primary"
-          type="submit"
-        >
-          Register Here
-        </Button>
+        <FormGroup>
+          <Button variant="primary" type="submit">
+            Login
+          </Button>
+          <RegisterForm />
+        </FormGroup>
       </Form>
     </div>
   );
