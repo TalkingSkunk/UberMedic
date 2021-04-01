@@ -202,7 +202,7 @@ function Questions () {
   </Form.Group>
         </div>
       </Card.Body>
-      <Col sm> <ModalInFunctionalComponent/></Col>
+     
       <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
    
