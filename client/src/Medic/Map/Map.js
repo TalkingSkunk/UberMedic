@@ -29,9 +29,16 @@ const socket = openSocket('http://localhost:8080');
       //The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
       const mapContainer = useRef();
   
-      const [lng, setLng] = useState(-79.47181);
-      const [lat, setLat] = useState(43.67081);
+      //medic position
+      let medicPosition
+      const [lng, setLng] = useState(null);
+      const [lat, setLat] = useState(null);
       const [zoom, setZoom] = useState(11.5);
+
+          // destination lng, lat ( SOCKET FROM SERVER INPUT)
+    let medicDestination
+    const [lng2, setLng2] = useState(0)
+    const [lat2, setLat2] = useState(0)
   
       
       
@@ -51,7 +58,7 @@ const socket = openSocket('http://localhost:8080');
           if (!navigator.geolocation){
               return alert('Geolocation not supported by your browser :(')
           }
-          navigator.geolocation.getCurrentPosition(position => {
+          navigator.geolocation.watchPosition(position => {
               const userCoordinates = [parseFloat(position.coords.longitude.toFixed(5)), parseFloat(position.coords.latitude.toFixed(5))];
               console.log('your location:', userCoordinates)
               
@@ -62,22 +69,41 @@ const socket = openSocket('http://localhost:8080');
               })
               }, 3000)
               console.log('after socket')
-              new mapboxgl.Marker({
+
+              medicPosition = new mapboxgl.Marker({
                   color: "#000066",
                   draggable: false,
                   }).setLngLat(userCoordinates)
                   .addTo(map)
-              map.flyTo({
-                  center: userCoordinates,
-                  zoom: 13
-              });
+
       
               setLng(userCoordinates[0])
               setLat(userCoordinates[1])
-      
+
+            if (lng2 && lat2) {
+                medicDestination = new mapboxgl.Marker({
+                    color: "#000066",
+                    draggable: false,
+                    }).setLngLat([lng2, lat2])
+                    .addTo(map)
+                    // zoom in to both markers
+                    let bounds = new mapboxgl.LngLatBounds();
+                    let markers = [userCoordinates, [lng2,lat2]]
+                    markers.forEach( (coordinates) => {
+                        bounds.extend(coordinates);
+                    });
+                    map.fitBounds(bounds, {padding: 50});
+            } else {
+                map.flyTo({
+                    center: userCoordinates,
+                    zoom: 13
+                });
+            }
               
-          }, err=>{console.log(err)}, {enableHighAccuracy: true});
-  
+              
+              
+            }, err=>{console.log(err)}, {enableHighAccuracy: true});
+            
   
           map.on('load', () => {
               // Add navigation control (+/- top right, and directions on top left)
@@ -90,13 +116,14 @@ const socket = openSocket('http://localhost:8080');
           return () => map.remove();
       }, []);
   
+      
+      
+      
     // The mapContainer ref specifies that map should be drawn to the HTML page in a new <div> element.
     return (
       <Col xs={12} md={6}>
       {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
-      <div className="sidebar">
-          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      </div>
+
         <div className="map-container" ref={mapContainer} />
       </Col>
     );
