@@ -165,8 +165,7 @@ function Questions () {
         <Button variant= 'btn btn-danger'> Echo </Button>
         </div>
       </Card.Body>
-     
-      <ModalInFunctionalComponent/>
+      <Col sm> <ModalInFunctionalComponent/></Col>
       <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
 

@@ -5,7 +5,7 @@ import Legend from '../Legend/Legend';
 
 function ModalInFunctionalComponent (){
 
-    const [modalIsOpen,setModalIsOpen ] = useState(false);
+    const [modalIsOpen,setModalIsOpen,sm] = useState(false);
 
     const setModalIsOpenToTrue =()=>{
         setModalIsOpen(true)
