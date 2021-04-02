@@ -9,7 +9,7 @@ import { MedicDispatchPortContext } from "./utils/MedicDispatchPortContext"
 
 const App = () => {
 
-  const [ medicDispatchPort, setMedicDispatchPort ]= useState( {
+  const [ medicDispatchPort, setMedicDispatchPort ] = useState( {
     lngMedic: 1,
     latMedic: 1,
     updateLngLatMedic: ( lng, lat )=>{

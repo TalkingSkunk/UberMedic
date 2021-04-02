@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Col } from "react-bootstrap";
-import { MedicDispatchPortContext } from "../../utils/MedicDispatchPortContext"
+import { MedicDispatchPortContext } from "../utils/MedicDispatchPortContext"
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';

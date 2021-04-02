@@ -7,7 +7,7 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
-import { MedicDispatchPortContext } from "../../utils/MedicDispatchPortContext"
+import { MedicDispatchPortContext } from "../utils/MedicDispatchPortContext"
 
 
 
