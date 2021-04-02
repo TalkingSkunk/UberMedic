@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Col } from "react-bootstrap";
-import { MedicDispatchPortContext } from "../utils/MedicDispatchPortContext"
+import { MedicDispatchPortContext } from "../../utils/MedicDispatchPort"
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';

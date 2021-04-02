@@ -5,7 +5,7 @@ import DispatcherWrapper from "./Dipatcher/Wrapper";
 import DispatcherMapWrapper from "./DispatcherMap/Wrapper/Wrapper";
 import MedicWrapper from "./Medic/Wrapper/Wrapper";
 import Login from "./loginPage";
-import { MedicDispatchPortContext } from "./utils/MedicDispatchPortContext"
+import { MedicDispatchPortContext } from "./utils/MedicDispatchPort"
 
 const App = () => {
 
