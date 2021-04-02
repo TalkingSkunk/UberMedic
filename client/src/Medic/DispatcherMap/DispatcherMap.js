@@ -5,26 +5,46 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Col } from "react-bootstrap";
-import { MedicDispatchContext } from "../../utils/MedicDispatchContext"
+import MedicDispatchContext from "../../utils/MedicDispatchContext";
+
+import fetchJSON from "../../utils/API"
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
 
 
 
+
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
-const Map = () => {
+const DispatcherMap = () => {
+    const [lngIncoming, setLngIncoming] = useState(0)
+    const [latIncoming, setLatIncoming] = useState(0)
 
-    const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
+    const fetchCoords = async () =>{
+        const { status, coords: {lng,lat} } = await fetchJSON( `http://localhost:8080/coords-get/3000` )
+        console.log ( 'fetching coords from medic', lng, lat)
+        setLngIncoming(lng)
+        setLatIncoming(lat)
+    }
 
-    Object.entries(medicDispatch).map(()=>{console.log('this is ambulance')})
+    useEffect(()=>{
+        setInterval(
+            fetchCoords
+        , 3000)
+    },[])
 
-    console.log(`MEDIC COORDS: id: [2021] lngOut: ${medicDispatch[2021].lngMedic}, latOut: ${medicDispatch[2021].latMedic}`)
+
+    const {medicDispatch, setMedicDispatch} = useContext(MedicDispatchContext)
+    
+    // map through all objects with key value pairs
+    Object.entries(medicDispatch).map((key)=>{console.log('this is the id of ambulance:', key)})
+
+    // console.log(`MEDIC COORDS: id: [2021] lngOut: ${medicDispatch[2021].lngMedic}, latOut: ${medicDispatch[2021].latMedic}`)
 
 
     //medic position
-    const [lngIncoming, setLngIncoming] = useState(medicDispatch[2021].lngMedic)
-    const [latIncoming, setLatIncoming] = useState(medicDispatch[2021].latMedic)
+    // const [lngIncoming, setLngIncoming] = useState(0)
+    // const [latIncoming, setLatIncoming] = useState(0)
     
     //The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
     const mapContainer = useRef();
@@ -101,4 +121,4 @@ const Map = () => {
     );
 }
 
-export default Map;
+export default DispatcherMap;

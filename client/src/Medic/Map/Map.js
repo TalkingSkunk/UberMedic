@@ -7,8 +7,9 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
-import { MedicDispatchContext } from "../../utils/MedicDispatchContext"
+import MedicDispatchContext from "../../utils/MedicDispatchContext";
 
+import fetchJSON from "../../utils/API"
 
 
 mapboxgl.workerClass = MapboxWorker;
@@ -23,7 +24,7 @@ const Map = () => {
     // ambulance id
     const id = 2021;
 
-    const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
+    const {medicDispatch, setMedicDispatch} = useContext(MedicDispatchContext)
 
     const watch = true;
     const {
@@ -35,7 +36,7 @@ const Map = () => {
     } = usePosition(watch, {enableHighAccuracy: true})
 
 
-    useEffect(()=>{
+    const broadcastCoords = async () =>{
         console.log(`MAP.JS: usePosition() gives lng: ${longitude}, lat: ${latitude}`)
 
         if(!longitude || !latitude){
@@ -43,9 +44,16 @@ const Map = () => {
         }
         setLng(parseFloat(longitude.toFixed(5)))
         setLat(parseFloat(latitude.toFixed(5)))
-        // identify the ambulance ID >> track and send coords to dispatch
         
+        const { status, message }= await fetchJSON( `http://localhost:8080/coords-send/3000/${parseFloat(longitude.toFixed(5))}/${parseFloat(latitude.toFixed(5))}` )
+        
+        // identify the ambulance ID >> track and send coords to dispatch
         setMedicDispatch({...medicDispatch, [id]: { lngMedic: longitude, latMedic: latitude }})
+        console.log('sending coords', longitude, latitude)
+    }
+
+    useEffect(()=>{
+        broadcastCoords()
     },[longitude,latitude])
 
 
@@ -90,6 +98,46 @@ const Map = () => {
         map.on('load', () => {
             // Add navigation control (+/- top right, and directions on top left)
             map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+            // d3.json(
+            //     'https://docs.mapbox.com/mapbox-gl-js/assets/hike.geojson',
+            //     (err, data)=>{
+            //     if (err) throw err;
+            //     // save full coordinate list for later
+            //     var coordinates = data.features[0].geometry.coordinates;
+            //     // start by showing just the first coordinate
+            //     data.features[0].geometry.coordinates = [coordinates[0]];
+            //     // add it to the map
+            //     map.addSource('trace', { type: 'geojson', data: data });
+            //     map.addLayer({
+            //     'id': 'trace',
+            //     'type': 'line',
+            //     'source': 'trace',
+            //     'paint': {
+            //     'line-color': 'yellow',
+            //     'line-opacity': 0.75,
+            //     'line-width': 5
+            //     }
+            //     });
+            //     // setup the viewport
+            //     map.jumpTo({ 'center': coordinates[0], 'zoom': 13 });
+            //     map.setPitch(30);
+            //     // on a regular basis, add more coordinates from the saved list and update the map
+            //     var i = 0;
+            //     var timer = window.setInterval(function () {
+            //     if (i < coordinates.length) {
+            //     data.features[0].geometry.coordinates.push(
+            //     coordinates[i]
+            //     );
+            //     map.getSource('trace').setData(data);
+            //     map.panTo(coordinates[i]);
+            //     i++;
+            //     } else {
+            //     window.clearInterval(timer);
+            //     }
+            //     }, 1000);
+            //     }
+            //     );
 
         })
 
