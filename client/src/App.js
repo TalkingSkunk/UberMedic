@@ -5,19 +5,26 @@ import DispatcherWrapper from "./Dipatcher/Wrapper";
 import DispatcherMapWrapper from "./DispatcherMap/Wrapper/Wrapper";
 import MedicWrapper from "./Medic/Wrapper/Wrapper";
 import Login from "./loginPage";
+import { EmsProvider } from "./utils/MedicDispatchPort"
 
 const App = () => {
+
+
+
   /////stateful
   return (
     <div>
-      <BrowserRouter>
-        <Route path="/dispatcher" exact component={DispatcherWrapper} />
+      <EmsProvider>
+        <BrowserRouter>
+          <Route path="/dispatcher" exact component={DispatcherWrapper} />
 
-        <Route path="/dispatcher/map" component={DispatcherMapWrapper} />
-        
-        <Route path="/medical" exact component={MedicWrapper} />
-        <Route path="/" exact component={Login} />
-      </BrowserRouter>
+          <Route path="/dispatcher/map" exact component={DispatcherMapWrapper} />
+          
+          <Route path="/medical" exact component={MedicWrapper} />
+
+          <Route path="/" exact component={Login} />
+        </BrowserRouter>
+      </EmsProvider>
     </div>
   );
 };

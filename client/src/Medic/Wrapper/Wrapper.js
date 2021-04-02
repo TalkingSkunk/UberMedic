@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState }  from 'react';
 import CallDetailsForm from "../CallDetailsForm/CallDetailsForm";
 import Map from '../Map/Map';
 import Navbar from '../Navbar/Navbar';
@@ -7,7 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 
 
+
+
 function MedicWrapper(){
+
 
     return(
         <Container>
