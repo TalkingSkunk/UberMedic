@@ -16,26 +16,28 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMyd
 const Map = () => {
 
     const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
-    // console.log(`MEDIC COORDS: lngOut: ${}, latOut: ${}`)
+
+    Object.entries(medicDispatch).map(()=>{console.log('this is ambulance')})
+
+    console.log(`MEDIC COORDS: id: [2021] lngOut: ${medicDispatch[2021].lngMedic}, latOut: ${medicDispatch[2021].latMedic}`)
 
 
     //medic position
-    const [lngIncoming, setLngIncoming] = useState(medicDispatch.lngMedic)
-    const [latIncoming, setLatIncoming] = useState(medicDispatch.latMedic)
+    const [lngIncoming, setLngIncoming] = useState(medicDispatch[2021].lngMedic)
+    const [latIncoming, setLatIncoming] = useState(medicDispatch[2021].latMedic)
     
     //The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
     const mapContainer = useRef();
     const [lng, setLng] = useState(-79.4718);
     const [lat, setLat] = useState(43.6708);
-    const [zoom, setZoom] = useState(11.5);
+    const [zoom, setZoom] = useState(11);
 
 
 
     useEffect(() => {
-
         const map = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/dark-v11',
+            style: 'mapbox://styles/mapbox/streets-v10',
             center: [lng, lat],
             zoom: zoom
         });
@@ -45,7 +47,7 @@ const Map = () => {
             return
         }
 
-        let marker = new mapboxgl.Marker({
+        new mapboxgl.Marker({
             color: "#000066",
             draggable: false,
             }).setLngLat([lngIncoming, latIncoming])
@@ -66,11 +68,11 @@ const Map = () => {
 
         })
 
-        map.on('move', () => {
-            lng = (map.getCenter().lng.toFixed(4));
-            lat = (map.getCenter().lat.toFixed(4));
-            setZoom(map.getZoom().toFixed(2));
-        });
+        // map.on('move', () => {
+        //     lng = (map.getCenter().lng.toFixed(4));
+        //     lat = (map.getCenter().lat.toFixed(4));
+        //     setZoom(map.getZoom().toFixed(2));
+        // });
     
 
         // map.resize()

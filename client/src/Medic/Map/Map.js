@@ -20,6 +20,8 @@ mapboxgl.accessToken =
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const Map = () => {
 
+    // ambulance id
+    const id = 2021;
 
     const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
 
@@ -39,9 +41,11 @@ const Map = () => {
         if(!longitude || !latitude){
             return
         }
-        setMedicDispatch({lngMedic: longitude, latMedic: latitude})
         setLng(parseFloat(longitude.toFixed(5)))
         setLat(parseFloat(latitude.toFixed(5)))
+        // identify the ambulance ID >> track and send coords to dispatch
+        
+        setMedicDispatch({...medicDispatch, [id]: { lngMedic: longitude, latMedic: latitude }})
     },[longitude,latitude])
 
 

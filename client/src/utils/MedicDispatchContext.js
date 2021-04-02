@@ -3,10 +3,18 @@ import React, {useState, createContext} from "react"
 export const MedicDispatchContext = createContext()
 
 export const MedicDispatchProvider = props => {
-    const [ medicDispatch, setMedicDispatch ] = useState( {
-        lngMedic: 1,
-        latMedic: 1
-    } );
+    //id of ambulance
+    const [ medicDispatch, setMedicDispatch ] = useState({
+        2021: {
+            lngMedic: 1,
+            latMedic: 1,
+        },
+        2011: {
+            lngMedic: 34,
+            latMedic: 34
+        }
+    }
+    );
     return(
         <MedicDispatchContext.Provider value={[medicDispatch, setMedicDispatch]}>
             {props.children}
