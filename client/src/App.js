@@ -5,23 +5,15 @@ import DispatcherWrapper from "./Dipatcher/Wrapper";
 import DispatcherMapWrapper from "./DispatcherMap/Wrapper/Wrapper";
 import MedicWrapper from "./Medic/Wrapper/Wrapper";
 import Login from "./loginPage";
-import { MedicDispatchPortContext } from "./utils/MedicDispatchPort"
+import { MedicDispatchProvider } from "./utils/MedicDispatchContext";
 
 const App = () => {
-
-  const [ medicDispatchPort, setMedicDispatchPort ] = useState( {
-    lngMedic: 1,
-    latMedic: 1,
-    updateLngLatMedic: ( lng, lat )=>{
-      setMedicDispatchPort({ lngMedic: lng, latMedic: lat });
-    }
-  } )
 
 
   /////stateful
   return (
     <div>
-      <MedicDispatchPortContext.Provider value={medicDispatchPort}>
+      <MedicDispatchProvider>
         <BrowserRouter>
           <Route path="/dispatcher" exact component={DispatcherWrapper} />
 
@@ -31,7 +23,7 @@ const App = () => {
 
           <Route path="/" exact component={Login} />
         </BrowserRouter>
-      </MedicDispatchPortContext.Provider>
+      </MedicDispatchProvider>
     </div>
   );
 };

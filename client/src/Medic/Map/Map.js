@@ -7,7 +7,7 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
-import { MedicDispatchPortContext } from "../../utils/MedicDispatchPort"
+import { MedicDispatchContext } from "../../utils/MedicDispatchContext"
 
 
 
@@ -19,7 +19,9 @@ mapboxgl.accessToken =
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const Map = () => {
-    const { updateLngLatMedic } = useContext( MedicDispatchPortContext )
+
+
+    const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
 
     const watch = true;
     const {
@@ -37,7 +39,7 @@ const Map = () => {
         if(!longitude || !latitude){
             return
         }
-        updateLngLatMedic( longitude, latitude )
+        setMedicDispatch({lngMedic: longitude, latMedic: latitude})
         setLng(parseFloat(longitude.toFixed(5)))
         setLat(parseFloat(latitude.toFixed(5)))
     },[longitude,latitude])

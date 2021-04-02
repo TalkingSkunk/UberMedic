@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Col } from "react-bootstrap";
-import { MedicDispatchPortContext } from "../../utils/MedicDispatchPort"
+import { MedicDispatchContext } from "../../utils/MedicDispatchContext"
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
@@ -13,15 +13,15 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMyd
 
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
-const Map = (props) => {
+const Map = () => {
 
-    const { lngMedic, latMedic }= useContext( MedicDispatchPortContext )
-    console.log(`MEDIC COORDS: lngOut: ${lngMedic}, latOut: ${latMedic}`)
+    const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
+    // console.log(`MEDIC COORDS: lngOut: ${}, latOut: ${}`)
 
 
     //medic position
-    const [lngIncoming, setLngIncoming] = useState(lngMedic)
-    const [latIncoming, setLatIncoming] = useState(latMedic)
+    const [lngIncoming, setLngIncoming] = useState(medicDispatch.lngMedic)
+    const [latIncoming, setLatIncoming] = useState(medicDispatch.latMedic)
     
     //The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
     const mapContainer = useRef();
