@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
@@ -7,7 +7,7 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
-import { useEmsContext, ACTIONS } from "../../utils/MedicDispatchPort"
+import { MedicDispatchPortContext } from "../../utils/MedicDispatchPortContext"
 
 
 
@@ -19,7 +19,7 @@ mapboxgl.accessToken =
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const Map = () => {
-
+    const { updateLngLatMedic } = useContext( MedicDispatchPortContext )
 
     const watch = true;
     const {
@@ -30,8 +30,6 @@ const Map = () => {
         error,
     } = usePosition(watch, {enableHighAccuracy: true})
 
-    //dispatch function
-    const [ state, dispatch ] = useEmsContext()
 
     useEffect(()=>{
         console.log(`MAP.JS: usePosition() gives lng: ${longitude}, lat: ${latitude}`)
@@ -39,7 +37,7 @@ const Map = () => {
         if(!longitude || !latitude){
             return
         }
-        dispatch({ type: ACTIONS.SEND_COORDS, payload: {lngOut: longitude, latOut: latitude} })
+        updateLngLatMedic( longitude, latitude )
         setLng(parseFloat(longitude.toFixed(5)))
         setLat(parseFloat(latitude.toFixed(5)))
     },[longitude,latitude])
