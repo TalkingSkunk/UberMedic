@@ -2,13 +2,14 @@ import { Button, Col, FormGroup } from "react-bootstrap";
 import React, { useState } from "react";
 import ReactBootstrap, { Form } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
+import signUp from "./controller/authController";
 
 function RegisterForm() {
   const [show, setShow] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     password: "",
-    retypePassword: "",
+    passwordConfirm: "",
     id: "",
   });
 
@@ -17,7 +18,7 @@ function RegisterForm() {
     const value = e.target.value;
     const name = e.target.name;
     setInputs({ ...inputs, [name]: value });
-    console.log(inputs);
+    // console.log(inputs);
   };
 
   const handleClose = () => setShow(false);
@@ -25,6 +26,22 @@ function RegisterForm() {
     e.preventDefault();
     setShow(true);
   };
+
+  const handleSubmit = async () => {
+    /////create new User
+    console.log("test");
+    const newUser = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(inputs),
+    })
+      .then((res) => res.json())
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+
+    handleClose();
+  };
+
   return (
     <div>
       <div className="container">
@@ -68,7 +85,7 @@ function RegisterForm() {
               <Form.Group as={Col} controlId="formGridPassword">
                 <Form.Label>Retype Password</Form.Label>
                 <Form.Control
-                  name="retypePassword"
+                  name="passwordConfirm"
                   onChange={handleInputChange}
                   type="password"
                   placeholder="Retype Password"
@@ -89,7 +106,7 @@ function RegisterForm() {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button type="submit" variant="primary" onClick={handleSubmit}>
               Register
             </Button>
           </Modal.Footer>
