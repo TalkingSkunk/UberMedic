@@ -36,10 +36,8 @@ function MedicWrapper(){
                     <CallDetailsForm />
                     <Map />
                 </Row>
-                <Row>
-                <div><h1>Dispatchside View</h1></div>
-                    <DispatcherMap />
-                </Row>
+
+
                 
             </Container>
     )

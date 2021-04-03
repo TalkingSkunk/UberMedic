@@ -12,7 +12,7 @@ export default MedicDispatchContext;
 // export const MedicDispatchContext = createContext()
 
 // export const MedicDispatchProvider = props => {
-//     //id of ambulance
+    //id of ambulance
     // const [ medicDispatch, setMedicDispatch ] = useState({
     //     2021: {
     //         lngMedic: 1,
@@ -23,7 +23,7 @@ export default MedicDispatchContext;
     //         latMedic: 34
     //     }
     // }
-//     );
+    // );
 //     return(
 //         <MedicDispatchContext.Provider value={[medicDispatch, setMedicDispatch]}>
 //             {props.children}
