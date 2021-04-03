@@ -20,15 +20,15 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMyd
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const DispatcherMap = () => {
 
+    const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
     // medic position
     const [lngMed, setLngMed] = useState(0)
     const [latMed, setLatMed] = useState(0)
-    
+
     // medic destination position
     const [lngDest, setLngDest] = useState(0)
     const [latDest, setLatDest] = useState(0)
 
-    const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
     useEffect(()=>{
         if(medicDispatch[2021].lngDest !== 0 && medicDispatch[2021].lngDest !== 0){
             // map through all objects with key value pairs
@@ -37,6 +37,8 @@ const DispatcherMap = () => {
             console.log(`destination for id: [2021] >> lng: ${medicDispatch[2021].lngDest}, lat: ${medicDispatch[2021].latDest}`)
             setLngDest(parseFloat(medicDispatch[2021].lngDest.toFixed(5)))
             setLatDest(parseFloat(medicDispatch[2021].latDest.toFixed(5)))
+            console.log('this si dest lng', lngDest)
+            console.log('this is deset lat', latDest)
         }
     },[medicDispatch])
 
@@ -70,12 +72,6 @@ const DispatcherMap = () => {
     // },[])
 
 
-
- 
-
-
-
-
     //The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
     const mapContainer = useRef();
     const [lng, setLng] = useState(-79.4718);
@@ -103,13 +99,13 @@ const DispatcherMap = () => {
             }).setLngLat([lngMed, latMed])
             .addTo(map)
         
-        if (lngDest !== 0 && latDest !== 0 ){
+        // if (lngDest !== 0 && latDest !== 0 ){
             const medicDestMarker = new mapboxgl.Marker({
                 color: "#ffffff",
                 draggable: false,
                 }).setLngLat([lngDest, latDest])
                 .addTo(map)
-        }
+        // }
 
 
         map.on('load', () => {
