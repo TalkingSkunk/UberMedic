@@ -182,9 +182,9 @@ function Dispatch() {
       <CardDeck>
         {/* POLICE/FIREFIGHTERS REQUIRED? */}
         <Card className="text-center">
-          <Card.Header>POLICE & FIREFIGHTERS ?</Card.Header>
+          <Card.Header>MEDIC REQUESTS</Card.Header>
           <Card.Body>
-            <Card.Title>FOR ADDITIONAL ASSISTANCE ONLY</Card.Title>
+            
 
             <Button variant="primary">POLICE</Button>
             <Button variant="danger">FIREFIGHTER</Button>
