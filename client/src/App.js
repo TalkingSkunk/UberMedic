@@ -2,22 +2,43 @@ import React, { useState } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import DispatcherWrapper from "./Dipatcher/Wrapper";
-import DispatcherMapWrapper from "./DispatcherMap/Wrapper/Wrapper";
+// import DispatcherMapWrapper from "./DispatcherMap/Wrapper/Wrapper";
 import MedicWrapper from "./Medic/Wrapper/Wrapper";
 import Login from "./loginPage";
+import MedicDispatchContext from "./utils/MedicDispatchContext";
+
+
+
 
 const App = () => {
+
+  const data = {
+    medicDispatch: {
+    "a": {
+        lngMedic: 1,
+        latMedic: 1,
+    },
+    "b": {
+        lngMedic: 34,
+        latMedic: 34
+    }
+    }, setMedicDispatch: function() {}
+}
+
   /////stateful
   return (
     <div>
-      <BrowserRouter>
-        <Route path="/dispatcher" exact component={DispatcherWrapper} />
+      <MedicDispatchContext.Provider value={data} >
+        <BrowserRouter>
+          <Route path="/dispatcher" exact component={DispatcherWrapper} />
 
-        <Route path="/dispatcher/map" component={DispatcherMapWrapper} />
-        
-        <Route path="/medical" exact component={MedicWrapper} />
-        <Route path="/" exact component={Login} />
-      </BrowserRouter>
+          {/* <Route path="/dispatcher/map" exact component={DispatcherMapWrapper} /> */}
+          
+          <Route path="/medical" exact component={MedicWrapper} />
+
+          <Route path="/" exact component={Login} />
+        </BrowserRouter>
+      </MedicDispatchContext.Provider>
     </div>
   );
 };
