@@ -35,12 +35,11 @@ const DispatcherMap = () => {
             Object.entries(medicDispatch).map((key)=>{console.log('this is the id of ambulance:', key)})
 
             console.log(`destination for id: [2021] >> lng: ${medicDispatch[2021].lngDest}, lat: ${medicDispatch[2021].latDest}`)
-            setLngDest(parseFloat(medicDispatch[2021].lngDest.toFixed(5)))
-            setLatDest(parseFloat(medicDispatch[2021].latDest.toFixed(5)))
-            console.log('this si dest lng', lngDest)
-            console.log('this is deset lat', latDest)
+            setLngDest(medicDispatch[2021].lngDest.toFixed(5))
+            setLatDest(medicDispatch[2021].latDest.toFixed(5))
         }
     },[medicDispatch])
+
 
     const socket = socketIOClient(ENDPOINT)
 
@@ -81,6 +80,9 @@ const DispatcherMap = () => {
 
 
     useEffect(() => {
+        console.log('this si dest lng', lngDest)
+        console.log('this is deset lat', latDest)
+
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v10',
@@ -88,24 +90,22 @@ const DispatcherMap = () => {
             zoom: zoom
         });
 
-        if(!lngMed || !latMed){
-            console.log('NO incoming medic coordinates')
-            return
+        if (lngMed !== 0 && latMed !== 0 ){
+            const medicMarker = new mapboxgl.Marker({
+                color: "#008000",
+                draggable: false,
+                }).setLngLat([lngMed, latMed])
+                .addTo(map)
         }
 
-        const medicMarker = new mapboxgl.Marker({
-            color: "#000066",
-            draggable: false,
-            }).setLngLat([lngMed, latMed])
-            .addTo(map)
         
-        // if (lngDest !== 0 && latDest !== 0 ){
+        if (lngDest !== 0 && latDest !== 0 ){
             const medicDestMarker = new mapboxgl.Marker({
-                color: "#ffffff",
+                color: "#C0C0C0",
                 draggable: false,
                 }).setLngLat([lngDest, latDest])
                 .addTo(map)
-        // }
+        }
 
 
         map.on('load', () => {
