@@ -60,7 +60,7 @@ function Dispatch() {
 
     const result = await getCoords( {city: city, postCode: postal, address: street} )
     socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
-    console.log('sent destination to server with socket')
+    console.log('sending destination coords to medicside')
   }
 
     return (

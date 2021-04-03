@@ -73,13 +73,14 @@ io.on('connection', (socket)=>{
    socket.on('dispatchlol', msg=>console.log(msg))
    socket.on('mediclol', msg=>console.log(msg))
 
+
    socket.on('medicDest', data=>{
-      console.log('relay medic destination', JSON.parse(data))
+      console.log('relay medic destination to medicside', JSON.parse(data))
       io.emit('medicDestOut', data)
    })
    
    socket.on('medicCoords', data=>{
-      console.log('relay medic coords', JSON.parse(data))
+      console.log('relay medic coords to dispatchside', JSON.parse(data))
       //relay
       io.emit('medicCoordsOut', data)
    })
