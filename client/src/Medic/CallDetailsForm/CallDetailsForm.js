@@ -30,12 +30,18 @@ const CallDetailsForm = () => {
     const [title, setTitle] = useState(buttonArray[0])
 
     const handleButton = () =>{
+ 
       if (counter <7 ) {
         setCounter(counter+1)
       } else {
         setCounter ( 0 )
       }
       setTitle(buttonArray[counter])
+
+// if clicked, send state of medic position 
+      if (title===buttonArray[0]){
+        
+      }
     }
 
 

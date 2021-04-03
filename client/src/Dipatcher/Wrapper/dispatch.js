@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -13,27 +13,56 @@ import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
-import API from "../API/index";
-
-const apiCall = async (data) => {
-  /////check for values
-
-  const result = await API(data);
-  console.log(result, "RESULT");
-};
+import DispatcherMap from "./DispatcherMap/DispatcherMap";
+import getCoords from "../API/index";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:8080";
 
 function Dispatch() {
-  const [data, setData] = useState({
-    postCode: "",
-    address: "",
-    city: "",
-    province: "",
-  });
+  const socket = socketIOClient(ENDPOINT);
+  useEffect(() => {
+    socket.emit("dispatchlol", "hello from Dispatchside");
+  }, []);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setData({ ...data, [name]: value });
-    // console.log(data);
+  let sendtothisAmb = 3000;
+
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [prov, setProv] = useState("");
+  const [postal, setPostal] = useState("");
+
+  const updateStreet = (e) => {
+    setStreet(e.target.value);
+  };
+  const updateCity = (e) => {
+    setCity(e.target.value);
+  };
+  const updateProv = (e) => {
+    setProv(e.target.value);
+  };
+  const updatePostal = (e) => {
+    setPostal(e.target.value);
+  };
+
+  //onSubmit event listener
+  const handleSendDestination = async (e) => {
+    e.preventDefault();
+
+    setPostal("");
+    setProv("");
+    setCity("");
+    setStreet("");
+
+    const result = await getCoords({
+      city: city,
+      postCode: postal,
+      address: street,
+    });
+    socket.emit(
+      "medicDest",
+      JSON.stringify({ lng: result[0], lat: result[1] })
+    );
+    console.log("sent destination to server with socket");
   };
 
   return (
@@ -43,34 +72,36 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>INCIDENT LOCATION</Card.Header>
           <Card.Body>
-            <Form>
+            <Form onSubmit={handleSendDestination}>
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Address</Form.Label>
                 <Form.Control
-                  name="address"
-                  onChange={handleInputChange}
-                  placeholder="1234 Main St"
+                  type="text"
+                  value={street}
+                  onChange={updateStreet}
                 />
               </Form.Group>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridCity">
                   <Form.Label>City</Form.Label>
-                  <Form.Control name="city" onChange={handleInputChange} />
+                  <Form.Control
+                    type="text"
+                    value={city}
+                    onChange={updateCity}
+                  />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>Province</Form.Label>
                   <Form.Control
-                    name="province"
-                    onChange={handleInputChange}
                     as="select"
-                    defaultValue="ontario"
+                    defaultValue="Choose..."
+                    value={prov}
+                    onChange={updateProv}
                   >
-                    <option value="ontario">Ontario</option>
-                    <option value="quebec">Quebec</option>
-                    <option value="british columbia">British Columbia</option>
-                    <option value="alberta">Alberta</option>
+                    <option>Ontario</option>
+                    <option>Quebec</option>
                   </Form.Control>
                 </Form.Group>
 
@@ -78,15 +109,15 @@ function Dispatch() {
                   <Form.Label>Postal Code</Form.Label>
                   <Form.Control
                     type="text"
-                    name="postCode"
-                    onChange={handleInputChange}
-                  />
+                    value={postal}
+                    onChange={updatePostal}
+                  ></Form.Control>
                 </Form.Group>
               </Form.Row>
             </Form>
           </Card.Body>
           <Card.Footer className="text-muted">
-            <Button onClick={apiCall(data)} variant="primary">
+            <Button variant="primary" onClick={handleSendDestination}>
               Submit
             </Button>
           </Card.Footer>
@@ -138,7 +169,7 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>NEAREST AMBULANCE</Card.Header>
           <Card.Body>
-            <Card.Title>MAP BELOW</Card.Title>
+            <DispatcherMap />
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted
