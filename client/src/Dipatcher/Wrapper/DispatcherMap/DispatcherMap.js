@@ -20,8 +20,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMyd
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const DispatcherMap = () => {
 
-    const {value} = useContext(MedicDispatchContext)
-    const [medicDispatch, setMedicDispatch] = value
+    const {medDest} = useContext(MedicDispatchContext)
+    const [medicDispatch, setMedicDispatch] = medDest
     // medic position
     const [lngMed, setLngMed] = useState(0)
     const [latMed, setLatMed] = useState(0)

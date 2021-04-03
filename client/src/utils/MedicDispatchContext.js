@@ -15,14 +15,14 @@ export const MedicDispatchProvider = props => {
         }
     ])
 
-    
     useEffect(()=>{
         socket.on('medReqOut', data=>{
             const dataOut = JSON.parse(data)
-            console.log('receiving medic coords, dispatchside', dataOut)
+            console.log('receiving medic requests, dispatchside', dataOut)
             setMedReqOut(prevReq => [...prevReq, {id: dataOut.id, for: dataOut.for}])
         })
     },[])
+
 
 
 
@@ -42,7 +42,7 @@ export const MedicDispatchProvider = props => {
 
     return(
         // { value: [value, setValue], value2: [value2, setValue2] }
-        <MedicDispatchContext.Provider value={{ value: [medicDispatch, setMedicDispatch], value2: [ medReqOut, setMedReqOut ] }}>
+        <MedicDispatchContext.Provider value={{ medDest: [medicDispatch, setMedicDispatch], medRequest: [ medReqOut, setMedReqOut ] }}>
             {props.children}
         </MedicDispatchContext.Provider>
     );

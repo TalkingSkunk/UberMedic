@@ -16,14 +16,15 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import medReq from "./medReq/medReq";
+import MedReq from "./MedReq/MedReq";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 
 function Dispatch() {
   // relay dispatch destination coords to dispatch map marker
-  const {value} = useContext(MedicDispatchContext)
-  const [medicDispatch, setMedicDispatch] = value
+  const {medDest, medRequest} = useContext(MedicDispatchContext)
+  const [medicDispatch, setMedicDispatch] = medDest
+  const [ medReqOut, setMedReqOut ] = medRequest
   // modals stuff clicks
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -193,7 +194,7 @@ function Dispatch() {
           <Card.Header>MEDIC REQUESTS</Card.Header>
           <Card.Body>
 
-              <medReq />
+              <MedReq />
 
           </Card.Body>
           <Card.Footer className="text-muted">

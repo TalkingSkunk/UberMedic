@@ -1,13 +1,20 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {MedicDispatchContext} from "../../../utils/MedicDispatchContext";
 import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
+import Button from "react-bootstrap/Button";
 
 
-const medReq = () =>{
 
-    const {value2} = React.useContext(MedicDispatchContext)
-    const [ medReqOut, setMedReqOut ] = value2
+const MedReq = () =>{
+    const {medRequest} = useContext(MedicDispatchContext)
+    const [ medReqOut, setMedReqOut ] = medRequest
+
+
+    const handleApprove = ()=>{
+        // clear request after approve from the list
+        
+    }
 
     // modals stuff clicks
     const [show, setShow] = useState(false);
@@ -17,11 +24,34 @@ const medReq = () =>{
     return(
         <ListGroup>
             {medReqOut.map(data=>{
-                <ListGroup.Item action onClick={handleShow}>
-                [{data.id}] Requesting {data.for}...
-                </ListGroup.Item>
+                return (
+                    <>
+                        <ListGroup.Item action onClick={handleShow}>
+                            [{data.id}] Requesting {data.for}...
+                        </ListGroup.Item>
+                        <Modal
+                            show={show}
+                            onHide={handleClose}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            <Modal.Header closeButton>
+                            <Modal.Title>Modal title</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                Please Contact Ambulance Prior to Decision.
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Disregard
+                            </Button>
+                            <Button variant="primary" onClick={handleApprove}>Approve</Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
+                )
             })}
         </ListGroup>
     )
 }
-export default medReq
+export default MedReq
