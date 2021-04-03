@@ -1,4 +1,4 @@
-import openSocket from 'socket.io-client';
+import socketIOClient from 'socket.io-client'
 import React, { useRef, useEffect, useState, useContext } from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -7,9 +7,9 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
-import MedicDispatchContext from "../../utils/MedicDispatchContext";
-
 import fetchJSON from "../../utils/API"
+
+const ENDPOINT = "http://localhost:8080"
 
 
 mapboxgl.workerClass = MapboxWorker;
@@ -20,11 +20,16 @@ mapboxgl.accessToken =
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const Map = () => {
+    const socket = socketIOClient(ENDPOINT)
+
+    useEffect(()=>{
+      socket.emit("mediclol", "hello from Medicside")
+    },[])
 
     // ambulance id
-    const id = 2021;
+    const thisAmb = 3000;
 
-    const {medicDispatch, setMedicDispatch} = useContext(MedicDispatchContext)
+    // const {medicDispatch, setMedicDispatch} = useContext(MedicDispatchContext)
 
     const watch = true;
     const {
@@ -36,25 +41,40 @@ const Map = () => {
     } = usePosition(watch, {enableHighAccuracy: true})
 
 
-    const broadcastCoords = async () =>{
+    // const broadcastCoords = async () =>{
+
+        
+    //     const { status, message }= await fetchJSON( `http://localhost:8080/coords-send/${thisAmb}/${parseFloat(longitude.toFixed(5))}/${parseFloat(latitude.toFixed(5))}` )
+        
+    //     // identify the ambulance ID >> track and send coords to dispatch
+    //     // setMedicDispatch({...medicDispatch, [id]: { lngMedic: longitude, latMedic: latitude }})
+
+    // }
+
+    useEffect(()=>{
         console.log(`MAP.JS: usePosition() gives lng: ${longitude}, lat: ${latitude}`)
 
         if(!longitude || !latitude){
             return
         }
+
         setLng(parseFloat(longitude.toFixed(5)))
         setLat(parseFloat(latitude.toFixed(5)))
-        
-        const { status, message }= await fetchJSON( `http://localhost:8080/coords-send/3000/${parseFloat(longitude.toFixed(5))}/${parseFloat(latitude.toFixed(5))}` )
-        
-        // identify the ambulance ID >> track and send coords to dispatch
-        setMedicDispatch({...medicDispatch, [id]: { lngMedic: longitude, latMedic: latitude }})
-        console.log('sending coords', longitude, latitude)
-    }
+        socket.emit("medicCoords", JSON.stringify ({ lng: parseFloat(longitude.toFixed(5)), lat: parseFloat(latitude.toFixed(5)), timestamp: timestamp }) )
+        console.log('sending medic coords to dispatchside')
+
+    },[longitude,latitude])
+
 
     useEffect(()=>{
-        broadcastCoords()
-    },[longitude,latitude])
+        socket.on('medicDestOut', data=>{
+            const coords = JSON.parse(data)
+            console.log('receiving dest coords, medicside', coords)
+            setLngDest(coords.lng)
+            setLatDest(coords.lat)
+        })
+    },[])
+
 
 
 
@@ -72,17 +92,33 @@ const Map = () => {
     const [lat, setLat] = useState(0)
     const [zoom, setZoom] = useState(11.5);
 
-    // destination lng, lat ( SOCKET FROM SERVER INPUT)
+    // destination lng, lat
     let medicDestination
 
-    const [lng2, setLng2] = useState(0)
-    const [lat2, setLat2] = useState(0)
-  
+    //receive destination coords
+    // const fetchDestCoords = async () =>{
+    //     const { status, coords: {lngDest,latDest} } = await fetchJSON( `http://localhost:8080/destination-get/${thisAmb}` )
+    //     console.log ( 'fetching coords for destination', lngDest, latDest)
+    //     if (lngDest !==0 && latDest !==0){
+    //         setlngDest(lngDest)
+    //         setlatDest(latDest)
+    //     }
+    // }
+    // useEffect(()=>{
+    //     setInterval(
+    //         fetchDestCoords
+    //     , 2000)
+    // },[])
 
+
+    const [lngDest, setLngDest] = useState(0)
+    const [latDest, setLatDest] = useState(0)
+  
 
 
     useEffect(() => {
         console.log('this is useEffect in the map.js: Installing MAPBOX MAP')
+
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v10',
@@ -99,46 +135,6 @@ const Map = () => {
             // Add navigation control (+/- top right, and directions on top left)
             map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-            // d3.json(
-            //     'https://docs.mapbox.com/mapbox-gl-js/assets/hike.geojson',
-            //     (err, data)=>{
-            //     if (err) throw err;
-            //     // save full coordinate list for later
-            //     var coordinates = data.features[0].geometry.coordinates;
-            //     // start by showing just the first coordinate
-            //     data.features[0].geometry.coordinates = [coordinates[0]];
-            //     // add it to the map
-            //     map.addSource('trace', { type: 'geojson', data: data });
-            //     map.addLayer({
-            //     'id': 'trace',
-            //     'type': 'line',
-            //     'source': 'trace',
-            //     'paint': {
-            //     'line-color': 'yellow',
-            //     'line-opacity': 0.75,
-            //     'line-width': 5
-            //     }
-            //     });
-            //     // setup the viewport
-            //     map.jumpTo({ 'center': coordinates[0], 'zoom': 13 });
-            //     map.setPitch(30);
-            //     // on a regular basis, add more coordinates from the saved list and update the map
-            //     var i = 0;
-            //     var timer = window.setInterval(function () {
-            //     if (i < coordinates.length) {
-            //     data.features[0].geometry.coordinates.push(
-            //     coordinates[i]
-            //     );
-            //     map.getSource('trace').setData(data);
-            //     map.panTo(coordinates[i]);
-            //     i++;
-            //     } else {
-            //     window.clearInterval(timer);
-            //     }
-            //     }, 1000);
-            //     }
-            //     );
-
         })
 
         medicPosition = new mapboxgl.Marker({
@@ -148,30 +144,32 @@ const Map = () => {
             .addTo(map)
 
 
-        if (lng2 && lat2) {
+        if (lngDest && latDest) {
             medicDestination = new mapboxgl.Marker({
                 color: "#000066",
                 draggable: false,
-                }).setLngLat([lng2, lat2])
+                }).setLngLat([lngDest, latDest])
                 .addTo(map)
             // zoom in to both markers
             let bounds = new mapboxgl.LngLatBounds();
-            let markers = [[lng, lat], [lng2,lat2]]
+            let markers = [[lng, lat], [lngDest,latDest]]
             markers.forEach( (coordinatesBounds) => {
                 bounds.extend(coordinatesBounds);
             });
             map.fitBounds(bounds, {padding: 50});
         } else {
             // fly to the medic position
-            map.flyTo({
-                center: [lng,lat],
-                zoom: 13
-            });
+            map.addControl(new mapboxgl.GeolocateControl({
+                positionOptions: {
+                enableHighAccuracy: true
+                },
+                trackUserLocation: true
+                }));
         }
 
 
         // Clean up on unmount
-        return () => map.remove();
+        // return () => map.remove();
 
     }, [lng,lat]);
       
@@ -181,9 +179,9 @@ const Map = () => {
     return (
       <Col xs={12} md={6}>
       {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
-      <div className="sidebar">
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-    </div>
+      {/* <div className="sidebar">
+        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} */}
+    {/* </div> */}
         <div className="map-container" ref={mapContainer} />
       </Col>
     );

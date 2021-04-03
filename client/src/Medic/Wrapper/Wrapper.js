@@ -4,9 +4,8 @@ import Map from '../Map/Map';
 import Navbar from '../Navbar/Navbar';
 import { Container, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import DispatcherMap from "../DispatcherMap/DispatcherMap"
-import ProfileContext from "../../utils/MedicDispatchContext";
-
+// import { MedicDispatchProvider, MedicDispatchContext } from "../../utils/MedicDispatchContext";
+// import DispatcherMap from "../DispatcherMap/DispatcherMap"
 
 //import id number of user
 const id = 30000
@@ -14,10 +13,11 @@ const id = 30000
 const isMedic = id < 10000
 
 
+// const [medicDispatch, setMedicDispatch] = useContext(MedicDispatchContext)
 {/* <div>{JSON.stringify(medicDispatch, null, 2)}</div> */}
 function MedicWrapper(){
-
     return(
+
             <Container>
                 {/* {isMedic
                     ? <Row>
@@ -31,17 +31,14 @@ function MedicWrapper(){
                 } */}
 
                 <Row>
-                <div><h1>Medicside View</h1></div>
                     <Navbar />
                     <CallDetailsForm />
                     <Map />
                 </Row>
-                <Row>
-                <div><h1>Dispatchside View</h1></div>
-                    <DispatcherMap />
-                </Row>
+
                 
             </Container>
+
     )
 
 

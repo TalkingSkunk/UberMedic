@@ -75,12 +75,12 @@ function RegisterForm() {
                 />
               </Form.Group>
               <Form.Group as={Col} controlId="formGridId">
-                <Form.Label>Insert ID Number</Form.Label>
+                <Form.Label>Insert OASIS Number/Dispatcher ID</Form.Label>
                 <Form.Control
                   name="id"
                   onChange={handleInputChange}
                   type="text"
-                  placeholder="Enter Id"
+                  placeholder="Enter OASIS/ID"
                 />
               </Form.Group>
             </Form>

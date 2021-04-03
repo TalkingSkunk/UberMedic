@@ -5,7 +5,7 @@
     left: 0;
     right: 0;
   }
-  
+
   .sidebarStyle {
     display: inline-block;
     position: absolute;
@@ -17,4 +17,4 @@
     z-index: 1 !important;
     padding: 6px;
     font-weight: bold;
-  }
+  } 
