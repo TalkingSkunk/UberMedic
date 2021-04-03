@@ -1,10 +1,11 @@
-require( 'dotenv' ).config() // looks for .env ; process.env gets it's values
+require("dotenv").config(); // looks for .env ; process.env gets it's values
+import signUp from "./controller/authController";
 
-const path = require('path')
-const express = require('express')
-const app = express()
-var cors = require('cors')
-app.use(cors())
+const path = require("path");
+const express = require("express");
+const app = express();
+var cors = require("cors");
+app.use(cors());
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -13,26 +14,18 @@ const io = require("socket.io")(server, {
   },
 });
 
-
-const PORT = process.env.PORT || 8080
-
-
-
-
+const PORT = process.env.PORT || 8080;
 
 // for parsing incoming POST data
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-
-if( !process.env.MONGODB_URI ){
-   console.log( '*ERROR* You need a .env file (with MONGODB_URI,...)' )
-   process.exit()
+if (!process.env.MONGODB_URI) {
+  console.log("*ERROR* You need a .env file (with MONGODB_URI,...)");
+  process.exit();
 }
 
-
-
-console.log ('yoyoma')
+console.log("yoyoma");
 
 // const medicDispatchCoords = {}
 // // medic sends coord to dispatch map
@@ -60,57 +53,53 @@ console.log ('yoyoma')
 //    res.send({status:true, coords})
 // })
 
-
-
-
-
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
-  
-io.on('connection', (socket)=>{
 
-   console.log('user connected')
+io.on("connection", (socket) => {
+  console.log("user connected");
 
-   socket.on('dispatchlol', msg=>console.log(msg))
-   socket.on('mediclol', msg=>console.log(msg))
+  socket.on("dispatchlol", (msg) => console.log(msg));
+  socket.on("mediclol", (msg) => console.log(msg));
 
-   socket.on('medicDest', data=>{
-      console.log('relay medic destination', JSON.parse(data))
-      io.emit('medicDestOut', data)
-   })
-   
-   socket.on('medicCoords', data=>{
-      console.log('relay medic coords', JSON.parse(data))
-      //relay
-      io.emit('medicCoordsOut', data)
-   })
-   
-   // socket.on('destination', async (coords)=>{
-   //    // to all sockets
-   //    console.log('receiving messsage from dispatch')
-   //    io.emit ('returnLocation', coords)
-      // let data = {
-      //    callID: 112,
-      //    unitNumber: 2021,
-      //    CTAS: 'ECHO',
-      //    CC: 'chest pain',
-      //    location: '1234 sunnyside dr',
-      //    intersection: 'bathurst and bloor',
-      //    police: 'on scene',
-      //    fire: 'on scene',
-      //    medic: 'on scene',
-      //    coords: coords,
-      // }
+  socket.on("medicDest", (data) => {
+    console.log("relay medic destination", JSON.parse(data));
+    io.emit("medicDestOut", data);
+  });
 
+  socket.on("medicCoords", (data) => {
+    console.log("relay medic coords", JSON.parse(data));
+    //relay
+    io.emit("medicCoordsOut", data);
+  });
 
-   socket.on ('disconnect', reason => {
-      console.log('user has disconnected :(')
-   })
+  // socket.on('destination', async (coords)=>{
+  //    // to all sockets
+  //    console.log('receiving messsage from dispatch')
+  //    io.emit ('returnLocation', coords)
+  // let data = {
+  //    callID: 112,
+  //    unitNumber: 2021,
+  //    CTAS: 'ECHO',
+  //    CC: 'chest pain',
+  //    location: '1234 sunnyside dr',
+  //    intersection: 'bathurst and bloor',
+  //    police: 'on scene',
+  //    fire: 'on scene',
+  //    medic: 'on scene',
+  //    coords: coords,
+  // }
 
+  socket.on("disconnect", (reason) => {
+    console.log("user has disconnected :(");
+  });
+});
 
-})
-
-
+// app.post("/", (req, res) => {
+//   console.log("test server");
+//   console.log(req, "  SERVER");
+//   signUp(req.body);
+// });
 
 server.listen(PORT, () => {
-   console.log (`listening on *:${PORT}`)
-})
+  console.log(`listening on *:${PORT}`);
+});
