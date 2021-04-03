@@ -1,6 +1,7 @@
 ////fetching coordinates with address, city and postcode inputs, RETURNING array with lat, long
 
 function getCoords(data) {
+  console.log(data, "API function");
   let { city, postCode, address } = data;
   city = city.replace(/ /g, "%20");
   postCode = postCode.replace(/ /g, "%20");
