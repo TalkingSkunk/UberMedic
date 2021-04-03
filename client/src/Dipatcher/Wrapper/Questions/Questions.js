@@ -39,15 +39,7 @@ function Questions () {
     
   </InputGroup>
 
-  <InputGroup className="mb-3">
-    <InputGroup.Prepend>
-    <div>
-    <label> Comments</label>
-    </div>
-   
-    </InputGroup.Prepend>
-    <FormControl aria-label="Text input with checkbox" />
-  </InputGroup> 
+  
 
 
   {/* QUESTION 2 */}
@@ -68,15 +60,7 @@ function Questions () {
     
   </InputGroup>
 
-  <InputGroup className="mb-3">
-    <InputGroup.Prepend>
-    <div>
-    <label> Comments</label>
-    </div>
-   
-    </InputGroup.Prepend>
-    <FormControl aria-label="Text input with checkbox" />
-  </InputGroup> 
+  
 
     {/* QUESTION 3 */}
 
@@ -100,15 +84,7 @@ function Questions () {
     
   </InputGroup>
 
-  <InputGroup className="mb-3">
-    <InputGroup.Prepend>
-    <div>
-    <label> Comments</label>
-    </div>
-   
-    </InputGroup.Prepend>
-    <FormControl aria-label="Text input with checkbox" />
-  </InputGroup> 
+ 
             </ul>     
 
 {/* <div >
