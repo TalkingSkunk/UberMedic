@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import {MedicDispatchContext} from "../../utils/MedicDispatchContext";
 import "./style.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -15,10 +16,21 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
+import MedReq from "./MedReq/MedReq";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 
 function Dispatch() {
+  // relay dispatch destination coords to dispatch map marker
+  const {medDest, medRequest} = useContext(MedicDispatchContext)
+  const [medicDispatch, setMedicDispatch] = medDest
+  const [ medReqOut, setMedReqOut ] = medRequest
+  // modals stuff clicks
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+
   const socket = socketIOClient(ENDPOINT);
   useEffect(() => {
     socket.emit("dispatchlol", "hello from Dispatchside");
@@ -53,12 +65,15 @@ function Dispatch() {
     setProv('')
     setCity('')
     setStreet('')
-
+    // turn dest input to coords
     const result = await getCoords( {city: city, postCode: postal, address: street} )
+    // send dest coords to medicside
     socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
     console.log('sending destination coords to medicside')
+    //send dest coords to dispatch map for ambulance id [2021]
+    setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } })
+  
   }
-
   
   return (
     <div>
@@ -176,17 +191,18 @@ function Dispatch() {
       <CardDeck>
         {/* POLICE/FIREFIGHTERS REQUIRED? */}
         <Card className="text-center">
-          <Card.Header>POLICE & FIREFIGHTERS ?</Card.Header>
+          <Card.Header>MEDIC REQUESTS</Card.Header>
           <Card.Body>
-            <Card.Title>FOR ADDITIONAL ASSISTANCE ONLY</Card.Title>
 
-            <Button variant="primary">POLICE</Button>
-            <Button variant="danger">FIREFIGHTER</Button>
+              <MedReq />
+
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted
           </Card.Footer>
         </Card>
+
+
 
         {/* CALLER HISTORY */}
         <Card className="text-center">
