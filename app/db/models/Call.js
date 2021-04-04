@@ -1,43 +1,57 @@
 //makes comm with mongo easier
 const mongoose = require('mongoose')
+// const getCoords = require( "../../../client/src/Dispatcher/API/index" )
+// const result = await getCoords( {city: city, postCode: postal, address: street} )
+
 // the thing that a model wraps around ( this is a constructor function)
 const Schema = mongoose.Schema
+
+
 
 const patientSchema = new Schema({
    firstName: {
       type:String,
+      trim: true,
       required:true,
    },
    lastName: {
       type:String,
+      trim: true,
       required:true,
    },
    dobYMD: {
       type:Number,
+      trim: true,
       required:true,
    },
    healthID: {
       type:Number,
+      trim: true,
       required:true,
    },
    streetAddress: {
       type:String,
+      trim: true,
       required:true,
    },
    cityAddress: {
       type:String,
+      trim: true,
       required:true,
    },
    provAddress: {
       type:String,
+      trim: true,
       required:true,
    },
    postalCode: {
       type:String,
+      trim: true,
       required:true,
    },
    pickupLocation: {
       type:String,
+      trim: true,
       required:true,
    },
 })
@@ -45,52 +59,195 @@ const patientSchema = new Schema({
 const procedureSchema = new Schema({
    time: {
       type:Number,
+      trim: true,
       required:true,
    },
    code: {
       type:Number,
+      trim: true,
       required:true,
    },
    doneBy: {
       type:Number,
+      trim: true,
       required:true,
    },
    result:{
       type:String,
+      trim: true,
       required:true,
    },
 })
 
 // new instance of a schema object
-const callSchema = new Schema({
+const ambulanceReportSchema = new Schema({
    patient: [patientSchema],
    incidentHx: {
       type:String,
+      trim: true,
       required: true,
    },
    pastHx: {
       type:String,
+      trim: true,
       required: true,
    },
    rx: {
       type:String,
+      trim: true,
       required: true,
    },
    allergy: {
       type:String,
+      trim: true,
       required:true,
    },
    appearance: {
       type:String,
+      trim: true,
       required:true,
    },
    procedures: [procedureSchema],
    footnote: {
       type:String,
+      trim: true,
       required:true,
    },
 }, {timestamps: true}) // timestamps property (time report is created/updated) passed in as the second argument (opitional object) inside the Schema constructor
 
+const acknowledgeSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+const mobileSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+const arrivedDestSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+const ptContactSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+const departDestSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+const arrivedHospSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+const tocSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+const clearCallSchema = new Schema ({
+   coords: {
+      type:Array,
+      required: true
+   },
+   medicCreated: {
+      type:Date,
+      default: Date.now
+   }
+})
+
+
+const callSchema = new Schema ({
+   dispatcherCreated: {
+      type:Date,
+      default: Date.now
+   },
+   streetDest: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   cityDest: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   postalDest: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   callerName: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   callerNum: {
+      type:Number,
+      trim: true,
+      required:true,
+   },
+   destCoords: {
+      type:Array,
+      required: true
+   },
+   acknowledge: [acknowledgeSchema],
+   mobile: [mobileSchema],
+   arrivedDest: [arrivedDestSchema],
+   ptContact: [ptContactSchema],
+   departDest: [departDestSchema],
+   arrivedHosp: [arrivedHospSchema],
+   toc: [tocSchema],
+   clearCall: [clearCallSchema],
+   ambulanceReport: [ambulanceReportSchema]
+})
+
+
+
+
 //store this model ; collection name 'calls', what type of object we are storing inside this collection ( schema ): callSchema
 // use this Model now to save new call documents into the database collection
-module.exports = mongoose.model('Call', callSchema)
+const Call = mongoose.model('Call', callSchema)
+
+
+module.exports = Call;

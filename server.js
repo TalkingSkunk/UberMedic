@@ -10,17 +10,21 @@ const mongoose = require ('mongoose')
 // const MongoClient = require('mongodb').MongoClient;
 
 var cors = require('cors')
-app.use(cors())
+const db = require("./app/db/models/");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-  },
+   cors: {
+      origin: "*",
+   },
 });
 
+app.use(cors())
 
 const PORT = process.env.PORT || 8080
+
+
+//call Models
 
 
 
@@ -66,17 +70,11 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
          // })
 
          io.on('connection', (socket)=>{
-            const calls = db.collection('Calls')
             console.log('user connected')
          
             socket.on('dispatchlol', msg=>console.log(msg))
             socket.on('mediclol', msg=>console.log(msg))
          
-            // relay medic destination coords to medicside
-            socket.on('medicDest', data=>{
-               console.log('relay medic destination to medicside', JSON.parse(data))
-               io.emit('medicDestOut', data)
-            })
             // relay medic coords to dispatchside
             socket.on('medicCoords', data=>{
                console.log('relay medic coords to dispatchside', JSON.parse(data))
@@ -87,6 +85,32 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                console.log('relay medic requests to dispatchside', JSON.parse(data))
                io.emit('medReqOut', data)
             })
+            // relay call details to medicside (mongo)
+            socket.on('callDetails', data=>{
+               console.log('relay call details to medicside', JSON.parse(data))
+
+               //save to db
+               
+
+
+               // io.emit('callDetailsOut', data)
+            })            
+
+            // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
+
+
+
+
+
+
+
+
+            // relay medic destination coords to medicside (to be destroyed future)
+            socket.on('medicDest', data=>{
+               console.log('relay medic destination to medicside', JSON.parse(data))
+               io.emit('medicDestOut', data)
+            })
+
          
             
             // socket.on('destination', async (coords)=>{
