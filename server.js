@@ -1,16 +1,22 @@
-require( 'dotenv' ).config() // looks for .env ; process.env gets it's values
+require("dotenv").config(); // looks for .env ; process.env gets it's values
+const signUp = require("./client/src/loginPage/controller/authController");
 
-const path = require('path')
-const express = require('express')
-const app = express()
-const bodyParser = require('body-parser')
+const path = require("path");
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}))
-const mongoose = require ('mongoose')
+app.use(bodyParser.urlencoded({ extended: false }));
+const mongoose = require("mongoose");
 // const MongoClient = require('mongodb').MongoClient;
 
+<<<<<<< HEAD
 var cors = require('cors')
 const db = require("./app/db/models/");
+=======
+var cors = require("cors");
+app.use(cors());
+>>>>>>> 9e7b3b6abbfc60807b016cf1ebbbba5a1ffe1dbc
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -19,6 +25,7 @@ const io = require("socket.io")(server, {
    },
 });
 
+<<<<<<< HEAD
 app.use(cors())
 
 const PORT = process.env.PORT || 8080
@@ -29,15 +36,17 @@ const PORT = process.env.PORT || 8080
 
 
 
+=======
+const PORT = process.env.PORT || 8080;
+>>>>>>> 9e7b3b6abbfc60807b016cf1ebbbba5a1ffe1dbc
 
 // for parsing incoming POST data
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-
-if( !process.env.MONGODB_URI ){
-   console.log( '*ERROR* You need a .env file (with MONGODB_URI,...)' )
-   process.exit()
+if (!process.env.MONGODB_URI) {
+  console.log("*ERROR* You need a .env file (with MONGODB_URI,...)");
+  process.exit();
 }
 
 const uri = process.env.MONGODB_URI;
@@ -176,9 +185,14 @@ console.log ('yoyoma')
 
 
 
+app.post("/login", (req, res) => {
+  console.log("login");
+});
 
+app.post("/signup", (req, res) => {
+  console.log("test server");
+  console.log(req.body, "  SERVER");
+  signUp(req.body);
+});
 
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
-  
-
-
