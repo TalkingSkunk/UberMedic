@@ -10,6 +10,10 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import ModalInFunctionalComponent from '../../Wrapper/Questions/modal2/modal2'
 import '../Questions/Questions.css'
+import FunctionClick from './FunctionClick'
+// import Reset from'./Buttons/reset'
+// import Alpha from './Buttons/Alpha'
+
 
 
 function Questions () {
@@ -83,51 +87,8 @@ function Questions () {
     
     
   </InputGroup>
-
  
-            </ul>     
-
-{/* <div >
-<Button variant= 'primary'> Alpha </Button>
-<Button variant= 'info'> Bravo </Button>
-<Button variant= 'btn btn-success'> Charlie </Button>
-<Button variant= 'btn btn-warning'> Delta  </Button>
-<Button variant= 'btn btn-danger'> Echo </Button>
-
-</div> */}
-
-{/* <Container>
-  <Row>
-    <Col sm={8}><strong> Select Approriate Scenario</strong> </Col>
-    <Col sm={4}> <strong> LEGEND </strong></Col>
-  </Row>
-  <Row>
-    <Col sm><Button variant= 'primary'> Alpha </Button></Col>
-
-    <Col sm><Button variant= 'primary'> Alpha </Button> Non Serious or non life threatening</Col>
-  </Row>
-  <Row>
-  <Col sm><Button variant= 'info'> Bravo </Button></Col>
-
-  <Col sm><Button variant= 'info'> Bravo </Button>    Serious not life threatening – urgent</Col>
-  </Row>
-  <Row>
-  <Col sm><Button variant= 'btn btn-success'> Charlie </Button></Col>
-
-  <Col sm><Button variant= 'btn btn-success'> Charlie </Button>   Serious not life threatening – immediate</Col>
-  </Row>
-  <Row>
-  <Col sm><Button variant= 'btn btn-warning'> Delta  </Button></Col>
-  
-  <Col sm><Button variant= 'btn btn-warning'> Delta  </Button> Life threatening other than cardiac or respiratory arrest</Col>
-  </Row>
-  <Row>
-  <Col sm><Button variant= 'btn btn-danger'> Echo </Button></Col>
-
-  <Col sm><Button variant= 'btn btn-danger'> Echo </Button>         Life threatening – Cardiac or respiratory arrest</Col>
-  </Row>
-
-</Container> */}
+            </ul>    
 
 
 <CardDeck >
@@ -138,12 +99,15 @@ function Questions () {
       <Card.Body>
         <Card.Title > SELECT ONE</Card.Title>
     
-    <div>
-        <Button className="display-none" variant= 'primary display-none'> Alpha </Button>
+  {/* <Alpha/> */}
+    <FunctionClick> </FunctionClick>
+        {/* <Button variant= 'primary' onClick='FunctionClick()'>Alpha </Button>
         <Button variant= 'info'> Bravo </Button>
         <Button variant= 'btn btn-success'> Charlie </Button>
         <Button variant= 'btn btn-warning'> Delta  </Button>
-        <Button variant= 'btn btn-danger'> Echo </Button>
+        <Button variant= 'btn btn-danger'> Echo </Button> */}
+        <div >
+          {/* <Reset/> */}
         </div>
       </Card.Body>
       <Col sm> <ModalInFunctionalComponent/></Col>
