@@ -61,16 +61,15 @@ const Map = () => {
         setLng(parseFloat(longitude.toFixed(5)))
         setLat(parseFloat(latitude.toFixed(5)))
         socket.emit("medicCoords", JSON.stringify ({ lng: parseFloat(longitude.toFixed(5)), lat: parseFloat(latitude.toFixed(5)), timestamp: timestamp }) )
- 
+        console.log('sending medic coords to dispatchside')
 
-        console.log('sending coords', longitude, latitude)
     },[longitude,latitude])
 
 
     useEffect(()=>{
         socket.on('medicDestOut', data=>{
             const coords = JSON.parse(data)
-            console.log('incoming dest coords, medicside', coords)
+            console.log('receiving dest coords, medicside', coords)
             setLngDest(coords.lng)
             setLatDest(coords.lat)
         })
@@ -170,7 +169,7 @@ const Map = () => {
 
 
         // Clean up on unmount
-        return () => map.remove();
+        // return () => map.remove();
 
     }, [lng,lat]);
       

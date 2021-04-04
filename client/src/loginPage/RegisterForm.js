@@ -30,13 +30,13 @@ function RegisterForm() {
   const handleSubmit = async () => {
     /////create new User
     console.log("test");
-    const newUser = await fetch("/", {
+    const newUser = await fetch("/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(inputs),
     })
       .then((res) => res.json())
-      .then((res) => console.log(res))
+      // .then((res) => console.log(res))
       .catch((err) => console.log(err));
 
     handleClose();

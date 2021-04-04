@@ -1,7 +1,7 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
-import signUp from "./controller/authController";
+const signUp = require("./client/src/loginPage/controller/authController");
 
-const path = require("path");
+// const path = require("path");
 const express = require("express");
 const app = express();
 var cors = require("cors");
@@ -62,6 +62,45 @@ io.on("connection", (socket) => {
   socket.on("mediclol", (msg) => console.log(msg));
 
   socket.on("medicDest", (data) => {
+    console.log("relay medic destination to medicside", JSON.parse(data));
+    io.emit("medicDestOut", data);
+  });
+
+  socket.on("medicCoords", (data) => {
+    console.log("relay medic coords to dispatchside", JSON.parse(data));
+    //relay
+    io.emit("medicCoordsOut", data);
+  });
+
+  // socket.on('destination', async (coords)=>{
+  //    // to all sockets
+  //    console.log('receiving messsage from dispatch')
+  //    io.emit ('returnLocation', coords)
+  // let data = {
+  //    callID: 112,
+  //    unitNumber: 2021,
+  //    CTAS: 'ECHO',
+  //    CC: 'chest pain',
+  //    location: '1234 sunnyside dr',
+  //    intersection: 'bathurst and bloor',
+  //    police: 'on scene',
+  //    fire: 'on scene',
+  //    medic: 'on scene',
+  //    coords: coords,
+  // }
+
+  socket.on("disconnect", (reason) => {
+    console.log("user has disconnected :(");
+  });
+});
+
+io.on("connection", (socket) => {
+  console.log("user connected");
+
+  socket.on("dispatchlol", (msg) => console.log(msg));
+  socket.on("mediclol", (msg) => console.log(msg));
+
+  socket.on("medicDest", (data) => {
     console.log("relay medic destination", JSON.parse(data));
     io.emit("medicDestOut", data);
   });
@@ -94,12 +133,16 @@ io.on("connection", (socket) => {
   });
 });
 
-// app.post("/", (req, res) => {
-//   console.log("test server");
-//   console.log(req, "  SERVER");
-//   signUp(req.body);
-// });
+app.post("/login", (req, res) => {
+  console.log("login");
+});
 
-server.listen(PORT, () => {
+app.post("/signup", (req, res) => {
+  console.log("test server");
+  console.log(req.body, "  SERVER");
+  signUp(req.body);
+});
+
+server.listen(8080, () => {
   console.log(`listening on *:${PORT}`);
 });

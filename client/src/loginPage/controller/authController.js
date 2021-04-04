@@ -1,7 +1,7 @@
-import User from "../model/userModel";
-import catchAsync from "../utils/catchAsync";
+const User = require("../model/userModel");
+const catchAsync = require("../utils/catchAsync");
 
-const signUp = catchAsync(async (req, res, next) => {
+exports.signUp = catchAsync(async (req, res, next) => {
   console.log(req, "   REQ");
   const newUser = await User.create({
     name: req.name,
@@ -17,5 +17,3 @@ const signUp = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-export default signUp;

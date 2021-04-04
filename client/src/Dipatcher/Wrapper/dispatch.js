@@ -48,23 +48,18 @@ function Dispatch() {
   const handleSendDestination = async (e) => {
     e.preventDefault();
 
-    setPostal("");
-    setProv("");
-    setCity("");
-    setStreet("");
 
-    const result = await getCoords({
-      city: city,
-      postCode: postal,
-      address: street,
-    });
-    socket.emit(
-      "medicDest",
-      JSON.stringify({ lng: result[0], lat: result[1] })
-    );
-    console.log("sent destination to server with socket");
-  };
+    setPostal('')
+    setProv('')
+    setCity('')
+    setStreet('')
 
+    const result = await getCoords( {city: city, postCode: postal, address: street} )
+    socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
+    console.log('sending destination coords to medicside')
+  }
+
+  
   return (
     <div>
       <CardDeck>
@@ -127,6 +122,7 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>CALLER INFORMATION</Card.Header>
           <Card.Body>
+
             <form>
               <div>
                 <label> Name of Caller</label>

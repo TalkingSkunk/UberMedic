@@ -1,3 +1,4 @@
+import socketIOClient from 'socket.io-client'
 import React, { useRef, useEffect, useState, useContext } from 'react';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 
@@ -8,6 +9,7 @@ import { Col } from "react-bootstrap";
 // import MedicDispatchContext from "../../../utils/MedicDispatchContext";
 
 // import fetchJSON from "../../../utils/API"
+const ENDPOINT = "http://localhost:8080"
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
@@ -17,14 +19,30 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMyd
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const DispatcherMap = () => {
-    const [lngIncoming, setLngIncoming] = useState(0)
-    const [latIncoming, setLatIncoming] = useState(0)
+    const socket = socketIOClient(ENDPOINT)
+
+    useEffect(()=>{
+        socket.on('medicCoordsOut', data=>{
+            const coords = JSON.parse(data)
+            console.log('receiving medic coords, dispatchside', coords)
+            setLngMed(coords.lng)
+            setLatMed(coords.lat)
+        })
+
+    },[])
+    // medic position
+    const [lngMed, setLngMed] = useState(0)
+    const [latMed, setLatMed] = useState(0)
+    // medic destination position
+    const [lngDest, setLngDest] = useState(0)
+    const [latDest, setLatDest] = useState(0)
+
 
     // const fetchCoords = async () =>{
     //     const { status, coords: {lng,lat} } = await fetchJSON( `http://localhost:8080/coords-get/3000` )
     //     console.log ( 'fetching coords from medic', lng, lat)
-    //     setLngIncoming(lng)
-    //     setLatIncoming(lat)
+    //     setlngMed(lng)
+    //     setlatMed(lat)
     // }
 
     // useEffect(()=>{
@@ -41,15 +59,12 @@ const DispatcherMap = () => {
     // console.log(`MEDIC COORDS: id: [2021] lngOut: ${medicDispatch[2021].lngMedic}, latOut: ${medicDispatch[2021].latMedic}`)
 
 
-    //medic position
-    // const [lngIncoming, setLngIncoming] = useState(0)
-    // const [latIncoming, setLatIncoming] = useState(0)
 
     //The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
     const mapContainer = useRef();
     const [lng, setLng] = useState(-79.4718);
     const [lat, setLat] = useState(43.6708);
-    const [zoom, setZoom] = useState(11);
+    const [zoom, setZoom] = useState(9);
 
 
 
@@ -61,16 +76,24 @@ const DispatcherMap = () => {
             zoom: zoom
         });
 
-        if(!lngIncoming || !latIncoming){
+        if(!lngMed || !latMed){
             console.log('NO incoming medic coordinates')
             return
         }
 
-        new mapboxgl.Marker({
+        const medicMarker = new mapboxgl.Marker({
             color: "#000066",
             draggable: false,
-            }).setLngLat([lngIncoming, latIncoming])
+            }).setLngLat([lngMed, latMed])
             .addTo(map)
+        
+        if (lngDest !== 0 && latDest !== 0 ){
+            const medicDestMarker = new mapboxgl.Marker({
+                color: "#000066",
+                draggable: false,
+                }).setLngLat([lngDest, latDest])
+                .addTo(map)
+        }
 
 
         map.on('load', () => {
@@ -96,8 +119,8 @@ const DispatcherMap = () => {
 
         // map.resize()
         // Clean up on unmount
-        return () => map.remove();
-    }, [lngIncoming, latIncoming]);
+        // return () => map.remove();
+    }, [lngMed, latMed, lngDest, latDest]);
 
     // The mapContainer ref specifies that map should be drawn to the HTML page in a new <div> element.
     return (
@@ -105,8 +128,7 @@ const DispatcherMap = () => {
         {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
 
         <h1>don't be shy. step into the light</h1>
-        <h1>hello tehree</h1>
-        <br/>
+        <h1>hello there.</h1>
         <h1>don't be shy. step into the light</h1>
         <div className="map-container" ref={mapContainer} />
         </Col>
