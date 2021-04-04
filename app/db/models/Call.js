@@ -9,6 +9,10 @@ const Schema = mongoose.Schema
 
 
 const patientSchema = new Schema({
+   registeredPt:{
+      type:Number,
+      trim: true,
+   },
    firstName: {
       type:String,
       trim: true,
@@ -218,6 +222,11 @@ const callSchema = new Schema ({
       trim: true,
       required:true,
    },
+   intersection: {
+      type:String,
+      trim: true,
+      required:true,
+   },
    callerName: {
       type:String,
       trim: true,
@@ -242,7 +251,7 @@ const callSchema = new Schema ({
       trim: true,
       required:true,
    },
-   intersection: {
+   notes: {
       type:String,
       trim: true,
       required:true,
@@ -261,6 +270,10 @@ const callSchema = new Schema ({
       type:String,
       trim: true,
       required:true,
+   },
+   registeredPt:{
+      type:Number,
+      trim:true
    },
    acknowledge: [acknowledgeSchema],
    mobile: [mobileSchema],

@@ -44,8 +44,17 @@ function Dispatch() {
 
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
-  const [prov, setProv] = useState("");
   const [postal, setPostal] = useState("");
+  const [intersection, setIntersection] = useState("");
+  const [callerName, setCallerName] = useState("")
+  const [callerNum, setCallerNum] = useState("")
+  const [ctas, setCtas] = useState("delta")
+  const [cc, setCC] = useState("blunt trauma")
+  const [notes, setNotes] = useState("buzz #1234 and beware of the dog")
+  const [police, setPolice] = useState("Attending")
+  const [fire, setFire] = useState("N/A")
+  const [additional, setAdditional] = useState("N/A")
+  const [registeredPt, setRegisteredPt] = useState('')
 
   const updateStreet = (e) => {
     setStreet(e.target.value);
@@ -53,28 +62,52 @@ function Dispatch() {
   const updateCity = (e) => {
     setCity(e.target.value);
   };
-  const updateProv = (e) => {
-    setProv(e.target.value);
+  const updateInters = (e) => {
+    setIntersection(e.target.value);
   };
   const updatePostal = (e) => {
     setPostal(e.target.value);
   };
+  const updateCallerName = (e) => {
+    setCallerName(e.target.value)
+  }
+  const updateCallerNum = (e)=>{
+    setCallerNum(e.target.value)
+  }
+  const updateCtas = (e)=>{
+    setCtas(e.target.value)
+  }
+  const updateCC = (e)=>{
+    setCC(e.target.value)
+  }
+  const updateNotes = (e)=>{
+    setNotes(e.target.value)
+  }
+  const updatePolice = (e)=>{
+    setPolice(e.target.value)
+  }
+  const updateFire = (e)=>{
+    setFire(e.target.value)
+  }
+  const updateAdditional = (e)=>{
+    setAdditional(e.target.value)
+  }
+  const updateRegisteredPt = (e)=>{
+    setRegisteredPt(e.target.value)
+  }
+
+
 
   //onSubmit event listener
-  const handleSendDestination = async (e) => {
+  const handleCheckInters = async (e) => {
     e.preventDefault();
 
 
-    setPostal('')
-    setProv('')
-    setCity('')
-    setStreet('')
     // turn dest input to coords
     const result = await getCoords( {city: city, postCode: postal, address: street} )
     // send dest coords to medicside
     socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
-
-
+    
     console.log('sending destination coords to medicside')
     //send dest coords to dispatch map for ambulance id [2021]
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } })
@@ -85,29 +118,41 @@ function Dispatch() {
   const handleSendCall = async (e) => {
     e.preventDefault();
 
-
-    setPostal('')
-    setProv('')
-    setCity('')
-    setStreet('')
     // turn dest input to coords
-    // const result = await getCoords( {city: city, postCode: postal, address: street} )
+    const destLngLat = await getCoords( {city: city, postCode: postal, address: street} )
 
-    // socket.emit('callDetails', JSON.stringify( data=>{
-    //   streetDest:
-    //   cityDest:
-    //   postalDest:
-    //   callerName:
-    //   callerNum:
-    //   destLngLat:
-    //   ctas:
-    //   cc:
-    //   intersection:
-    //   
 
-      
-    // }))
+    await socket.emit('callDetails', JSON.stringify({
+      streetDest: street,
+      cityDest: city,
+      postalDest: postal,
+      intersection: intersection,
+      callerName: callerName,
+      callerNum: callerNum,
+      destLngLat: [destLngLat[0], destLngLat[1]],
+      ctas: ctas,
+      cc: cc,
+      notes: notes,
+      police: police,
+      fire: fire,
+      additional: additional,   
+      registeredPt: registeredPt
+    }))
 
+    console.log('sending call details to medicside')
+    setStreet('')
+    setCity('')
+    setIntersection('')
+    setPostal('')
+    setCallerName('')
+    setCallerNum('')
+    setCtas('')
+    setCC('')
+    setNotes('')
+    setPolice('')
+    setFire('')
+    setAdditional('')
+    setRegisteredPt('')
   }
 
 
@@ -120,7 +165,7 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>INCIDENT LOCATION</Card.Header>
           <Card.Body>
-            <Form onSubmit={handleSendDestination}>
+            <Form>
               <Form.Group controlId="formGridAddress1">
                 <Form.Label>Address</Form.Label>
                 <Form.Control
@@ -140,19 +185,6 @@ function Dispatch() {
                   />
                 </Form.Group>
 
-                <Form.Group as={Col} controlId="formGridState">
-                  <Form.Label>Province</Form.Label>
-                  <Form.Control
-                    as="select"
-                    defaultValue="Choose..."
-                    value={prov}
-                    onChange={updateProv}
-                  >
-                    <option>Ontario</option>
-                    <option>Quebec</option>
-                  </Form.Control>
-                </Form.Group>
-
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Postal Code</Form.Label>
                   <Form.Control
@@ -161,12 +193,22 @@ function Dispatch() {
                     onChange={updatePostal}
                   ></Form.Control>
                 </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridState">
+                  <Form.Label>Intersection</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={intersection}
+                    onChange={updateInters}
+                  />
+                </Form.Group>
+
               </Form.Row>
             </Form>
           </Card.Body>
           <Card.Footer className="text-muted">
-            <Button variant="primary" onClick={handleSendDestination}>
-              Submit
+            <Button variant="primary" onClick={handleCheckInters}>
+              Check for Intersection
             </Button>
           </Card.Footer>
         </Card>
@@ -179,24 +221,32 @@ function Dispatch() {
             <form>
               <div>
                 <label> Name of Caller</label>
-                <input />
+                <input 
+                  type="text"
+                  value={callerName}
+                  onChange={updateCallerName}
+                />
               </div>
               <div>
                 <label> Phone number</label>
-                <input />
+                <input 
+                  type="text"
+                  value={callerNum}
+                  onChange={updateCallerNum}
+                />
               </div>   
             </form>
           </Card.Body>
-          <Card.Footer className="text-muted">
+          {/* <Card.Footer className="text-muted">
             <Button variant="primary">Submit</Button>
-          </Card.Footer>
+          </Card.Footer> */}
         </Card>
       </CardDeck>
 
       {/* MEDICAL QUESTIONS */}
       <CardDeck>
         <Card className="text-center">
-          <Card.Header>ECHO SCRENNING</Card.Header>
+          <Card.Header>SCREENING</Card.Header>
           <Card.Body>
             <Card.Title> Severity of Situation</Card.Title>
 
@@ -206,7 +256,7 @@ function Dispatch() {
           </Card.Body>
 
           <Card.Footer className="text-muted">
-            <Button variant="primary">Submit</Button>
+            <Button variant="warning" onClick={handleSendCall}>SEND</Button>
           </Card.Footer>
         </Card>
 
@@ -258,9 +308,24 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>REGISTERED PATIENTS PROGRAM</Card.Header>
           <Card.Body>
-            <Card.Title>Card Title Goes Here</Card.Title>
-            <Card.Text>Some Card body content goes here</Card.Text>
-            <Button variant="primary">Primary Button</Button>
+            <form>
+            <Form.Row>
+
+                <Form.Group as={Col} controlId="formGridRegisteredPt">
+                  <Form.Label>Registered Patient #</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={registeredPt}
+                    onChange={updateRegisteredPt}
+                  ></Form.Control>
+                </Form.Group>
+
+              </Form.Row>
+            </form>
+            <Card.Text>
+              Patient Found
+              Patient FirstName: {registeredFirstName}
+          </Card.Text>
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted
