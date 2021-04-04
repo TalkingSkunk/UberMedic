@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import Modal from "react-bootstrap/Modal";
@@ -144,9 +145,7 @@ function Dispatch() {
               </div>
             </form>
           </Card.Body>
-          <Card.Footer className="text-muted">
-            <Button variant="primary">Submit</Button>
-          </Card.Footer>
+        
         </Card>
       </CardDeck>
 
@@ -155,16 +154,48 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>ECHO SCRENNING</Card.Header>
           <Card.Body>
-            <Card.Title> Severity of Situation</Card.Title>
-
+        <Row style={{marginTop:"-22px"}}>
             <Button variant="light">
               <ModalInFunctionalComponent />
             </Button>
-          </Card.Body>
+         </Row>
+            <Row style={{marginBottom:"22px"}} >
+          <div>
+            <Col>
+          CTAS:
+        </Col>
+        <Col>
+        <input>
+        </input>
+        </Col>
+        <Col>
+         Chief Compliant
+        </Col>
+        <Col>
+        <input>
+        </input>
+        </Col>
+        <Col>
+         Additional Notes
+        </Col>
+        <Col>
+        <input>
+        </input>
+        </Col>
+          </div>
+          </Row >
 
-          <Card.Footer className="text-muted">
-            <Button variant="primary">Submit</Button>
-          </Card.Footer>
+          <div>
+
+          <Button variant="primary">POLICE</Button>
+            <Button variant="danger">FIREFIGHTER</Button>
+          
+            </div>
+     
+          </Card.Body>
+        
+
+       
         </Card>
 
         {/* NEAREST AMBULANCE */}
@@ -186,8 +217,6 @@ function Dispatch() {
           <Card.Body>
             <Card.Title>FOR ADDITIONAL ASSISTANCE ONLY</Card.Title>
 
-            <Button variant="primary">POLICE</Button>
-            <Button variant="danger">FIREFIGHTER</Button>
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted
