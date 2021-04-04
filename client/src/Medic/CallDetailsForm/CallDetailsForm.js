@@ -51,9 +51,6 @@ const CallDetailsForm = () => {
             <label htmlFor="callID">Call ID</label>
             <input type="text" id="callID" name="callID" value={details.callID} readOnly required />
             <br/>
-            <label htmlFor="unitNum">Unit Number</label>
-            <input type="text" id="unitNum" name="unitNum" value={details.unitNum} readOnly required />
-            <br/>
             <label htmlFor="ctas">ctas</label>
             <input type="text" id="ctas" name="ctas" value={details.ctas} readOnly required />
             <br/>

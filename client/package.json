@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "http://127.0.0.1:8080",
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -23,7 +23,7 @@
     "react-map-gl": "^6.1.11",
     "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^4.0.3",
     "socket.io": "^4.0.0",
     "socket.io-client": "^4.0.0",
     "use-position": "0.0.8",

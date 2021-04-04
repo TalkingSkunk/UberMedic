@@ -115,8 +115,9 @@ const ambulanceReportSchema = new Schema({
    },
 }, {timestamps: true}) // timestamps property (time report is created/updated) passed in as the second argument (opitional object) inside the Schema constructor
 
+//8 timestamp during call progression
 const acknowledgeSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -126,7 +127,7 @@ const acknowledgeSchema = new Schema ({
    }
 })
 const mobileSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -136,7 +137,7 @@ const mobileSchema = new Schema ({
    }
 })
 const arrivedDestSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -146,7 +147,7 @@ const arrivedDestSchema = new Schema ({
    }
 })
 const ptContactSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -156,7 +157,7 @@ const ptContactSchema = new Schema ({
    }
 })
 const departDestSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -166,7 +167,7 @@ const departDestSchema = new Schema ({
    }
 })
 const arrivedHospSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -176,7 +177,7 @@ const arrivedHospSchema = new Schema ({
    }
 })
 const tocSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -186,7 +187,7 @@ const tocSchema = new Schema ({
    }
 })
 const clearCallSchema = new Schema ({
-   coords: {
+   lngLat: {
       type:Array,
       required: true
    },
@@ -196,7 +197,7 @@ const clearCallSchema = new Schema ({
    }
 })
 
-
+// one document to rule them all
 const callSchema = new Schema ({
    dispatcherCreated: {
       type:Date,
@@ -227,9 +228,39 @@ const callSchema = new Schema ({
       trim: true,
       required:true,
    },
-   destCoords: {
+   destLngLat: {
       type:Array,
       required: true
+   },
+   ctas: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   cc: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   intersection: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   police: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   fire: {
+      type:String,
+      trim: true,
+      required:true,
+   },
+   additional: {
+      type:String,
+      trim: true,
+      required:true,
    },
    acknowledge: [acknowledgeSchema],
    mobile: [mobileSchema],

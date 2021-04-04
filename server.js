@@ -10,13 +10,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const mongoose = require("mongoose");
 // const MongoClient = require('mongodb').MongoClient;
 
-<<<<<<< HEAD
 var cors = require('cors')
 const db = require("./app/db/models/");
-=======
-var cors = require("cors");
-app.use(cors());
->>>>>>> 9e7b3b6abbfc60807b016cf1ebbbba5a1ffe1dbc
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -25,20 +20,12 @@ const io = require("socket.io")(server, {
    },
 });
 
-<<<<<<< HEAD
 app.use(cors())
 
 const PORT = process.env.PORT || 8080
 
 
-//call Models
 
-
-
-
-=======
-const PORT = process.env.PORT || 8080;
->>>>>>> 9e7b3b6abbfc60807b016cf1ebbbba5a1ffe1dbc
 
 // for parsing incoming POST data
 app.use(express.urlencoded({ extended: true }));
@@ -50,20 +37,6 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// const run = async()=>{
-//    try {
-//      // Connect the client to the server
-//      await client.connect();
-//      // Establish and verify connection
-//      await client.db("UberMedic").command({ ping: 1 });
-//      console.log("Connected successfully to server");
-//    } finally {
-//      // Ensures that the client will close when you finish/error
-//      await client.close();
-//    }
-//  }
-//  run().catch(console.dir);
 
 // connect to db ; async task ; don't listen for requests until connection to db is complete
 mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true } )

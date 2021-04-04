@@ -2,6 +2,9 @@ import React, { useEffect, useState, useContext } from "react";
 import {MedicDispatchContext} from "../../utils/MedicDispatchContext";
 import "./style.css";
 import Button from "react-bootstrap/Button";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup"
+import ToggleButton from "react-bootstrap/ToggleButton"
+
 import Card from "react-bootstrap/Card";
 import CardColumns from "react-bootstrap/CardColumns";
 import CardDeck from "react-bootstrap/CardDeck";
@@ -29,6 +32,7 @@ function Dispatch() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
 
 
   const socket = socketIOClient(ENDPOINT);
@@ -76,6 +80,36 @@ function Dispatch() {
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } })
   
   }
+
+  //one button to rule them all
+  const handleSendCall = async (e) => {
+    e.preventDefault();
+
+
+    setPostal('')
+    setProv('')
+    setCity('')
+    setStreet('')
+    // turn dest input to coords
+    // const result = await getCoords( {city: city, postCode: postal, address: street} )
+
+    // socket.emit('callDetails', JSON.stringify( data=>{
+    //   streetDest:
+    //   cityDest:
+    //   postalDest:
+    //   callerName:
+    //   callerNum:
+    //   destLngLat:
+    //   ctas:
+    //   cc:
+    //   intersection:
+    //   
+
+      
+    // }))
+
+  }
+
 
 
   
@@ -150,7 +184,7 @@ function Dispatch() {
               <div>
                 <label> Phone number</label>
                 <input />
-              </div>
+              </div>   
             </form>
           </Card.Body>
           <Card.Footer className="text-muted">
