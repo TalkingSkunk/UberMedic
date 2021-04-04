@@ -7,15 +7,20 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CardDeck from 'react-bootstrap/CardDeck';
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
 import ModalInFunctionalComponent from '../../Wrapper/Questions/modal2/modal2'
-import Form from 'react-bootstrap/Form'
-import './Questions.css'
+import '../Questions/Questions.css'
+import FunctionClick from './FunctionClick'
+
+
 
 
 function Questions () {
 
         return (
             <>
+
+          <h1 >Screening Form</h1>
             <ul>
               <h1>Screening Questions</h1>
         {/* QUESTION 1 */}
@@ -38,7 +43,8 @@ function Questions () {
     
   </InputGroup>
 
- 
+  
+
 
   {/* QUESTION 2 */}
 
@@ -81,33 +87,27 @@ function Questions () {
     
     
   </InputGroup>
-
-  
-            </ul>     
+ 
+            </ul>    
 
 
 <CardDeck >
 
+
 <Card className="text-center" >
-      <Card.Header>Recommended Severity Levels</Card.Header>
+      <Card.Header>SEVERITY LEVELS</Card.Header>
       <Card.Body>
         <Card.Title > SELECT ONE</Card.Title>
     
-    <div>
-        <Button variant= 'primary'> Alpha </Button>
-        <Button variant= 'info'> Bravo </Button>
-        <Button variant= 'btn btn-success'> Charlie </Button>
-        <Button variant= 'btn btn-warning'> Delta  </Button>
-        <Button variant= 'btn btn-danger'> Echo </Button>
-        </div>
+  
+    <FunctionClick> </FunctionClick>
+       
+      
       </Card.Body>
-     
       <Col sm> <ModalInFunctionalComponent/></Col>
       <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
-
-
-
+   
 
 
     
@@ -142,6 +142,8 @@ function Questions () {
      
       <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
     </Card>
+   
+    
 
 </CardDeck>
             </>

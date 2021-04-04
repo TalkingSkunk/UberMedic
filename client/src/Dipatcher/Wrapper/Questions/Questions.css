@@ -6,3 +6,22 @@ h2{
     font-family: 'Times New Roman', Times, serif;
     font-weight: bolder;
 }
+
+.test{
+    background:blue;
+}
+.test2{
+    background: teal;
+}
+.test3{
+    background:green;
+}
+.test4{
+    background: orange;
+}
+.test5{
+    background: red;
+}
+.reset{
+    background:white
+}
