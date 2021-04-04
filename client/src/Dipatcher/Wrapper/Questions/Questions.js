@@ -11,8 +11,7 @@ import Form from 'react-bootstrap/Form';
 import ModalInFunctionalComponent from '../../Wrapper/Questions/modal2/modal2'
 import '../Questions/Questions.css'
 import FunctionClick from './FunctionClick'
-// import Reset from'./Buttons/reset'
-// import Alpha from './Buttons/Alpha'
+
 
 
 
@@ -99,16 +98,10 @@ function Questions () {
       <Card.Body>
         <Card.Title > SELECT ONE</Card.Title>
     
-  {/* <Alpha/> */}
+  
     <FunctionClick> </FunctionClick>
-        {/* <Button variant= 'primary' onClick='FunctionClick()'>Alpha </Button>
-        <Button variant= 'info'> Bravo </Button>
-        <Button variant= 'btn btn-success'> Charlie </Button>
-        <Button variant= 'btn btn-warning'> Delta  </Button>
-        <Button variant= 'btn btn-danger'> Echo </Button> */}
-        <div >
-          {/* <Reset/> */}
-        </div>
+       
+      
       </Card.Body>
       <Col sm> <ModalInFunctionalComponent/></Col>
       <Card.Footer className="text-muted"><Button variant="primary">Submit</Button></Card.Footer>
