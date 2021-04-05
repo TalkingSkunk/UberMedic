@@ -1,5 +1,5 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
-const signUp = require("./client/src/loginPage/controller/authController");
+const { signUp } = require("./client/src/loginPage/controller/authController");
 
 const path = require("path");
 const express = require("express");
@@ -9,23 +9,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const mongoose = require("mongoose");
 
-var cors = require('cors')
+var cors = require("cors");
 const db = require("./app/db/models/");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
-   cors: {
-      origin: "*",
-   },
+  cors: {
+    origin: "*",
+  },
 });
 
-app.use(cors())
+app.use(cors());
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 
- // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
+// mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
 // db.MobileUnit.insertMany([
-   
+
 //    {
 //       unit: 1517,
 //       medic1: 44112,
@@ -57,11 +57,6 @@ const PORT = process.env.PORT || 8080
 //       availability: "available",
 //    },
 // ])
-
-
-
-
-
 
 // for parsing incoming POST data
 app.use(express.urlencoded({ extended: true }));
@@ -307,15 +302,13 @@ console.log ('yoyoma')
 //    res.send({status:true, coords})
 // })
 
-
-
 app.post("/login", (req, res) => {
   console.log("login");
 });
 
 app.post("/signup", (req, res) => {
-  console.log("test server");
-  console.log(req.body, "  SERVER");
+  // console.log("test server");
+  // console.log(req.body, "  SERVER");
   signUp(req.body);
 });
 

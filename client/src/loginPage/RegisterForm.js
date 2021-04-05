@@ -47,7 +47,7 @@ function RegisterForm() {
       <div className="container">
         <Button
           onClick={handleShow}
-          style={{ position: "relative", right: "-850px" }}
+          style={{ position: "relative", marginLeft: "150px", top: "-38px" }}
           variant="primary"
           type="submit"
         >

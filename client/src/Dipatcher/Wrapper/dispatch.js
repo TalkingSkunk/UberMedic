@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import {MedicDispatchContext} from "../../utils/MedicDispatchContext";
+import { MedicDispatchContext } from "../../utils/MedicDispatchContext";
 import "./style.css";
 import Button from "react-bootstrap/Button";
-import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup"
-import ToggleButton from "react-bootstrap/ToggleButton"
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import ToggleButton from "react-bootstrap/ToggleButton";
 
 import Card from "react-bootstrap/Card";
 import CardColumns from "react-bootstrap/CardColumns";
@@ -20,21 +20,19 @@ import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
 import MedReq from "./MedReq/MedReq";
-import AvailUnits from "./AvailUnits/AvailUnits"
+import AvailUnits from "./AvailUnits/AvailUnits";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 
 function Dispatch() {
   // relay dispatch destination coords to dispatch map marker
-  const {medDest} = useContext(MedicDispatchContext)
-  const [medicDispatch, setMedicDispatch] = medDest
+  const { medDest } = useContext(MedicDispatchContext);
+  const [medicDispatch, setMedicDispatch] = medDest;
 
   // modals stuff clicks
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-
 
   const socket = socketIOClient(ENDPOINT);
   useEffect(() => {
@@ -49,16 +47,16 @@ function Dispatch() {
   const [city, setCity] = useState("");
   const [postal, setPostal] = useState("");
   const [intersection, setIntersection] = useState("");
-  const [callerName, setCallerName] = useState("")
-  const [callerNum, setCallerNum] = useState("")
-  const [ctas, setCtas] = useState("delta")
-  const [cc, setCC] = useState("blunt trauma")
-  const [notes, setNotes] = useState("buzz #1234 and beware of the dog")
-  const [police, setPolice] = useState("Attending")
-  const [fire, setFire] = useState("N/A")
-  const [additional, setAdditional] = useState("N/A")
-  const [registeredPt, setRegisteredPt] = useState('')
-  const [registeredPtExist, setRegisteredPtExist] = useState('')
+  const [callerName, setCallerName] = useState("");
+  const [callerNum, setCallerNum] = useState("");
+  const [ctas, setCtas] = useState("delta");
+  const [cc, setCC] = useState("blunt trauma");
+  const [notes, setNotes] = useState("buzz #1234 and beware of the dog");
+  const [police, setPolice] = useState("Attending");
+  const [fire, setFire] = useState("N/A");
+  const [additional, setAdditional] = useState("N/A");
+  const [registeredPt, setRegisteredPt] = useState("");
+  const [registeredPtExist, setRegisteredPtExist] = useState("");
 
   const updateStreet = (e) => {
     setStreet(e.target.value);
@@ -73,66 +71,72 @@ function Dispatch() {
     setPostal(e.target.value);
   };
   const updateCallerName = (e) => {
-    setCallerName(e.target.value)
-  }
-  const updateCallerNum = (e)=>{
-    setCallerNum(e.target.value)
-  }
-  const updateCtas = (e)=>{
-    setCtas(e.target.value)
-  }
-  const updateCC = (e)=>{
-    setCC(e.target.value)
-  }
-  const updateNotes = (e)=>{
-    setNotes(e.target.value)
-  }
-  const updatePolice = (e)=>{
-    setPolice(e.target.value)
-  }
-  const updateFire = (e)=>{
-    setFire(e.target.value)
-  }
-  const updateAdditional = (e)=>{
-    setAdditional(e.target.value)
-  }
-  const updateRegisteredPt = (e)=>{
-    setRegisteredPt(e.target.value)
-  }
-  const handleRegisteredPt = async (e)=>{
-    await socket.emit('fetchRegisteredPt', JSON.stringify({
-      registeredId: registeredPt
-    }))
-    console.log('sent request for registered info')
-    socket.on('fetchRegisteredPtOut', data=>{
-      const patient = JSON.parse(data)
-      if (patient !== null){
-        console.log("this is the patient received", patient)
-        setRegisteredPtExist(patient.firstName)
+    setCallerName(e.target.value);
+  };
+  const updateCallerNum = (e) => {
+    setCallerNum(e.target.value);
+  };
+  const updateCtas = (e) => {
+    setCtas(e.target.value);
+  };
+  const updateCC = (e) => {
+    setCC(e.target.value);
+  };
+  const updateNotes = (e) => {
+    setNotes(e.target.value);
+  };
+  const updatePolice = (e) => {
+    setPolice(e.target.value);
+  };
+  const updateFire = (e) => {
+    setFire(e.target.value);
+  };
+  const updateAdditional = (e) => {
+    setAdditional(e.target.value);
+  };
+  const updateRegisteredPt = (e) => {
+    setRegisteredPt(e.target.value);
+  };
+  const handleRegisteredPt = async (e) => {
+    await socket.emit(
+      "fetchRegisteredPt",
+      JSON.stringify({
+        registeredId: registeredPt,
+      })
+    );
+    console.log("sent request for registered info");
+    socket.on("fetchRegisteredPtOut", (data) => {
+      const patient = JSON.parse(data);
+      if (patient !== null) {
+        console.log("this is the patient received", patient);
+        setRegisteredPtExist(patient.firstName);
       } else {
-        setRegisteredPtExist('N/A')
+        setRegisteredPtExist("N/A");
       }
-    })
-    console.log('received info for registered pt back')
-
-  }
-
-
+    });
+    console.log("received info for registered pt back");
+  };
 
   //onSubmit event listener
   const handleCheckInters = async (e) => {
     e.preventDefault();
 
     // turn dest input to coords
-    const result = await getCoords( {city: city, postCode: postal, address: street} )
+    const result = await getCoords({
+      city: city,
+      postCode: postal,
+      address: street,
+    });
     // send dest coords to medicside
-    socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
-    
-    console.log('sending destination coords to medicside')
+    socket.emit(
+      "medicDest",
+      JSON.stringify({ lng: result[0], lat: result[1] })
+    );
+
+    console.log("sending destination coords to medicside");
     //send dest coords to dispatch map for ambulance id [2021]
-    setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } })
-  
-  }
+    setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } });
+  };
 
   //one button to rule them all
   const handleSendCall = async (e) => {
@@ -240,7 +244,6 @@ function Dispatch() {
                     onChange={updateInters}
                   />
                 </Form.Group>
-
               </Form.Row>
             </Form>
           </Card.Body>
@@ -255,11 +258,10 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>CALLER INFORMATION</Card.Header>
           <Card.Body>
-
             <form>
               <div>
                 <label> Name of Caller</label>
-                <input 
+                <input
                   type="text"
                   value={callerName}
                   onChange={updateCallerName}
@@ -267,12 +269,12 @@ function Dispatch() {
               </div>
               <div>
                 <label> Phone number</label>
-                <input 
+                <input
                   type="text"
                   value={callerNum}
                   onChange={updateCallerNum}
                 />
-              </div>   
+              </div>
             </form>
           </Card.Body>
           {/* <Card.Footer className="text-muted">
@@ -294,7 +296,9 @@ function Dispatch() {
           </Card.Body>
 
           <Card.Footer className="text-muted">
-            <Button variant="warning" onClick={handleSendCall}>SEND</Button>
+            <Button variant="warning" onClick={handleSendCall}>
+              SEND
+            </Button>
           </Card.Footer>
         </Card>
 
@@ -303,9 +307,7 @@ function Dispatch() {
           <Card.Header>Closest Available Units</Card.Header>
           <Card.Body>
             <ListGroup as="ul">
-
               <AvailUnits />
-
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
@@ -327,23 +329,17 @@ function Dispatch() {
         </Card>
       </CardDeck>
 
-      
-
       <CardDeck>
         {/* MEDIC REQUESTS SIGNAL INCOMING */}
         <Card className="text-center">
           <Card.Header>MEDIC REQUESTS</Card.Header>
           <Card.Body>
-
-              <MedReq />
-
+            <MedReq />
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted
           </Card.Footer>
         </Card>
-
-
 
         {/* CALLER HISTORY */}
         <Card className="text-center">
@@ -366,8 +362,7 @@ function Dispatch() {
           <Card.Header>REGISTERED PATIENTS PROGRAM</Card.Header>
           <Card.Body>
             <form>
-            <Form.Row>
-
+              <Form.Row>
                 <Form.Group as={Col} controlId="formGridRegisteredPt">
                   <Form.Label>Registered Patient #</Form.Label>
                   <Form.Control
@@ -379,20 +374,15 @@ function Dispatch() {
                 <Button variant="primary" onClick={handleRegisteredPt}>
                   Search
                 </Button>
-
-
               </Form.Row>
             </form>
-            {registeredPtExist !== "N/A" ?
+            {registeredPtExist !== "N/A" ? (
               <Card.Text>
-                Patient Found
-                Patient FirstName: {registeredPtExist}
+                Patient Found Patient FirstName: {registeredPtExist}
               </Card.Text>
-              :
-              <Card.Text>
-                Unregistered ID!
-              </Card.Text>
-            }
+            ) : (
+              <Card.Text>Unregistered ID!</Card.Text>
+            )}
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted
