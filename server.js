@@ -13,6 +13,7 @@ const mongoose = require("mongoose");
 var cors = require("cors");
 const db = require("./app/db/models/");
 const { sign } = require("crypto");
+const MedReq = require("./app/db/models/MedReq");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
