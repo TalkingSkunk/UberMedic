@@ -91,26 +91,27 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             })
             // relay medic reqs to dispatchside
             socket.on('medReq', data=>{
-               console.log('relay medic requests to dispatchside', JSON.parse(data))
+               console.log('save medic requests to db', JSON.parse(data))
                const medReqpack = JSON.parse(data)
                db.MedReq.create({
                   unit: medReqpack.unit,
                   reqFor: medReqpack.reqFor,
                   status: "active",
                })
+               db.MedReq.find({status: "active"}).then(request=>{
+                  console.log('sending medic reqs to dispatchside', request)
+                  io.emit('medReqOut', JSON.stringify(request))
+               })
             })
-            // db.MedReq.find({status: "active"}).then(request=>{
-            //    io.emit('medReqOut', JSON.stringify(request))
+            // db.MedReq.watch().on('change',(change)=>{
+            //    console.log('change to medreqs', change)
             // })
-            db.MedReq.watch().on('change',(change)=>{
-               console.log('change to medreqs', change)
-            })
             // approve medic req
             socket.on('approveReq', data=>{
                console.log('approve medic requests, dispatchside', JSON.parse(data))
                const handleReq = JSON.parse(data)
-               db.MedReq.updateOne({
-                  unit: handleReq.unit,
+               db.MedReq.update({
+                  // unit: handleReq.unit,
                   reqFor: handleReq.isFor
                },{
                   $set: {
@@ -122,8 +123,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             socket.on('rejectReq', data=>{
                console.log('reject medic requests, dispatchside', JSON.parse(data))
                const handleReq = JSON.parse(data)
-               db.MedReq.updateOne({
-                  unit: handleReq.unit,
+               db.MedReq.update({
+                  // unit: handleReq.unit,
                   reqFor: handleReq.isFor
                },{
                   $set: {
