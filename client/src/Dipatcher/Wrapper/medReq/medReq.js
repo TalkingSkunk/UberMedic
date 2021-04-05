@@ -1,14 +1,22 @@
-import React, {useContext, useState} from 'react'
-import {MedicDispatchContext} from "../../../utils/MedicDispatchContext";
+import React, {useEffect, useState} from 'react'
 import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:8080";
 
 
+const MedReq = () =>{    
+    const socket = socketIOClient(ENDPOINT)
 
-const MedReq = () =>{
-    const {medRequest} = useContext(MedicDispatchContext)
-    const [ medReqOut, setMedReqOut ] = medRequest
+    useEffect(()=>{
+        socket.on('medReqOut', data=>{
+            console.log('receiving medic requests, dispatchside', JSON.parse(data))
+            const medReqArray = JSON.parse(data)
+            setMedReqOut(medReqArray)
+        })
+    },[])
+    const [ medReqOut, setMedReqOut ] = useState([])
 
     const [reqContent, setReqContent] = useState("")
 
@@ -16,30 +24,36 @@ const MedReq = () =>{
         // clear request after approve from the list
         // setMedReqOut(prevReq => [...prevReq, {id: dataOut.id, for: dataOut.for}])
         // const revisedComments = state.comments.filter( (_,idx)=>idx!==action.value )
-        const isId = e.target.dataset.id
+        const isUnit = e.target.dataset.unit
         const isFor = e.target.dataset.for
-        setMedReqOut(prevReq=>{
-            prevReq.filter(item=>item.id !== isId && item.for !== isFor )
-        })
+        socket.emit('approveReq', JSON.stringify({
+            unit: isUnit,
+            isFor: isFor,
+            status: "approved"
+        }))
+        setShow(false);
+    }
+
+    const handleClose = (e) => {
+        const isUnit = e.target.dataset.unit
+        const isFor = e.target.dataset.for
+        socket.emit('rejectReq', JSON.stringify({
+            unit: isUnit,
+            isFor: isFor,
+            status: "rejected"
+        }))
         setShow(false);
     }
 
     // modals stuff clicks
     const [show, setShow] = useState(false);
-    const [modalId, setModalId] = useState("")
+    const [modalUnit, setModalUnit] = useState("")
     const [modalFor, setModalFor] = useState("")
     
-    const handleClose = (e) => {
-        const isId = e.target.dataset.id
-        const isFor = e.target.dataset.for
-        setMedReqOut(prevReq=>{
-            prevReq.filter(item=>item.id !== isId && item.for !== isFor )
-        })
-        setShow(false);
-    }
+    // when the request list is clicked... show modal
     const handleShow = (e) => {
         setReqContent(e.target.innerText)
-        setModalId(e.target.dataset.id)
+        setModalUnit(e.target.dataset.unit)
         setModalFor(e.target.dataset.for)
         setShow(true);
     }
@@ -49,8 +63,8 @@ const MedReq = () =>{
             {medReqOut.map(data=>{
                 return (
                     <>
-                        <ListGroup.Item action onClick={handleShow} data-id={data.id} data-for={data.for}>
-                            [{data.id}] Requesting >> {data.for}...
+                        <ListGroup.Item action onClick={handleShow} data-unit={data.unit} data-for={data.reqFor}>
+                            {data.createdAt}: [{data.unit}] Requesting >> {data.reqFor}...
                         </ListGroup.Item>
                         <Modal
                             show={show}
@@ -59,7 +73,7 @@ const MedReq = () =>{
                             keyboard={false}
                         >
                             <Modal.Header closeButton>
-                            <Modal.Title>Resource Request</Modal.Title>
+                                <Modal.Title>Resource Request</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 {reqContent}
@@ -67,10 +81,10 @@ const MedReq = () =>{
                                 Please Contact Ambulance Prior to Decision.
                             </Modal.Body>
                             <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose} data-id={modalId} data-for={modalFor}>
-                                Disregard
-                            </Button>
-                            <Button variant="primary" onClick={handleApprove} data-id={modalId} data-for={modalFor}>Approve</Button>
+                                <Button variant="secondary" onClick={handleClose} data-unit={modalUnit} data-for={modalFor}>
+                                    Disregard
+                                </Button>
+                                <Button variant="primary" onClick={handleApprove} data-unit={modalUnit} data-for={modalFor}>Approve</Button>
                             </Modal.Footer>
                         </Modal>
                     </>

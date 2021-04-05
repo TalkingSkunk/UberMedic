@@ -10,9 +10,10 @@ const Navbar = () => {
         e.preventDefault();
         setRequestFor(e.target.innerText)
     }
-    const handleReqConfirm = (e) => {
+    const handleReqConfirm = async (e) => {
         e.preventDefault();
-        socket.emit("medReq", JSON.stringify ({ id: 2021, for: requestFor }) )
+        console.log('sending request to dispatchside')
+        await socket.emit("medReq", JSON.stringify ({ unit: 2021, reqFor: requestFor }) )
     }
 
     const [requestFor, setRequestFor] = useState('')

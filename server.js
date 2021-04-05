@@ -24,50 +24,31 @@ app.use(cors())
 
 const PORT = process.env.PORT || 8080
 
-// id: {
-// firstName: {
-
-// lastName: {
-
-// healthID: {
-
-// pastHx: {
-
-// standingOrder: {
-
- // mock registered pts
-// db.RegisteredPt.insertMany([
+ // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
+// db.MobileUnit.insertMany([
 //    {
-//       id: 12345,
-//       firstName: "Barbara",
-//       lastName: "Sim",
-//       healthID: "506950596059LO",
-//       pastHx: "stage 4 pancreatic cancer, palliative",
-//       standingOrder: "hydrocodone"
+//       unit: 1984,
+//       medic1: 09876,
+//       medic2: 94837,
+//       availability: "available",
 //    },
 //    {
-//       id: 12346,
-//       firstName: "Lois",
-//       lastName: "Mol",
-//       healthID: "506953336059LO",
-//       pastHx: "stage 3 colon cancer, palliative",
-//       standingOrder: "Fentanyl"
+//       unit: 1917,
+//       medic1: 49584,
+//       medic2: 23309,
+//       availability: "en route to CTAS Alpha-Charlie",
 //    },
 //    {
-//       id: 12347,
-//       firstName: "Katrina",
-//       lastName: "Hur",
-//       healthID: "506900096059LO",
-//       pastHx: "Extended Care LTC resident, prone to fall",
-//       standingOrder: "X-ray, casting, suturing PRN"
+//       unit: 1945,
+//       medic1: 20192,
+//       medic2: 44932,
+//       availability: "busy",
 //    },
 //    {
-//       id: 12348,
-//       firstName: "Bob",
-//       lastName: "Goo",
-//       healthID: "506900096059LO",
-//       pastHx: "Extended Care LTC resident, prone to fall",
-//       standingOrder: "X-ray, casting, suturing PRN"
+//       unit: 2021,
+//       medic1: 44932,
+//       medic2: 00492,
+//       availability: "busy",
 //    },
 // ])
 
@@ -95,10 +76,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
          server.listen(PORT, () => {
             console.log (`listening on *:${PORT}`)
          })
-         // Users.watch().on('change',(change)=>{
-         //    console.log('Something has changed')
-         //    io.to(change.fullDocument._id).emit('changes',change.fullDocument)
-         // })
+      
 
          io.on('connection', (socket)=>{
             console.log('user connected')
@@ -114,7 +92,44 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             // relay medic reqs to dispatchside
             socket.on('medReq', data=>{
                console.log('relay medic requests to dispatchside', JSON.parse(data))
-               io.emit('medReqOut', data)
+               const medReqpack = JSON.parse(data)
+               db.MedReq.create({
+                  unit: medReqpack.unit,
+                  reqFor: medReqpack.reqFor,
+                  status: "active",
+               })
+            })
+            // db.MedReq.find({status: "active"}).then(request=>{
+            //    io.emit('medReqOut', JSON.stringify(request))
+            // })
+            db.MedReq.watch().on('change',(change)=>{
+               console.log('change to medreqs', change)
+            })
+            // approve medic req
+            socket.on('approveReq', data=>{
+               console.log('approve medic requests, dispatchside', JSON.parse(data))
+               const handleReq = JSON.parse(data)
+               db.MedReq.updateOne({
+                  unit: handleReq.unit,
+                  reqFor: handleReq.isFor
+               },{
+                  $set: {
+                     status: handleReq.status
+                  }
+               })
+            })
+            // reject medic req
+            socket.on('rejectReq', data=>{
+               console.log('reject medic requests, dispatchside', JSON.parse(data))
+               const handleReq = JSON.parse(data)
+               db.MedReq.updateOne({
+                  unit: handleReq.unit,
+                  reqFor: handleReq.isFor
+               },{
+                  $set: {
+                     status: handleReq.status
+                  }
+               })
             })
             //return request for registered patient name to dispatchside
             socket.on('fetchRegisteredPt', data=>{

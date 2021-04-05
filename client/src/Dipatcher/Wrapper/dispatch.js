@@ -25,9 +25,9 @@ const ENDPOINT = "http://localhost:8080";
 
 function Dispatch() {
   // relay dispatch destination coords to dispatch map marker
-  const {medDest, medRequest} = useContext(MedicDispatchContext)
+  const {medDest} = useContext(MedicDispatchContext)
   const [medicDispatch, setMedicDispatch] = medDest
-  const [ medReqOut, setMedReqOut ] = medRequest
+
   // modals stuff clicks
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
