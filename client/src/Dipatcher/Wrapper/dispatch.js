@@ -288,9 +288,11 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>Closest Available Units</Card.Header>
           <Card.Body>
+            <ListGroup as="ul">
 
               <AvailUnits />
 
+            </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted

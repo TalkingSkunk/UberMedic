@@ -25,8 +25,32 @@ app.use(cors())
 const PORT = process.env.PORT || 8080
 
  // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
-// db.MobileUnit.create([
+// db.MobileUnit.insertMany([
    
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+//    },
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+//    },
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+//    },
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+//    },
 //    {
 //       unit: 1517,
 //       medic1: 44112,
@@ -73,10 +97,10 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                io.emit('medicCoordsOut', data)
             })
             // relay availablt units to dispatchside
-
+            // socket.on('availUnits',)
             // initial populate of available units to dispatchside
             socket.on('fetchUnits', ()=>{
-               db.MobileUnit.find({availability: "available"}).then(request=>{
+               db.MobileUnit.find({ availability: {$in:["available", "en route to CTAS Alpha-Charlie"]} }).sort({availability: 1}).then(request=>{
                   console.log('fetching available units to dispatchside', request)
                   io.emit('fetchUnitsOut', JSON.stringify(request))
                })

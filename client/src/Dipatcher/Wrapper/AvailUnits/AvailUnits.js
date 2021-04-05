@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 // import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
-import Button from "react-bootstrap/Button";
+// import Button from "react-bootstrap/Button";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 
@@ -16,88 +16,69 @@ const AvailUnits = () =>{
         socket.on('fetchUnitsOut', data=>{
             const populateUnits = JSON.parse(data)
             console.log('populating available units, dispatchside', populateUnits)
-            setMedReqOut(populateReq)
+            setAvailUnits(populateUnits)
         })
     },[])
 
-    useEffect(()=>{
-        socket.on('medReqOut', data=>{
-            console.log('receiving medic requests, dispatchside', JSON.parse(data))
-            const medReqArray = JSON.parse(data)
-            setMedReqOut(medReqArray)
-        })
-    },[])
-    const [ medReqOut, setMedReqOut ] = useState([])
+    // useEffect(()=>{
+    //     socket.on('medReqOut', data=>{
+    //         console.log('receiving medic requests, dispatchside', JSON.parse(data))
+    //         const medReqArray = JSON.parse(data)
+    //         setMedReqOut(medReqArray)
+    //     })
+    // },[])
 
-    const [reqContent, setReqContent] = useState("")
+    const [ availUnits, setAvailUnits ] = useState([])
 
-    const handleApprove = (e)=>{
-        // clear request after approve from the list
-        // setMedReqOut(prevReq => [...prevReq, {id: dataOut.id, for: dataOut.for}])
-        // const revisedComments = state.comments.filter( (_,idx)=>idx!==action.value )
-        const isUnit = e.target.dataset.unit
-        const isFor = e.target.dataset.for
-        socket.emit('approveReq', JSON.stringify({
-            unit: isUnit,
-            isFor: isFor,
-            status: "approved"
-        }))
-        setShow(false);
+
+    //clickety click listgroupitem
+    const [isActive, setIsActive] = useState('')
+    const handleActive = (e) => {
+        if(e.target.classList.contains('active')){
+            e.target.classList.remove('active')
+        } else {
+            e.target.classList.add('active')
+        }
     }
 
-    const handleClose = (e) => {
-        const isUnit = e.target.dataset.unit
-        const isFor = e.target.dataset.for
-        socket.emit('rejectReq', JSON.stringify({
-            unit: isUnit,
-            isFor: isFor,
-            status: "rejected"
-        }))
-        setShow(false);
-    }
+    // const handleApprove = (e)=>{
+    //     // clear request after approve from the list
+    //     // setMedReqOut(prevReq => [...prevReq, {id: dataOut.id, for: dataOut.for}])
+    //     // const revisedComments = state.comments.filter( (_,idx)=>idx!==action.value )
+    //     const isUnit = e.target.dataset.unit
+    //     const isFor = e.target.dataset.for
+    //     socket.emit('approveReq', JSON.stringify({
+    //         unit: isUnit,
+    //         isFor: isFor,
+    //         status: "approved"
+    //     }))
+    //     setShow(false);
+    // }
 
-    // modals stuff clicks
-    const [show, setShow] = useState(false);
-    const [modalUnit, setModalUnit] = useState("")
-    const [modalFor, setModalFor] = useState("")
-    
-    // when the request list is clicked... show modal
-    const handleShow = (e) => {
-        setReqContent(e.target.innerText)
-        setModalUnit(e.target.dataset.unit)
-        setModalFor(e.target.dataset.for)
-        setShow(true);
-    }
+    // const handleClose = (e) => {
+    //     const isUnit = e.target.dataset.unit
+    //     const isFor = e.target.dataset.for
+    //     socket.emit('rejectReq', JSON.stringify({
+    //         unit: isUnit,
+    //         isFor: isFor,
+    //         status: "rejected"
+    //     }))
+    //     setShow(false);
+    // }
+
+
 
     return(
         <ListGroup>
-            {medReqOut.map(data=>{
+            {availUnits.map(data=>{
                 return (
                     <>
-                        <ListGroup.Item action onClick={handleShow} data-unit={data.unit} data-for={data.reqFor}>
-                            {data.createdAt}: [{data.unit}] Requesting >> {data.reqFor}...
-                        </ListGroup.Item>
-                        <Modal
-                            show={show}
-                            onHide={handleClose}
-                            backdrop="static"
-                            keyboard={false}
-                        >
-                            <Modal.Header closeButton>
-                                <Modal.Title>Resource Request</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                {reqContent}
-                                <br/>
-                                Please Contact Ambulance Prior to Decision.
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button variant="secondary" onClick={handleClose} data-unit={modalUnit} data-for={modalFor}>
-                                    Disregard
-                                </Button>
-                                <Button variant="primary" onClick={handleApprove} data-unit={modalUnit} data-for={modalFor}>Approve</Button>
-                            </Modal.Footer>
-                        </Modal>
+                        <li class="list-group-item" aria-current="true" onClick={handleActive}>
+                            [{data.unit}] Status >> {data.availability}
+                        </li>
+                        {/* <ListGroup.Item as="li" onClick={handleActive}>
+                            [{data.unit}] Status >> {data.availability}
+                        </ListGroup.Item> */}
                     </>
                 )
             })}
