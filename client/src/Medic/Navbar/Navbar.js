@@ -1,6 +1,35 @@
 import React, { useRef, useEffect, useState } from 'react';
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:8080";
 
 const Navbar = () => {
+
+    const socket = socketIOClient(ENDPOINT)
+
+    const handleReq = (e) => {
+        e.preventDefault();
+        setRequestFor(e.target.innerText)
+    }
+    const handleReqConfirm = async (e) => {
+        e.preventDefault();
+        console.log('sending request to dispatchside')
+        await socket.emit("medReq", JSON.stringify ({ unit: 2021, reqFor: requestFor }) )
+    }
+
+    const [requestFor, setRequestFor] = useState('')
+
+    // const handleReq = (state, action) => {
+    //     switch (action.type) {
+    //     case "POST":
+    //       return { ...state, comments: [ action.value, ...state.comments ] };
+    //     case "DELETE":
+    //       // ADD delete code?
+    //       return { ...state };
+    //     default:
+    //       throw new Error(`Invalid action type: ${action.type}`)
+    //     }
+    //   }
+    
     return(
         <nav>
             <div className="site-title">
@@ -22,11 +51,11 @@ const Navbar = () => {
                         Dispatch will respond to your request.
                         </div>
                         <div className="modal-footer">
-                        <button type="button" className="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Consult BHP</button>
-                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Police</button>
-                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">Fire</button>
-                        <button type="button" className="btn btn-secdonary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">PCP Backup</button>
-                        <button type="button" className="btn btn-dark" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq">ACP Backup</button>
+                        <button type="button" className="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>BHP</button>
+                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>Police</button>
+                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>Fire</button>
+                        <button type="button" className="btn btn-secdonary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>PCP Backup</button>
+                        <button type="button" className="btn btn-dark" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>ACP Backup</button>
                         </div>
                     </div>
                     </div>
@@ -36,12 +65,12 @@ const Navbar = () => {
                     <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                        <h5 className="modal-title" id="staticBackdropLabel">Confirm Request?</h5>
+                        <h5 className="modal-title" id="staticBackdropLabel">Requesting {requestFor}</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary">Understood</button>
+                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={handleReqConfirm}>Confirm</button>
                         </div>
                     </div>
                     </div>

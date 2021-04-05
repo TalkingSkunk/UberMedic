@@ -24,6 +24,7 @@ function Questions () {
 
           <h1 >Screening Form</h1>
             <ul>
+              <h1>Screening Questions</h1>
         {/* QUESTION 1 */}
                  <h2>1.) Is the patient conscious?</h2>
                  <InputGroup className="mb-3">

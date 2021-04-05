@@ -1,34 +1,231 @@
-require( 'dotenv' ).config() // looks for .env ; process.env gets it's values
+require("dotenv").config(); // looks for .env ; process.env gets it's values
+const signUp = require("./client/src/loginPage/controller/authController");
 
-const path = require('path')
-const express = require('express')
-const app = express()
+const path = require("path");
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+const mongoose = require("mongoose");
+// const MongoClient = require('mongodb').MongoClient;
+
 var cors = require('cors')
-app.use(cors())
+const db = require("./app/db/models/");
+const MedReq = require("./app/db/models/MedReq")
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-  },
+   cors: {
+      origin: "*",
+   },
 });
 
+app.use(cors())
 
 const PORT = process.env.PORT || 8080
+
+ // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
+// db.MobileUnit.insertMany([
+//    {
+//       unit: 1984,
+//       medic1: 09876,
+//       medic2: 94837,
+//       availability: "available",
+//    },
+//    {
+//       unit: 1917,
+//       medic1: 49584,
+//       medic2: 23309,
+//       availability: "en route to CTAS Alpha-Charlie",
+//    },
+//    {
+//       unit: 1945,
+//       medic1: 20192,
+//       medic2: 44932,
+//       availability: "busy",
+//    },
+//    {
+//       unit: 2021,
+//       medic1: 44932,
+//       medic2: 00492,
+//       availability: "busy",
+//    },
+// ])
+
 
 
 
 
 
 // for parsing incoming POST data
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-
-if( !process.env.MONGODB_URI ){
-   console.log( '*ERROR* You need a .env file (with MONGODB_URI,...)' )
-   process.exit()
+if (!process.env.MONGODB_URI) {
+  console.log("*ERROR* You need a .env file (with MONGODB_URI,...)");
+  process.exit();
 }
+
+const uri = process.env.MONGODB_URI;
+
+// connect to db ; async task ; don't listen for requests until connection to db is complete
+mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true } )
+      .then( (result)=> { //takes in result as parameter to be used as necessary
+         console.log('connected to db')
+         // listen for requests (assumes use of localhost)
+         server.listen(PORT, () => {
+            console.log (`listening on *:${PORT}`)
+         })
+      
+
+         io.on('connection', (socket)=>{
+            console.log('user connected')
+         
+            socket.on('dispatchlol', msg=>console.log(msg))
+            socket.on('mediclol', msg=>console.log(msg))
+         
+            // relay medic coords to dispatchside
+            socket.on('medicCoords', data=>{
+               console.log('relay medic coords to dispatchside', JSON.parse(data))
+               io.emit('medicCoordsOut', data)
+            })
+            // relay medic reqs to dispatchside
+            socket.on('medReq', data=>{
+               console.log('save medic requests to db', JSON.parse(data))
+               const medReqpack = JSON.parse(data)
+               // const newMedReq = new MedReq({
+               //    unit: medReqpack.unit,
+               //    reqFor: medReqpack.reqFor,
+               //    status: "active",
+               // })
+               // newMedReq.save().then ( ()=>{
+               //    console.log('hi')
+               // })
+               db.MedReq.create({
+                  unit: medReqpack.unit,
+                  reqFor: medReqpack.reqFor,
+                  status: "active",
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('medReqOut', JSON.stringify(request))
+                  })
+               })
+            })
+            socket.on('fetchRequests', ()=>{
+               db.MedReq.find({status: "active"}).then(request=>{
+                  console.log('sending medic reqs to dispatchside', request)
+                  io.emit('fetchRequestsOut', JSON.stringify(request))
+               })
+            })
+            // db.MedReq.watch().on('change',(change)=>{
+            //    console.log('change to medreqs', change)
+            // })
+            // approve medic req
+            socket.on('approveReq', data=>{
+               console.log('approve medic requests, dispatchside', JSON.parse(data))
+               const handleReq = JSON.parse(data)
+               db.MedReq.findOneAndUpdate({
+                  unit: handleReq.unit,
+                  reqFor: handleReq.isFor
+               }, {
+                  $set: {
+                     status: handleReq.status
+                  }
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('medReqOut', JSON.stringify(request))
+                  })
+               })
+            })
+            // reject medic req
+            socket.on('rejectReq', data=>{
+               console.log('reject medic requests, dispatchside', JSON.parse(data))
+               const handleReq = JSON.parse(data)
+               db.MedReq.findOneAndUpdate({
+                  unit: handleReq.unit,
+                  reqFor: handleReq.isFor
+               },{
+                  $set: {
+                     status: handleReq.status
+                  }
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('medReqOut', JSON.stringify(request))
+                  })
+               })
+            })
+            //return request for registered patient name to dispatchside
+            socket.on('fetchRegisteredPt', data=>{
+               console.log('receiving request for registered Pt info from dispatchside', JSON.parse(data))
+               const id = JSON.parse(data)
+               db.RegisteredPt.find({id: id.registeredId})
+               .then(patient=>{
+                  console.log('this is registered patient', patient)
+                  io.emit('fetchRegisteredPtOut', JSON.stringify(patient[0]))
+               })
+            })
+            // relay call details to medicside (mongo)
+            socket.on('callDetails', data=>{
+               console.log('relay call details to medicside', JSON.parse(data))
+
+               //save to db
+               
+
+
+               // io.emit('callDetailsOut', data)
+            })            
+
+            // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
+
+
+
+
+
+
+
+
+            // relay medic destination coords to medicside (to be destroyed future)
+            socket.on('medicDest', data=>{
+               console.log('relay medic destination to medicside', JSON.parse(data))
+               io.emit('medicDestOut', data)
+            })
+
+         
+            
+            // socket.on('destination', async (coords)=>{
+            //    // to all sockets
+            //    console.log('receiving messsage from dispatch')
+            //    io.emit ('returnLocation', coords)
+               // let data = {
+               //    callID: 112,
+               //    unitNumber: 2021,
+               //    CTAS: 'ECHO',
+               //    CC: 'chest pain',
+               //    location: '1234 sunnyside dr',
+               //    intersection: 'bathurst and bloor',
+               //    police: 'on scene',
+               //    fire: 'on scene',
+               //    medic: 'on scene',
+               //    coords: coords,
+               // }
+         
+         
+            socket.on ('disconnect', reason => {
+               console.log('user has disconnected :(')
+            })
+         
+         
+         })
+         
+
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
 
 
 
@@ -62,56 +259,14 @@ console.log ('yoyoma')
 
 
 
+app.post("/login", (req, res) => {
+  console.log("login");
+});
 
+app.post("/signup", (req, res) => {
+  console.log("test server");
+  console.log(req.body, "  SERVER");
+  signUp(req.body);
+});
 
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
-  
-io.on('connection', (socket)=>{
-
-   console.log('user connected')
-
-   socket.on('dispatchlol', msg=>console.log(msg))
-   socket.on('mediclol', msg=>console.log(msg))
-
-
-   socket.on('medicDest', data=>{
-      console.log('relay medic destination to medicside', JSON.parse(data))
-      io.emit('medicDestOut', data)
-   })
-   
-   socket.on('medicCoords', data=>{
-      console.log('relay medic coords to dispatchside', JSON.parse(data))
-      //relay
-      io.emit('medicCoordsOut', data)
-   })
-   
-   // socket.on('destination', async (coords)=>{
-   //    // to all sockets
-   //    console.log('receiving messsage from dispatch')
-   //    io.emit ('returnLocation', coords)
-      // let data = {
-      //    callID: 112,
-      //    unitNumber: 2021,
-      //    CTAS: 'ECHO',
-      //    CC: 'chest pain',
-      //    location: '1234 sunnyside dr',
-      //    intersection: 'bathurst and bloor',
-      //    police: 'on scene',
-      //    fire: 'on scene',
-      //    medic: 'on scene',
-      //    coords: coords,
-      // }
-
-
-   socket.on ('disconnect', reason => {
-      console.log('user has disconnected :(')
-   })
-
-
-})
-
-
-
-server.listen(PORT, () => {
-   console.log (`listening on *:${PORT}`)
-})
