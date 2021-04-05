@@ -84,7 +84,6 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             console.log (`listening on *:${PORT}`)
          })
       
-
          io.on('connection', (socket)=>{
             console.log('user connected')
          
