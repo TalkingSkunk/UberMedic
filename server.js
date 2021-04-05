@@ -12,7 +12,6 @@ const mongoose = require("mongoose");
 
 var cors = require('cors')
 const db = require("./app/db/models/");
-const MedReq = require("./app/db/models/MedReq")
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -26,30 +25,13 @@ app.use(cors())
 const PORT = process.env.PORT || 8080
 
  // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
-// db.MobileUnit.insertMany([
+// db.MobileUnit.create([
+   
 //    {
-//       unit: 1984,
-//       medic1: 09876,
-//       medic2: 94837,
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
 //       availability: "available",
-//    },
-//    {
-//       unit: 1917,
-//       medic1: 49584,
-//       medic2: 23309,
-//       availability: "en route to CTAS Alpha-Charlie",
-//    },
-//    {
-//       unit: 1945,
-//       medic1: 20192,
-//       medic2: 44932,
-//       availability: "busy",
-//    },
-//    {
-//       unit: 2021,
-//       medic1: 44932,
-//       medic2: 00492,
-//       availability: "busy",
 //    },
 // ])
 
@@ -90,18 +72,19 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                console.log('relay medic coords to dispatchside', JSON.parse(data))
                io.emit('medicCoordsOut', data)
             })
+            // relay availablt units to dispatchside
+
+            // initial populate of available units to dispatchside
+            socket.on('fetchUnits', ()=>{
+               db.MobileUnit.find({availability: "available"}).then(request=>{
+                  console.log('fetching available units to dispatchside', request)
+                  io.emit('fetchUnitsOut', JSON.stringify(request))
+               })
+            })
             // relay medic reqs to dispatchside
             socket.on('medReq', data=>{
                console.log('save medic requests to db', JSON.parse(data))
                const medReqpack = JSON.parse(data)
-               // const newMedReq = new MedReq({
-               //    unit: medReqpack.unit,
-               //    reqFor: medReqpack.reqFor,
-               //    status: "active",
-               // })
-               // newMedReq.save().then ( ()=>{
-               //    console.log('hi')
-               // })
                db.MedReq.create({
                   unit: medReqpack.unit,
                   reqFor: medReqpack.reqFor,
@@ -113,6 +96,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   })
                })
             })
+            // initial populate of medic requests to dispatchside
             socket.on('fetchRequests', ()=>{
                db.MedReq.find({status: "active"}).then(request=>{
                   console.log('sending medic reqs to dispatchside', request)
@@ -168,10 +152,28 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   io.emit('fetchRegisteredPtOut', JSON.stringify(patient[0]))
                })
             })
-            // relay call details to medicside (mongo)
+            // relay call details to medicside
             socket.on('callDetails', data=>{
-               console.log('relay call details to medicside', JSON.parse(data))
 
+               // await socket.emit('callDetails', JSON.stringify({
+               //    streetDest: street,
+               //    cityDest: city,
+               //    postalDest: postal,
+               //    intersection: intersection,
+               //    callerName: callerName,
+               //    callerNum: callerNum,
+               //    destLngLat: [destLngLat[0], destLngLat[1]],
+               //    ctas: ctas,
+               //    cc: cc,
+               //    notes: notes,
+               //    police: police,
+               //    fire: fire,
+               //    additional: additional,   
+               //    registeredPt: registeredPt
+               //  }))            
+
+               console.log('relay call details to medicside', JSON.parse(data))
+               const callPack = JSON.parse(data)
                //save to db
                
 
