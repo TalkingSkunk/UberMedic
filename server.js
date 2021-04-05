@@ -189,53 +189,34 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             socket.on('callDetails', data=>{
                console.log('relay call details to medicside', JSON.parse(data))
                const callPack = JSON.parse(data)
+               const callId = mongoose.Types.ObjectId();
                //save to db
-               // db.MedReq.create({
-               //    unit: medReqpack.unit,
-               //    reqFor: medReqpack.reqFor,
-               //    status: "active",
-               // }).then(()=>{
-               //    db.MedReq.find({status: "active"}).then(request=>{
-               //       console.log('sending medic reqs to dispatchside', request)
-               //       io.emit('medReqOut', JSON.stringify(request))
-               //    })
-               // })
                db.Call.create({
+                  _id: callId,
                   deployedUnit: callPack.deployedUnit,
-
-               }).then(()=>{
-                  db.Call.find
-               })
-               // await socket.emit('callDetails', JSON.stringify({
-               //    streetDest: street,
-               //    cityDest: city,
-               //    postalDest: postal,
-               //    intersection: intersection,
-               //    callerName: callerName,
-               //    callerNum: callerNum,
-               //    destLngLat: [destLngLat[0], destLngLat[1]],
-               //    ctas: ctas,
-               //    cc: cc,
-               //    notes: notes,
-               //    police: police,
-               //    fire: fire,
-               //    additional: additional,   
-               //    registeredPt: registeredPt
-               //  }))            
-
-               
-
-
-               // io.emit('callDetailsOut', data)
+                  streetDest: callPack.streetDest,
+                  cityDest: callPack.cityDest,
+                  postalDest: callPack.postalDest,
+                  intersection: callPack.intersection,
+                  callerName: callPack.callerName,
+                  callerNum: callPack.callerNum,
+                  destLngLat: callPack.destLngLat,
+                  ctas: callPack.ctas,
+                  cc: callPack.cc,
+                  notes: callPack.notes,
+                  police: callPack.police,
+                  fire: callPack.fire,
+                  additional: callPack.additional,
+                  registeredPt: callPack.registeredPt
+               }).then((err, result)=>{
+                  console.log('call details doc id', result._id)
+                  // db.Call.find({id: result._id}).then(doc=>{
+                  //    io.emit('callDetailsOut', JSON.stringify(doc))
+                  // })
+               })         
             })            
 
             // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
-
-
-
-
-
-
 
 
             // relay medic destination coords to medicside (to be destroyed future)

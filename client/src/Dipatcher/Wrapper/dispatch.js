@@ -100,6 +100,7 @@ function Dispatch() {
     setRegisteredPt(e.target.value)
   }
   const handleRegisteredPt = async (e)=>{
+    console.log('sending registeredPt', registeredPt)
     await socket.emit('fetchRegisteredPt', JSON.stringify({
       registeredId: registeredPt
     }))
