@@ -8,7 +8,6 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const mongoose = require("mongoose");
-// const MongoClient = require('mongodb').MongoClient;
 
 var cors = require('cors')
 const db = require("./app/db/models/");
@@ -95,10 +94,19 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                console.log('relay medic coords to dispatchside', JSON.parse(data))
                io.emit('medicCoordsOut', data)
             })
+            // relay dispatch choice of unit to dispatchside
+            socket.on('offUnit', data=>{
+               io.emit('offUnitOut', data)
+               console.log('dispatch removed unit:', JSON.parse(data))
+            })
+            socket.on('onUnit', data=>{
+               io.emit('onUnitOut', data)
+               console.log('dispatch added unit:', JSON.parse(data))
+            })
             // relay availablt units to dispatchside
             // socket.on('availUnits',)
             // initial populate of available units to dispatchside
-            socket.on('fetchUnits', ()=>{
+            socket.on('fetchUnits', () => {
                db.MobileUnit.find({ availability: {$in:["available", "en route to CTAS Alpha-Charlie"]} }).sort({availability: 1}).then(request=>{
                   console.log('fetching available units to dispatchside', request)
                   io.emit('fetchUnitsOut', JSON.stringify(request))

@@ -34,9 +34,12 @@ const AvailUnits = () =>{
     const handleActive = (e) => {
         if(e.target.classList.contains('active')){
             e.target.classList.remove('active')
+            const isUnit = e.target.dataset.unit
+            socket.emit('offUnit', JSON.stringify(isUnit))
         } else {
             e.target.classList.add('active')
-            socket.emit('selectUnit', )
+            const isUnit = e.target.dataset.unit
+            socket.emit('onUnit', JSON.stringify(isUnit))
         }
     }
 

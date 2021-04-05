@@ -44,7 +44,7 @@ function Dispatch() {
   let sendtothisAmb = 3000;
 
   // call details states
-  const [deployedUnit, setDeployedUnit] = useState("")
+  const [deployedUnit, setDeployedUnit] = useState([])
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postal, setPostal] = useState("");
@@ -60,9 +60,6 @@ function Dispatch() {
   const [registeredPt, setRegisteredPt] = useState('')
   const [registeredPtExist, setRegisteredPtExist] = useState('')
 
-  const updateDeployedUnit = (e) => {
-    setDeployedUnit(e.target.value)
-  }
   const updateStreet = (e) => {
     setStreet(e.target.value);
   };
@@ -181,7 +178,24 @@ function Dispatch() {
   }
 
 
+  //listen for choice of unit
+  useEffect(()=>{
+    socket.on('offUnitOut', data=>{
+      console.log('this is offunit', JSON.parse(data))
+      setDeployedUnit( oldArray => oldArray.filter( unit => unit !== JSON.parse(data) ) )
+    })
+  },[])
+  useEffect(()=>{
+    socket.on('onUnitOut', data=>{
+      console.log('this is onunit', JSON.parse(data))
+      setDeployedUnit( oldArray=>[ ...oldArray, JSON.parse(data) ] )
+    })
+  },[])
 
+
+  useEffect(()=>{
+    console.log('units to be deployed:', deployedUnit)
+  },[deployedUnit])
   
   return (
     <div>
