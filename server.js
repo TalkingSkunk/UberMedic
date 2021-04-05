@@ -187,7 +187,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             })
             // relay call details to medicside
             socket.on('callDetails', data=>{
-               console.log('relay call details to medicside', JSON.parse(data))
+               console.log('receiving call details, serverside', JSON.parse(data))
                const callPack = JSON.parse(data)
                const callId = mongoose.Types.ObjectId();
                //save to db
