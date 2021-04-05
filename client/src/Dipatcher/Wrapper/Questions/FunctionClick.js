@@ -6,32 +6,32 @@ function FunctionClick(event) {
 
     function clickHandler(){
         console.log('this works')
-        document.getElementsByClassName('card-header')[7].classList.add('test')
-        document.getElementsByClassName('card-footer')[7].classList.add('test')
+        document.getElementsByClassName('card-header')[8].classList.add('test')
+        document.getElementsByClassName('card-footer')[6].classList.add('test')
     }
 
     function bravo(){
         console.log('this works too ')
-        document.getElementsByClassName('card-header')[7].classList.add('test2')
-        document.getElementsByClassName('card-footer')[7].classList.add('test2')
+        document.getElementsByClassName('card-header')[8].classList.add('test2')
+        document.getElementsByClassName('card-footer')[6].classList.add('test2')
     }
 
     function charlie(){
         console.log('works')
-        document.getElementsByClassName('card-header')[7].classList.add('test3')
-        document.getElementsByClassName('card-footer')[7].classList.add('test3')
+        document.getElementsByClassName('card-header')[8].classList.add('test3')
+        document.getElementsByClassName('card-footer')[6].classList.add('test3')
     }
 
     function delta(){
         console.log('works')
-        document.getElementsByClassName('card-header')[7].classList.add('test4')
-        document.getElementsByClassName('card-footer')[7].classList.add('test4')
+        document.getElementsByClassName('card-header')[8].classList.add('test4')
+        document.getElementsByClassName('card-footer')[6].classList.add('test4')
     }
 
     function echo(){
         console.log('works')
-        document.getElementsByClassName('card-header')[7].classList.add('test5')
-        document.getElementsByClassName('card-footer')[7].classList.add('test5')
+        document.getElementsByClassName('card-header')[8].classList.add('test5')
+        document.getElementsByClassName('card-footer')[6].classList.add('test5')
     }
 
 if (event = clickHandler){

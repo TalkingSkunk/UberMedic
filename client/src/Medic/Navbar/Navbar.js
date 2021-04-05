@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { Card } from "react-bootstrap";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 
@@ -31,15 +32,15 @@ const Navbar = () => {
     //   }
     
     return(
+        <Card style={{height: "fit-content", width: "fit-content"}}>
         <nav>
             <div className="site-title">
-            <p>RoadRunner App</p>
             </div>
-            
-            <ul>
 
-                <li><button type="button" data-bs-toggle="modal" data-bs-target="#requestFor">Request +</button></li>
-                
+            <div>
+                <h3 style={{fontWeight: "bolder", fontFamily: "times new roman"}}>Request Backup</h3>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#requestFor">Request +</button>
+                </div> 
                 <div className="modal fade" id="requestFor" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div className="modal-dialog">
                     <div className="modal-content">
@@ -75,7 +76,7 @@ const Navbar = () => {
                     </div>
                     </div>
                 </div>
-                <li>
+        
 
                     <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#dangerBtn">
                     10-2000
@@ -94,10 +95,11 @@ const Navbar = () => {
                         </div>
                     </div>
                     </div>
-                </li>
+             
         
-            </ul>
+         
         </nav>
+        </Card>
     );
 }
 

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Col } from "react-bootstrap";
+import { Col, Card } from "react-bootstrap";
+
 
 
 const CallDetailsForm = () => {
@@ -46,31 +47,51 @@ const CallDetailsForm = () => {
 
 
     return(
-        <Col xs={12} md={6}>
+
+
+          <Card style={{height:"fit-content", width: "fit-content"}}>
+            <h3  style={{fontWeight: "bolder"}}>DISPATCH INFORMATION</h3>
+        <Col >
           <form action="" id="readOnlyFromDispatch">
-            <label htmlFor="callID">Call ID</label>
-            <input type="text" id="callID" name="callID" value={details.callID} readOnly required />
-            <br/>
-            <label htmlFor="ctas">ctas</label>
-            <input type="text" id="ctas" name="ctas" value={details.ctas} readOnly required />
-            <br/>
-            <label htmlFor="cc">Chief Complaint</label>
-            <input type="text" id="cc" name="cc" value={details.cc} readOnly required />
-            <br/>
-            <label htmlFor="location">Location</label>
-            <input type="text" id="location" name="location" value={details.location} readOnly required />
-            <br/>
-            <label htmlFor="intersection">Intersection</label>
-            <input type="text" id="intersection" name="intersection" value={details.intersection} readOnly required />
-            <br/>
-            <label htmlFor="police">Police</label>
-            <input type="text" id="police" name="police" value={details.police} readOnly required />
-            <br/>
-            <label htmlFor="fire">Fire</label>
-            <input type="text" id="fire" name="fire" value={details.fire} readOnly required />
-            <br/>
-            <label htmlFor="medic">Additional Crew</label>
-            <input type="text" id="medic" name="medic" value={details.medic} readOnly required />
+            <label htmlFor="callID" style={{ fontWeight:"bolder"}} >Call ID</label>
+            <div>
+            <input type="text" id="callID" name="callID" style={{marginBottom:"5px"}} value={details.callID} readOnly required />
+            </div>
+         
+            <label htmlFor="ctas" style={{fontWeight:"bolder"}} >CTAS</label>
+            <div>
+            <input type="text" id="ctas" name="ctas" style={{marginBottom:"5px"}} value={details.ctas} readOnly required />
+            </div>
+      
+            <label htmlFor="cc" style={{marginRight: "14px", fontWeight:"bolder"}} >Chief Complaint</label>
+            <div>
+            <input type="text" id="cc" name="cc" style={{marginBottom:"5px"}}  value={details.cc} readOnly required />
+            </div>
+  
+            <label htmlFor="location" style={{marginRight: "14px", fontWeight:"bolder"}} >Location</label>
+            <div>
+            <input type="text" id="location" name="location"  style={{marginBottom:"5px"}} value={details.location} readOnly required />
+            </div>
+    
+            <label htmlFor="intersection" style={{marginRight: "14px", fontWeight:"bolder"}} >Intersection</label>
+           <div>
+            <input type="text" id="intersection" name="intersection" style={{marginBottom:"5px"}}  value={details.intersection} readOnly required />
+            </div>
+
+         
+            <label htmlFor="police" style={{marginRight: "14px", fontWeight:"bolder"}} >Police</label>
+            <div>
+            <input type="text" id="police" name="police" style={{marginBottom:"5px"}} value={details.police} readOnly required />
+            </div>
+            
+            <label htmlFor="fire" style={{marginRight: "14px", fontWeight:"bolder"}}>Fire</label>
+            <div>
+            <input type="text" id="fire" name="fire" style={{marginBottom:"5px"}} value={details.fire} readOnly required />
+            </div>
+            <label htmlFor="medic" style={{marginRight: "14px", fontWeight:"bolder"}}>Additional Crew</label>
+            <div>
+            <input type="text" id="medic" name="medic" style={{marginBottom:"5px"}}  value={details.medic} readOnly required />
+            </div>
           </form>
 
           <div>
@@ -91,6 +112,7 @@ const CallDetailsForm = () => {
             </div>
           </div>
         </Col>
+        </Card>
     );
 }
 

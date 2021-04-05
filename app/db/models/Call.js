@@ -208,7 +208,7 @@ const callSchema = new Schema ({
       default: Date.now
    },
    deployedUnit: {
-      type:Number,
+      type: Array,
       required:true,
    },
    streetDest: {

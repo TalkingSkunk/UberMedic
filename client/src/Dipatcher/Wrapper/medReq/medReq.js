@@ -28,7 +28,7 @@ const MedReq = () => {
   }, []);
   const [medReqOut, setMedReqOut] = useState([]);
 
-  const [reqContent, setReqContent] = useState("");
+    const [ medReqOut, setMedReqOut ] = useState([])
 
   const handleApprove = (e) => {
     // clear request after approve from the list
