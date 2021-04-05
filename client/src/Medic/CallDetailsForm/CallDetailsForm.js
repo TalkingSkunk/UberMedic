@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Col } from "react-bootstrap";
+import { Col, Card } from "react-bootstrap";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 

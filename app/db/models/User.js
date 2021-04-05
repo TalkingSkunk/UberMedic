@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
@@ -11,6 +10,7 @@ const userSchema = new mongoose.Schema({
   id: {
     type: String,
     required: [true, "Please insert ID/OASIS number"],
+    minLength: 5,
   },
   password: {
     type: String,
@@ -29,19 +29,27 @@ const userSchema = new mongoose.Schema({
       message: "passwords are not the same",
     },
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 userSchema.pre("save", async function (next) {
   ////only run if password is modified
-  if (!this.isModified("password")) return next();
+  try {
+    if (!this.isModified("password")) return next();
 
-  ///hash the password with cost of 12
-  this.password = await bcrypt.hash(this.password, 12);
-  ////delete password confirm field
-  this.passwordConfirm = undefined;
-  next();
+    ///hash the password with cost of 12
+    this.password = await bcrypt.hash(this.password, 12);
+    ////delete password confirm field
+    this.passwordConfirm = undefined;
+    next();
+  } catch {
+    console.log(new Error("ERROR----ENCRYPTION FAILED"));
+  }
 });
 
-exports.User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-// export default User;
+module.exports = User;

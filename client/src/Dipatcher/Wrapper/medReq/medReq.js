@@ -1,66 +1,79 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 
+const MedReq = () => {
+  const socket = socketIOClient(ENDPOINT);
 
-const MedReq = () =>{    
-    const socket = socketIOClient(ENDPOINT)
+  useEffect(() => {
+    socket.emit("fetchRequests");
+  }, []);
+  useEffect(() => {
+    socket.on("fetchRequestsOut", (data) => {
+      const populateReq = JSON.parse(data);
+      console.log("populating medic requests, dispatchside", populateReq);
+      setMedReqOut(populateReq);
+    });
+  }, []);
 
-    useEffect(()=>{
-        socket.emit('fetchRequests')
-    },[])
-    useEffect(()=>{
-        socket.on('fetchRequestsOut', data=>{
-            const populateReq = JSON.parse(data)
-            console.log('populating medic requests, dispatchside', populateReq)
-            setMedReqOut(populateReq)
-        })
-    },[])
+  useEffect(() => {
+    socket.on("medReqOut", (data) => {
+      console.log("receiving medic requests, dispatchside", JSON.parse(data));
+      const medReqArray = JSON.parse(data);
+      setMedReqOut(medReqArray);
+    });
+  }, []);
+  const [medReqOut, setMedReqOut] = useState([]);
 
-    const [ medReqOut, setMedReqOut ] = useState([])
 
-    const [reqContent, setReqContent] = useState("")
 
-    const handleApprove = (e)=>{
-        // clear request after approve from the list
-        // setMedReqOut(prevReq => [...prevReq, {id: dataOut.id, for: dataOut.for}])
-        // const revisedComments = state.comments.filter( (_,idx)=>idx!==action.value )
-        const isUnit = e.target.dataset.unit
-        const isFor = e.target.dataset.for
-        socket.emit('approveReq', JSON.stringify({
-            unit: isUnit,
-            isFor: isFor,
-            status: "approved"
-        }))
-        setShow(false);
-    }
+  const handleApprove = (e) => {
+    // clear request after approve from the list
+    // setMedReqOut(prevReq => [...prevReq, {id: dataOut.id, for: dataOut.for}])
+    // const revisedComments = state.comments.filter( (_,idx)=>idx!==action.value )
+    const isUnit = e.target.dataset.unit;
+    const isFor = e.target.dataset.for;
+    socket.emit(
+      "approveReq",
+      JSON.stringify({
+        unit: isUnit,
+        isFor: isFor,
+        status: "approved",
+      })
+    );
+    setShow(false);
+  };
 
-    const handleClose = (e) => {
-        const isUnit = e.target.dataset.unit
-        const isFor = e.target.dataset.for
-        socket.emit('rejectReq', JSON.stringify({
-            unit: isUnit,
-            isFor: isFor,
-            status: "rejected"
-        }))
-        setShow(false);
-    }
+  const handleClose = (e) => {
+    const isUnit = e.target.dataset.unit;
+    const isFor = e.target.dataset.for;
+    socket.emit(
+      "rejectReq",
+      JSON.stringify({
+        unit: isUnit,
+        isFor: isFor,
+        status: "rejected",
+      })
+    );
+    setShow(false);
+  };
 
-    // modals stuff clicks
-    const [show, setShow] = useState(false);
-    const [modalUnit, setModalUnit] = useState("")
-    const [modalFor, setModalFor] = useState("")
-    
-    // when the request list is clicked... show modal
-    const handleShow = (e) => {
-        setReqContent(e.target.innerText)
-        setModalUnit(e.target.dataset.unit)
-        setModalFor(e.target.dataset.for)
-        setShow(true);
-    }
+  // modals stuff clicks
+  const [show, setShow] = useState(false);
+  const [modalUnit, setModalUnit] = useState("");
+  const [modalFor, setModalFor] = useState("");
+  const [reqContent, setReqContent] = useState('')
+
+  // when the request list is clicked... show modal
+  const handleShow = (e) => {
+    setReqContent(e.target.innerText);
+    setModalUnit(e.target.dataset.unit);
+    setModalFor(e.target.dataset.for);
+    setShow(true);
+  };
 
     return(
         <ListGroup>
