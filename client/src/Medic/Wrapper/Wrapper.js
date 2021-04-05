@@ -2,8 +2,9 @@ import React, { useEffect, useState, useContext }  from 'react';
 import CallDetailsForm from "../CallDetailsForm/CallDetailsForm";
 import Map from '../Map/Map';
 import Navbar from '../Navbar/Navbar';
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, CardDeck } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import '../Wrapper/Wrapper.css'
 // import { MedicDispatchProvider, MedicDispatchContext } from "../../utils/MedicDispatchContext";
 // import DispatcherMap from "../DispatcherMap/DispatcherMap"
 
@@ -19,6 +20,7 @@ function MedicWrapper(){
     return(
 
             <Container>
+              <body>
                 {/* {isMedic
                     ? <Row>
                         <Navbar />
@@ -31,12 +33,15 @@ function MedicWrapper(){
                 } */}
 
                 <Row>
+                <h1 style={{textAlign:"center"}}>RoadRunner App</h1>
                     <Navbar />
+                 <CardDeck>
                     <CallDetailsForm />
                     <Map />
+                    </CardDeck>
                 </Row>
 
-                
+                </body>
             </Container>
 
     )

@@ -1,5 +1,5 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
-const signUp = require("./client/src/loginPage/controller/authController");
+const { signUp } = require("./client/src/loginPage/controller/authController");
 
 const path = require("path");
 const express = require("express");
@@ -8,55 +8,55 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const mongoose = require("mongoose");
-// const MongoClient = require('mongodb').MongoClient;
 
-var cors = require('cors')
+var cors = require("cors");
 const db = require("./app/db/models/");
-const MedReq = require("./app/db/models/MedReq")
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
-   cors: {
-      origin: "*",
-   },
+  cors: {
+    origin: "*",
+  },
 });
 
-app.use(cors())
+app.use(cors());
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 
- // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
+// mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
 // db.MobileUnit.insertMany([
+
 //    {
-//       unit: 1984,
-//       medic1: 09876,
-//       medic2: 94837,
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
 //       availability: "available",
 //    },
 //    {
-//       unit: 1917,
-//       medic1: 49584,
-//       medic2: 23309,
-//       availability: "en route to CTAS Alpha-Charlie",
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
 //    },
 //    {
-//       unit: 1945,
-//       medic1: 20192,
-//       medic2: 44932,
-//       availability: "busy",
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
 //    },
 //    {
-//       unit: 2021,
-//       medic1: 44932,
-//       medic2: 00492,
-//       availability: "busy",
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+//    },
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
 //    },
 // ])
-
-
-
-
-
 
 // for parsing incoming POST data
 app.use(express.urlencoded({ extended: true }));
@@ -78,7 +78,6 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             console.log (`listening on *:${PORT}`)
          })
       
-
          io.on('connection', (socket)=>{
             console.log('user connected')
          
@@ -90,18 +89,28 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                console.log('relay medic coords to dispatchside', JSON.parse(data))
                io.emit('medicCoordsOut', data)
             })
+            // relay dispatch choice of unit to dispatchside
+            socket.on('offUnit', data=>{
+               io.emit('offUnitOut', data)
+               console.log('dispatch removed unit:', JSON.parse(data))
+            })
+            socket.on('onUnit', data=>{
+               io.emit('onUnitOut', data)
+               console.log('dispatch added unit:', JSON.parse(data))
+            })
+            // relay availablt units to dispatchside
+            // socket.on('availUnits',)
+            // initial populate of available units to dispatchside
+            socket.on('fetchUnits', () => {
+               db.MobileUnit.find({ availability: {$in:["available", "en route to CTAS Alpha-Charlie"]} }).sort({availability: 1}).then(request=>{
+                  console.log('fetching available units to dispatchside', request)
+                  io.emit('fetchUnitsOut', JSON.stringify(request))
+               })
+            })
             // relay medic reqs to dispatchside
             socket.on('medReq', data=>{
                console.log('save medic requests to db', JSON.parse(data))
                const medReqpack = JSON.parse(data)
-               // const newMedReq = new MedReq({
-               //    unit: medReqpack.unit,
-               //    reqFor: medReqpack.reqFor,
-               //    status: "active",
-               // })
-               // newMedReq.save().then ( ()=>{
-               //    console.log('hi')
-               // })
                db.MedReq.create({
                   unit: medReqpack.unit,
                   reqFor: medReqpack.reqFor,
@@ -113,6 +122,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   })
                })
             })
+            // initial populate of medic requests to dispatchside
             socket.on('fetchRequests', ()=>{
                db.MedReq.find({status: "active"}).then(request=>{
                   console.log('sending medic reqs to dispatchside', request)
@@ -128,7 +138,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                const handleReq = JSON.parse(data)
                db.MedReq.findOneAndUpdate({
                   unit: handleReq.unit,
-                  reqFor: handleReq.isFor
+                  reqFor: handleReq.isFor,
+                  status: "active"
                }, {
                   $set: {
                      status: handleReq.status
@@ -136,7 +147,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                }).then(()=>{
                   db.MedReq.find({status: "active"}).then(request=>{
                      console.log('sending medic reqs to dispatchside', request)
-                     io.emit('medReqOut', JSON.stringify(request))
+                     io.emit('fetchRequestsOut', JSON.stringify(request))
                   })
                })
             })
@@ -146,15 +157,16 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                const handleReq = JSON.parse(data)
                db.MedReq.findOneAndUpdate({
                   unit: handleReq.unit,
-                  reqFor: handleReq.isFor
-               },{
+                  reqFor: handleReq.isFor,
+                  status: "active"
+               }, {
                   $set: {
                      status: handleReq.status
                   }
                }).then(()=>{
                   db.MedReq.find({status: "active"}).then(request=>{
                      console.log('sending medic reqs to dispatchside', request)
-                     io.emit('medReqOut', JSON.stringify(request))
+                     io.emit('fetchRequestsOut', JSON.stringify(request))
                   })
                })
             })
@@ -168,11 +180,44 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   io.emit('fetchRegisteredPtOut', JSON.stringify(patient[0]))
                })
             })
-            // relay call details to medicside (mongo)
+            // relay call details to medicside
             socket.on('callDetails', data=>{
                console.log('relay call details to medicside', JSON.parse(data))
-
+               const callPack = JSON.parse(data)
                //save to db
+               // db.MedReq.create({
+               //    unit: medReqpack.unit,
+               //    reqFor: medReqpack.reqFor,
+               //    status: "active",
+               // }).then(()=>{
+               //    db.MedReq.find({status: "active"}).then(request=>{
+               //       console.log('sending medic reqs to dispatchside', request)
+               //       io.emit('medReqOut', JSON.stringify(request))
+               //    })
+               // })
+               db.Call.create({
+                  deployedUnit: callPack.deployedUnit,
+
+               }).then(()=>{
+                  db.Call.find
+               })
+               // await socket.emit('callDetails', JSON.stringify({
+               //    streetDest: street,
+               //    cityDest: city,
+               //    postalDest: postal,
+               //    intersection: intersection,
+               //    callerName: callerName,
+               //    callerNum: callerNum,
+               //    destLngLat: [destLngLat[0], destLngLat[1]],
+               //    ctas: ctas,
+               //    cc: cc,
+               //    notes: notes,
+               //    police: police,
+               //    fire: fire,
+               //    additional: additional,   
+               //    registeredPt: registeredPt
+               //  }))            
+
                
 
 
@@ -257,15 +302,13 @@ console.log ('yoyoma')
 //    res.send({status:true, coords})
 // })
 
-
-
 app.post("/login", (req, res) => {
   console.log("login");
 });
 
 app.post("/signup", (req, res) => {
-  console.log("test server");
-  console.log(req.body, "  SERVER");
+  // console.log("test server");
+  // console.log(req.body, "  SERVER");
   signUp(req.body);
 });
 
