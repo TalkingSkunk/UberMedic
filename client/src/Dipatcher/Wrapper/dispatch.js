@@ -132,15 +132,15 @@ function Dispatch() {
 
             <form>
               <div>
-                <label> Name of Caller</label>
+                <label style={{marginRight: "15px", fontWeight: "bolder"}}> Name of Caller</label>
                 <input />
               </div>
               <div>
-                <label> Phone number</label>
+                <label style={{marginRight: "18px", fontWeight: "bolder"}}> Phone number</label>
                 <input />
               </div>
               <div>
-                <label> Postal/ZIP code</label>
+                <label style={{marginRight: "10px", fontWeight: "bolder"}}> Postal/ZIP code</label>
                 <input />
               </div>
             </form>
@@ -152,31 +152,28 @@ function Dispatch() {
       {/* MEDICAL QUESTIONS */}
       <CardDeck>
         <Card className="text-center">
-          <Card.Header>ECHO SCRENNING</Card.Header>
+          <Card.Header> <ModalInFunctionalComponent /></Card.Header>
           <Card.Body>
         <Row style={{marginTop:"-22px"}}>
-            <Button variant="light">
-              <ModalInFunctionalComponent />
-            </Button>
          </Row>
             <Row style={{marginBottom:"22px"}} >
           <div>
             <Col>
-          CTAS:
+            <label style={{fontWeight: "bolder"}}> CTAS </label>
         </Col>
         <Col>
         <input>
         </input>
         </Col>
         <Col>
-         Chief Compliant
+        <label style={{fontWeight: "bolder"}}> Chief Complaint </label>
         </Col>
         <Col>
         <input>
         </input>
         </Col>
         <Col>
-         Additional Notes
+        <label style={{fontWeight: "bolder"}}> Additional Notes </label>
         </Col>
         <Col>
         <input>
@@ -184,6 +181,9 @@ function Dispatch() {
         </Col>
           </div>
           </Row >
+
+
+          
 
           <div>
 
@@ -243,9 +243,18 @@ function Dispatch() {
         <Card className="text-center">
           <Card.Header>REGISTERED PATIENTS PROGRAM</Card.Header>
           <Card.Body>
-            <Card.Title>Card Title Goes Here</Card.Title>
-            <Card.Text>Some Card body content goes here</Card.Text>
-            <Button variant="primary">Primary Button</Button>
+            <div>
+              <Col style={{marginBottom:"20px"}}>
+              <label style={{marginRight: "12px", fontWeight: "bolder"}}> Name </label>
+      <input/>
+            </Col>
+            <Col style={{ marginLeft:"-11px"}}>
+            <label style={{marginRight: "12px",fontWeight: "bolder"}}> Program </label>
+            <input/>
+            </Col>
+            </div>
+           
+           
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted

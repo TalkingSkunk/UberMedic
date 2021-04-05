@@ -11,8 +11,10 @@ import Form from 'react-bootstrap/Form';
 import ModalInFunctionalComponent from '../../Wrapper/Questions/modal2/modal2'
 import '../Questions/Questions.css'
 import FunctionClick from './FunctionClick'
+// import {useState} from 'react'
 
 
+// const [title, setTitle] = useState('')
 
 
 function Questions () {
@@ -117,7 +119,7 @@ function Questions () {
     
     <div>
     <Form.Group controlId="exampleForm.ControlTextarea1">
-    <Form.Control as="textarea" rows={3} />
+    <Form.Control as="textarea"  rows={3} />
   </Form.Group>
         </div>
       </Card.Body>
