@@ -4,7 +4,7 @@ import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
 import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-import { Col } from "react-bootstrap";
+import { Col, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
 import fetchJSON from "../../utils/API"
@@ -177,13 +177,15 @@ const Map = () => {
       
     // The mapContainer ref specifies that map should be drawn to the HTML page in a new <div> element.
     return (
-      <Col xs={12} md={6}>
+        <Card >
+      <Col  style={{height: "fit-content"}}>
       {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
       {/* <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} */}
     {/* </div> */}
         <div className="map-container" ref={mapContainer} />
       </Col>
+      </Card>
     );
 
   }

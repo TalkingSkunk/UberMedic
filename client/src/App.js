@@ -10,6 +10,7 @@ const App = () => {
   /////stateful
   return (
     <div>
+      
       <MedicDispatchProvider>
         <BrowserRouter>
           <Route path="/dispatcher" exact component={DispatcherWrapper} />
@@ -21,6 +22,7 @@ const App = () => {
           {/* <Route path="/signup" exact component={authController.signUp} /> */}
         </BrowserRouter>
       </MedicDispatchProvider>
+ 
     </div>
   );
 };
