@@ -55,6 +55,7 @@ function Dispatch() {
   const [fire, setFire] = useState("N/A")
   const [additional, setAdditional] = useState("N/A")
   const [registeredPt, setRegisteredPt] = useState('')
+  const [registeredPtExist, setRegisteredPtExist] = useState('')
 
   const updateStreet = (e) => {
     setStreet(e.target.value);
@@ -94,6 +95,23 @@ function Dispatch() {
   }
   const updateRegisteredPt = (e)=>{
     setRegisteredPt(e.target.value)
+  }
+  const handleRegisteredPt = async (e)=>{
+    await socket.emit('fetchRegisteredPt', JSON.stringify({
+      registeredId: registeredPt
+    }))
+    console.log('sent request for registered info')
+    socket.on('fetchRegisteredPtOut', data=>{
+      const patient = JSON.parse(data)
+      if (patient !== null){
+        console.log("this is the patient received", patient)
+        setRegisteredPtExist(patient.firstName)
+      } else {
+        setRegisteredPtExist('N/A')
+      }
+    })
+    console.log('received info for registered pt back')
+
   }
 
 
@@ -319,13 +337,23 @@ function Dispatch() {
                     onChange={updateRegisteredPt}
                   ></Form.Control>
                 </Form.Group>
+                <Button variant="primary" onClick={handleRegisteredPt}>
+                  Search
+                </Button>
+
 
               </Form.Row>
             </form>
-            <Card.Text>
-              Patient Found
-              Patient FirstName: {registeredFirstName}
-          </Card.Text>
+            {registeredPtExist !== "N/A" ?
+              <Card.Text>
+                Patient Found
+                Patient FirstName: {registeredPtExist}
+              </Card.Text>
+              :
+              <Card.Text>
+                Unregistered ID!
+              </Card.Text>
+            }
           </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted

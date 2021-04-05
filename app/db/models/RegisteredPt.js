@@ -6,20 +6,20 @@ const Schema = mongoose.Schema
 // new instance of a schema object
 
 const registeredPtSchema = new Schema({
-   id: {
-      type:Number,
-      required:true,
-   },
-   firstName: {
-      type:String,
-      required:true,
-   },
-   lastName: {
-       type:String,
-       required:true,
-   },
-    healthID: {
+    id: {
         type:Number,
+        required:true,
+    },
+    firstName: {
+        type:String,
+        required:true,
+    },
+    lastName: {
+        type:String,
+        required:true,
+    },
+    healthID: {
+        type:String,
         trim: true,
         required:true,
     },

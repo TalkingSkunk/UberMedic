@@ -24,6 +24,55 @@ app.use(cors())
 
 const PORT = process.env.PORT || 8080
 
+// id: {
+// firstName: {
+
+// lastName: {
+
+// healthID: {
+
+// pastHx: {
+
+// standingOrder: {
+
+ // mock registered pts
+// db.RegisteredPt.insertMany([
+//    {
+//       id: 12345,
+//       firstName: "Barbara",
+//       lastName: "Sim",
+//       healthID: "506950596059LO",
+//       pastHx: "stage 4 pancreatic cancer, palliative",
+//       standingOrder: "hydrocodone"
+//    },
+//    {
+//       id: 12346,
+//       firstName: "Lois",
+//       lastName: "Mol",
+//       healthID: "506953336059LO",
+//       pastHx: "stage 3 colon cancer, palliative",
+//       standingOrder: "Fentanyl"
+//    },
+//    {
+//       id: 12347,
+//       firstName: "Katrina",
+//       lastName: "Hur",
+//       healthID: "506900096059LO",
+//       pastHx: "Extended Care LTC resident, prone to fall",
+//       standingOrder: "X-ray, casting, suturing PRN"
+//    },
+//    {
+//       id: 12348,
+//       firstName: "Bob",
+//       lastName: "Goo",
+//       healthID: "506900096059LO",
+//       pastHx: "Extended Care LTC resident, prone to fall",
+//       standingOrder: "X-ray, casting, suturing PRN"
+//    },
+// ])
+
+
+
 
 
 
@@ -66,6 +115,16 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             socket.on('medReq', data=>{
                console.log('relay medic requests to dispatchside', JSON.parse(data))
                io.emit('medReqOut', data)
+            })
+            //return request for registered patient name to dispatchside
+            socket.on('fetchRegisteredPt', data=>{
+               console.log('receiving request for registered Pt info from dispatchside', JSON.parse(data))
+               const id = JSON.parse(data)
+               db.RegisteredPt.find({id: id.registeredId})
+               .then(patient=>{
+                  console.log('this is registered patient', patient)
+                  io.emit('fetchRegisteredPtOut', JSON.stringify(patient[0]))
+               })
             })
             // relay call details to medicside (mongo)
             socket.on('callDetails', data=>{
