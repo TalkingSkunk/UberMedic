@@ -12,6 +12,7 @@ const mongoose = require("mongoose");
 
 var cors = require('cors')
 const db = require("./app/db/models/");
+const MedReq = require("./app/db/models/MedReq")
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -93,14 +94,29 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             socket.on('medReq', data=>{
                console.log('save medic requests to db', JSON.parse(data))
                const medReqpack = JSON.parse(data)
+               // const newMedReq = new MedReq({
+               //    unit: medReqpack.unit,
+               //    reqFor: medReqpack.reqFor,
+               //    status: "active",
+               // })
+               // newMedReq.save().then ( ()=>{
+               //    console.log('hi')
+               // })
                db.MedReq.create({
                   unit: medReqpack.unit,
                   reqFor: medReqpack.reqFor,
                   status: "active",
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('medReqOut', JSON.stringify(request))
+                  })
                })
+            })
+            socket.on('fetchRequests', ()=>{
                db.MedReq.find({status: "active"}).then(request=>{
                   console.log('sending medic reqs to dispatchside', request)
-                  io.emit('medReqOut', JSON.stringify(request))
+                  io.emit('fetchRequestsOut', JSON.stringify(request))
                })
             })
             // db.MedReq.watch().on('change',(change)=>{
@@ -110,26 +126,36 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             socket.on('approveReq', data=>{
                console.log('approve medic requests, dispatchside', JSON.parse(data))
                const handleReq = JSON.parse(data)
-               db.MedReq.update({
-                  // unit: handleReq.unit,
+               db.MedReq.findOneAndUpdate({
+                  unit: handleReq.unit,
                   reqFor: handleReq.isFor
-               },{
+               }, {
                   $set: {
                      status: handleReq.status
                   }
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('medReqOut', JSON.stringify(request))
+                  })
                })
             })
             // reject medic req
             socket.on('rejectReq', data=>{
                console.log('reject medic requests, dispatchside', JSON.parse(data))
                const handleReq = JSON.parse(data)
-               db.MedReq.update({
-                  // unit: handleReq.unit,
+               db.MedReq.findOneAndUpdate({
+                  unit: handleReq.unit,
                   reqFor: handleReq.isFor
                },{
                   $set: {
                      status: handleReq.status
                   }
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('medReqOut', JSON.stringify(request))
+                  })
                })
             })
             //return request for registered patient name to dispatchside

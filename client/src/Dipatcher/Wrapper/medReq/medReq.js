@@ -10,6 +10,17 @@ const MedReq = () =>{
     const socket = socketIOClient(ENDPOINT)
 
     useEffect(()=>{
+        socket.emit('fetchRequests')
+    },[])
+    useEffect(()=>{
+        socket.on('fetchRequestsOut', data=>{
+            const populateReq = JSON.parse(data)
+            console.log('populating medic requests, dispatchside', populateReq)
+            setMedReqOut(populateReq)
+        })
+    },[])
+
+    useEffect(()=>{
         socket.on('medReqOut', data=>{
             console.log('receiving medic requests, dispatchside', JSON.parse(data))
             const medReqArray = JSON.parse(data)
