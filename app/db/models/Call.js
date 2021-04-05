@@ -207,6 +207,10 @@ const callSchema = new Schema ({
       type:Date,
       default: Date.now
    },
+   deployedUnit: {
+      type:Number,
+      required:true,
+   },
    streetDest: {
       type:String,
       trim: true,
