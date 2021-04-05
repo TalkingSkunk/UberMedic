@@ -143,7 +143,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                const handleReq = JSON.parse(data)
                db.MedReq.findOneAndUpdate({
                   unit: handleReq.unit,
-                  reqFor: handleReq.isFor
+                  reqFor: handleReq.isFor,
+                  status: "active"
                }, {
                   $set: {
                      status: handleReq.status
@@ -151,7 +152,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                }).then(()=>{
                   db.MedReq.find({status: "active"}).then(request=>{
                      console.log('sending medic reqs to dispatchside', request)
-                     io.emit('medReqOut', JSON.stringify(request))
+                     io.emit('fetchRequestsOut', JSON.stringify(request))
                   })
                })
             })
@@ -161,15 +162,16 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                const handleReq = JSON.parse(data)
                db.MedReq.findOneAndUpdate({
                   unit: handleReq.unit,
-                  reqFor: handleReq.isFor
-               },{
+                  reqFor: handleReq.isFor,
+                  status: "active"
+               }, {
                   $set: {
                      status: handleReq.status
                   }
                }).then(()=>{
                   db.MedReq.find({status: "active"}).then(request=>{
                      console.log('sending medic reqs to dispatchside', request)
-                     io.emit('medReqOut', JSON.stringify(request))
+                     io.emit('fetchRequestsOut', JSON.stringify(request))
                   })
                })
             })
@@ -185,7 +187,25 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             })
             // relay call details to medicside
             socket.on('callDetails', data=>{
+               console.log('relay call details to medicside', JSON.parse(data))
+               const callPack = JSON.parse(data)
+               //save to db
+               // db.MedReq.create({
+               //    unit: medReqpack.unit,
+               //    reqFor: medReqpack.reqFor,
+               //    status: "active",
+               // }).then(()=>{
+               //    db.MedReq.find({status: "active"}).then(request=>{
+               //       console.log('sending medic reqs to dispatchside', request)
+               //       io.emit('medReqOut', JSON.stringify(request))
+               //    })
+               // })
+               db.Call.create({
+                  deployedUnit: callPack.deployedUnit,
 
+               }).then(()=>{
+                  db.Call.find
+               })
                // await socket.emit('callDetails', JSON.stringify({
                //    streetDest: street,
                //    cityDest: city,
@@ -203,9 +223,6 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                //    registeredPt: registeredPt
                //  }))            
 
-               console.log('relay call details to medicside', JSON.parse(data))
-               const callPack = JSON.parse(data)
-               //save to db
                
 
 

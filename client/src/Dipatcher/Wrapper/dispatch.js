@@ -123,7 +123,6 @@ function Dispatch() {
   const handleCheckInters = async (e) => {
     e.preventDefault();
 
-
     // turn dest input to coords
     const result = await getCoords( {city: city, postCode: postal, address: street} )
     // send dest coords to medicside

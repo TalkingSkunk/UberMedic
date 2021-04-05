@@ -20,13 +20,6 @@ const MedReq = () =>{
         })
     },[])
 
-    useEffect(()=>{
-        socket.on('medReqOut', data=>{
-            console.log('receiving medic requests, dispatchside', JSON.parse(data))
-            const medReqArray = JSON.parse(data)
-            setMedReqOut(medReqArray)
-        })
-    },[])
     const [ medReqOut, setMedReqOut ] = useState([])
 
     const [reqContent, setReqContent] = useState("")
