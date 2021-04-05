@@ -12,8 +12,6 @@ const mongoose = require("mongoose");
 
 var cors = require("cors");
 const db = require("./app/db/models/");
-const { sign } = require("crypto");
-const MedReq = require("./app/db/models/MedReq");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -28,29 +26,36 @@ const PORT = process.env.PORT || 8080;
 
 // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
 // db.MobileUnit.insertMany([
+
 //    {
-//       unit: 1984,
-//       medic1: 09876,
-//       medic2: 94837,
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
 //       availability: "available",
 //    },
 //    {
-//       unit: 1917,
-//       medic1: 49584,
-//       medic2: 23309,
-//       availability: "en route to CTAS Alpha-Charlie",
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
 //    },
 //    {
-//       unit: 1945,
-//       medic1: 20192,
-//       medic2: 44932,
-//       availability: "busy",
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
 //    },
 //    {
-//       unit: 2021,
-//       medic1: 44932,
-//       medic2: 00492,
-//       availability: "busy",
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+//    },
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
 //    },
 // ])
 

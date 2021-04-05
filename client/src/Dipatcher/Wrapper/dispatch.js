@@ -19,7 +19,8 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./medReq/medReq";
+import MedReq from "./MedReq/MedReq";
+import AvailUnits from "./AvailUnits/AvailUnits";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
 
@@ -40,6 +41,7 @@ function Dispatch() {
 
   let sendtothisAmb = 3000;
 
+  const [deployedUnit, setDeployedUnit] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postal, setPostal] = useState("");
@@ -55,6 +57,9 @@ function Dispatch() {
   const [registeredPt, setRegisteredPt] = useState("");
   const [registeredPtExist, setRegisteredPtExist] = useState("");
 
+  const updateDeployedUnit = (e) => {
+    setDeployedUnit(e.target.value);
+  };
   const updateStreet = (e) => {
     setStreet(e.target.value);
   };
@@ -149,6 +154,7 @@ function Dispatch() {
     await socket.emit(
       "callDetails",
       JSON.stringify({
+        deployedUnit: deployedUnit,
         streetDest: street,
         cityDest: city,
         postalDest: postal,
@@ -286,8 +292,12 @@ function Dispatch() {
 
         {/* NEAREST AMBULANCE */}
         <Card className="text-center">
-          <Card.Header>Closest Available Unit</Card.Header>
-          <Card.Body></Card.Body>
+          <Card.Header>Closest Available Units</Card.Header>
+          <Card.Body>
+            <ListGroup as="ul">
+              <AvailUnits />
+            </ListGroup>
+          </Card.Body>
           <Card.Footer className="text-muted">
             Submitted/not submitted
           </Card.Footer>
@@ -297,7 +307,7 @@ function Dispatch() {
       {/* this is a really cool map */}
       <CardDeck>
         <Card className="text-center">
-          <Card.Header>NEAREST AMBULANCE</Card.Header>
+          <Card.Header>God's View of City of Toronto</Card.Header>
           <Card.Body>
             <DispatcherMap />
           </Card.Body>
@@ -308,7 +318,7 @@ function Dispatch() {
       </CardDeck>
 
       <CardDeck>
-        {/* POLICE/FIREFIGHTERS REQUIRED? */}
+        {/* MEDIC REQUESTS SIGNAL INCOMING */}
         <Card className="text-center">
           <Card.Header>MEDIC REQUESTS</Card.Header>
           <Card.Body>
