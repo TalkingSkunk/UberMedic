@@ -127,7 +127,7 @@ function Dispatch() {
     // turn dest input to coords
     const result = await getCoords( {city: city, postCode: postal, address: street} )
     // send dest coords to medicside
-    socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
+    // socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
     
     console.log('sending destination coords to medicside')
     //send dest coords to dispatch map for ambulance id [2021]

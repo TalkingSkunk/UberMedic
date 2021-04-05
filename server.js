@@ -84,7 +84,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
          })
       
          io.on('connection', (socket)=>{
-            console.log('user connected')
+            // console.log('user connected')
          
             socket.on('dispatchlol', msg=>console.log(msg))
             socket.on('mediclol', msg=>console.log(msg))
@@ -210,41 +210,21 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   registeredPt: callPack.registeredPt
                }).then((err, result)=>{
                   console.log('call details doc id', result._id)
-                  // db.Call.find({id: result._id}).then(doc=>{
-                  //    io.emit('callDetailsOut', JSON.stringify(doc))
-                  // })
+                  db.Call.find({_id: result._id}).then(doc=>{
+                     console.log('sending call details to medicside', doc)
+                     io.emit('callDetailsOut', JSON.stringify(doc))
+                  })
                })         
             })            
-
             // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
 
 
             // relay medic destination coords to medicside (to be destroyed future)
-            socket.on('medicDest', data=>{
-               console.log('relay medic destination to medicside', JSON.parse(data))
-               io.emit('medicDestOut', data)
-            })
+            // socket.on('medicDest', data=>{
+            //    console.log('relay medic destination to medicside', JSON.parse(data))
+            //    io.emit('medicDestOut', data)
+            // })
 
-         
-            
-            // socket.on('destination', async (coords)=>{
-            //    // to all sockets
-            //    console.log('receiving messsage from dispatch')
-            //    io.emit ('returnLocation', coords)
-               // let data = {
-               //    callID: 112,
-               //    unitNumber: 2021,
-               //    CTAS: 'ECHO',
-               //    CC: 'chest pain',
-               //    location: '1234 sunnyside dr',
-               //    intersection: 'bathurst and bloor',
-               //    police: 'on scene',
-               //    fire: 'on scene',
-               //    medic: 'on scene',
-               //    coords: coords,
-               // }
-         
-         
             socket.on ('disconnect', reason => {
                console.log('user has disconnected :(')
             })
