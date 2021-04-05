@@ -2,7 +2,6 @@ import { Button, Col, FormGroup } from "react-bootstrap";
 import React, { useState } from "react";
 import ReactBootstrap, { Form } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
-import signUp from "./controller/authController";
 
 function RegisterForm() {
   const [show, setShow] = useState(false);
@@ -28,16 +27,16 @@ function RegisterForm() {
   };
 
   const handleSubmit = async () => {
-    /////create new User
-    console.log("test");
-    const newUser = await fetch("/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(inputs),
-    })
-      .then((res) => res.json())
-      // .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    try {
+      /////create new User
+      const newUser = await fetch("/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inputs),
+      });
+    } catch {
+      console.log(new Error("ERROR---- POST REQUEST FAILED"));
+    }
 
     handleClose();
   };
@@ -82,7 +81,7 @@ function RegisterForm() {
                   placeholder="Password"
                 />
               </Form.Group>
-              <Form.Group as={Col} controlId="formGridPassword">
+              <Form.Group as={Col} controlId="formGridConfirmPassword">
                 <Form.Label>Retype Password</Form.Label>
                 <Form.Control
                   name="passwordConfirm"

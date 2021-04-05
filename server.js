@@ -1,5 +1,5 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
-const { signUp } = require("./client/src/loginPage/controller/authController");
+const { signUp } = require("./app/db/authController");
 
 const path = require("path");
 const express = require("express");
@@ -11,7 +11,9 @@ const mongoose = require("mongoose");
 // const MongoClient = require('mongodb').MongoClient;
 
 var cors = require("cors");
-const db = require("./app/db/models/");
+const db = require("./app/db/models");
+const { brotliDecompress } = require("zlib");
+const { sign } = require("crypto");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -232,11 +234,25 @@ console.log("yoyoma");
 app.post("/login", (req, res) => {
   console.log("login");
 });
-
-app.post("/signup", (req, res) => {
-  // console.log("test server");
+app.post("/signup", async (req, res) => {
   // console.log(req.body, "  SERVER");
-  signUp(req.body);
+  console.log(req.body);
+  //put the user model into the models folder
+  ////creating new user
+  const result = await db.User.create({
+    name: req.body.name,
+    id: req.body.id,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+  });
+
+  res.status(200).json({
+    status: "Success",
+    data: {
+      result,
+    },
+  });
+  console.log(result);
 });
 
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter

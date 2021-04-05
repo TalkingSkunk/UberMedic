@@ -19,7 +19,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./MedReq/MedReq";
+import MedReq from "./medReq/medReq";
 import AvailUnits from "./AvailUnits/AvailUnits";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
