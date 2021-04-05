@@ -280,6 +280,19 @@ function Dispatch() {
 
         {/* NEAREST AMBULANCE */}
         <Card className="text-center">
+          <Card.Header>Closest Available Unit</Card.Header>
+          <Card.Body>
+
+          </Card.Body>
+          <Card.Footer className="text-muted">
+            Submitted/not submitted
+          </Card.Footer>
+        </Card>
+      </CardDeck>
+
+      {/* this is a really cool map */}
+      <CardDeck>
+        <Card className="text-center">
           <Card.Header>NEAREST AMBULANCE</Card.Header>
           <Card.Body>
             <DispatcherMap />
@@ -289,6 +302,8 @@ function Dispatch() {
           </Card.Footer>
         </Card>
       </CardDeck>
+
+      
 
       <CardDeck>
         {/* POLICE/FIREFIGHTERS REQUIRED? */}

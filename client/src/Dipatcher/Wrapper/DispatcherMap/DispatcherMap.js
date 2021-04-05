@@ -143,6 +143,7 @@ const DispatcherMap = () => {
         <h1>don't be shy. step into the light</h1>
         <h1>hello there.</h1>
         <h1>don't be shy. step into the light</h1>
+        <h1>don't be shy. step into the light</h1>
         <div className="map-container" ref={mapContainer} />
         </Col>
     );
