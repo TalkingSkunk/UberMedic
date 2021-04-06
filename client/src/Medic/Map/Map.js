@@ -9,7 +9,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
 import fetchJSON from "../../utils/API"
 
-const ENDPOINT = "http://localhost:8080"
+const ENDPOINT = "ws://localhost:8080";
+
 
 
 mapboxgl.workerClass = MapboxWorker;
@@ -20,7 +21,8 @@ mapboxgl.accessToken =
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const Map = () => {
-    const socket = socketIOClient(ENDPOINT)
+
+    const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
     useEffect(()=>{
       socket.emit("mediclol", "hello from Medicside")

@@ -9,7 +9,8 @@ import { Col } from "react-bootstrap";
 import {MedicDispatchContext} from "../../../utils/MedicDispatchContext";
 
 // import fetchJSON from "../../../utils/API"
-const ENDPOINT = "http://localhost:8080"
+const ENDPOINT = "ws://localhost:8080";
+
 
 mapboxgl.workerClass = MapboxWorker;
 mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
@@ -42,7 +43,8 @@ const DispatcherMap = () => {
     },[medicDispatch])
 
 
-    const socket = socketIOClient(ENDPOINT)
+
+    const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
     useEffect(()=>{
         socket.on('medicCoordsOut', data=>{

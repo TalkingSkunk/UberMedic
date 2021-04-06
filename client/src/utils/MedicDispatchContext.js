@@ -1,12 +1,13 @@
 import React, {useState, createContext, useEffect} from "react"
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
+
 
 export const MedicDispatchContext = createContext()
 
 export const MedicDispatchProvider = props => {
 
-    const socket = socketIOClient(ENDPOINT)
+    const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
 
     const [ medReqOut, setMedReqOut ] = useState([

@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Col, Card } from "react-bootstrap";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
 
 
 const CallDetailsForm = () => {
-  const socket = socketIOClient(ENDPOINT)
 
+  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
 
   useEffect(()=>{

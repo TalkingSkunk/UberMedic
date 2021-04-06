@@ -20,10 +20,11 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./medReq/medReq";
+import MedReq from "./MedReq/MedReq";
 import AvailUnits from "./AvailUnits/AvailUnits";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
+
 
 function Dispatch() {
   // relay dispatch destination coords to dispatch map marker
@@ -35,7 +36,8 @@ function Dispatch() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const socket = socketIOClient(ENDPOINT);
+
+  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
   useEffect(() => {
     socket.emit("dispatchlol", "hello from Dispatchside");
   }, []);
