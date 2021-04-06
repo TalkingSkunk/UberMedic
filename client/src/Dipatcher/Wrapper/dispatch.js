@@ -207,7 +207,7 @@ function Dispatch() {
   }, [deployedUnit]);
 
   return (
-    <div style={{margin: "40px"}}>
+    <div style={{ margin: "40px" }}>
       <CardDeck>
         {/* INCIDENT LOCATION CARD */}
         <Card className="text-center">
@@ -323,43 +323,36 @@ function Dispatch() {
                 <Col>
                   <div>
                     <div>
-                    <label
-                      style={{ fontWeight: "bolder" }}
-                    >
-                      {" "}
-                      CTAS{" "}
-                    </label>
-                    </div> 
-                    <div>
-                    <input
-                      style={{ marginRight: "10px" }}
-                      onChange={updateCtas}
-                    ></input>
+                      <label style={{ fontWeight: "bolder" }}> CTAS </label>
                     </div>
                     <div>
-                    <label
-                      style={{  fontWeight: "bolder" }}
-                    >
-                      {" "}
-                      Chief Complaint{" "}
-                    </label>
+                      <input
+                        style={{ marginRight: "10px" }}
+                        onChange={updateCtas}
+                      ></input>
                     </div>
                     <div>
-                    <input
-                      style={{ marginLeft: "5px" }}
-                      onChange={updateCC}
-                    ></input>
+                      <label style={{ fontWeight: "bolder" }}>
+                        {" "}
+                        Chief Complaint{" "}
+                      </label>
+                    </div>
+                    <div>
+                      <input
+                        style={{ marginLeft: "5px" }}
+                        onChange={updateCC}
+                      ></input>
                     </div>
                   </div>
                 </Col>
-               
+
                 <div>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Additional Notes{" "}
                   </label>
-                  </div>
-                  <input onChange={updateNotes}></input>
+                </div>
+                <input onChange={updateNotes}></input>
               </div>
             </Row>
 
@@ -433,7 +426,7 @@ function Dispatch() {
 
       {/* this is a really cool map */}
       <CardDeck>
-        <Card className="text-center" style={{ height: "fit-content" }}>
+        <Card className="text-center" style={{ height: "480px" }}>
           <Card.Header style={{ fontWeight: "bolder" }}>
             NEAREST AMBULANCE
           </Card.Header>
