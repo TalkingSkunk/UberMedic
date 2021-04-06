@@ -172,7 +172,7 @@ const Map = () => {
     // The mapContainer ref specifies that map should be drawn to the HTML page in a new <div> element.
     return (
         <Card >
-      <Col  style={{height: "fit-content"}}>
+      <Col >
       {/* <div> to display the longitude, latitude, and zoom of the map. The return statement will look like this now: */}
       {/* <div className="sidebar">
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} */}
