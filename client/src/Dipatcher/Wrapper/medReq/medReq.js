@@ -7,8 +7,14 @@ const ENDPOINT = "http://localhost:8080";
 
 const MedReq = () => {
   const socket = socketIOClient(ENDPOINT);
-  const [medReqOut, setMedReqOut] = useState([]);
 
+  useEffect(() => {
+    socket.on("medReqOut", (data) => {
+      console.log("receiving medic requests, dispatchside", JSON.parse(data));
+      const medReqArray = JSON.parse(data);
+      setMedReqOut(medReqArray);
+    });
+  }, []);
   useEffect(() => {
     socket.emit("fetchRequests");
   }, []);
@@ -20,13 +26,9 @@ const MedReq = () => {
     });
   }, []);
 
-  useEffect(() => {
-    socket.on("medReqOut", (data) => {
-      console.log("receiving medic requests, dispatchside", JSON.parse(data));
-      const medReqArray = JSON.parse(data);
-      setMedReqOut(medReqArray);
-    });
-  }, []);
+  const [medReqOut, setMedReqOut] = useState([]);
+
+  //   const [reqContent, setReqContent] = useState("");
 
   const handleApprove = (e) => {
     // clear request after approve from the list
@@ -45,6 +47,11 @@ const MedReq = () => {
     setShow(false);
   };
 
+  // modals stuff clicks
+  const [show, setShow] = useState(false);
+  const [modalUnit, setModalUnit] = useState("");
+  const [modalFor, setModalFor] = useState("");
+  const [reqContent, setReqContent] = useState("");
   const handleClose = (e) => {
     const isUnit = e.target.dataset.unit;
     const isFor = e.target.dataset.for;
@@ -58,12 +65,6 @@ const MedReq = () => {
     );
     setShow(false);
   };
-
-  // modals stuff clicks
-  const [show, setShow] = useState(false);
-  const [modalUnit, setModalUnit] = useState("");
-  const [modalFor, setModalFor] = useState("");
-  const [reqContent, setReqContent] = useState("");
 
   // when the request list is clicked... show modal
   const handleShow = (e) => {
@@ -84,7 +85,7 @@ const MedReq = () => {
               data-unit={data.unit}
               data-for={data.reqFor}
             >
-              {data.createdAt}: [{data.unit}] Requesting >>{data.reqFor}...
+              {data.createdAt}: [{data.unit}] Requesting >> {data.reqFor}...
             </ListGroup.Item>
             <Modal
               show={show}

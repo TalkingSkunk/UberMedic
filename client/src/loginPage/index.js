@@ -15,17 +15,25 @@ function Login() {
     const value = e.target.value;
     const name = e.target.name;
     setInputs({ ...inputs, [name]: value });
-    console.log(inputs);
+    // console.log(inputs);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     /////////////fetch db check for correspondence
     ////go to server first, server talks to database
+    const result = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(inputs),
+    });
+    console.log(result, "  SUBMIT");
+    console.log("TEST  SUBMIT");
   };
 
   return (
     <div className="container" style={{ marginTop: "50px" }}>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formBasicId">
           <Form.Label>ID/OASIS number</Form.Label>
           <Form.Control

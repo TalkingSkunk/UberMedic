@@ -13,6 +13,7 @@ var cors = require("cors");
 const db = require("./app/db/models");
 const { brotliDecompress } = require("zlib");
 const { sign } = require("crypto");
+const User = require("./app/db/models/User");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -305,8 +306,21 @@ console.log("yoyoma");
 //    res.send({status:true, coords})
 // })
 
-app.post("/login", (req, res) => {
-  console.log("login");
+app.post("/login", async (req, res) => {
+  console.log(req.body);
+
+  const user = await db.User.findOne({
+    id: req.body.id,
+  });
+
+  if (
+    !user ||
+    !(await user.correctPassword(req.body.password, user.password))
+  ) {
+    throw new Error("Incorrect email or password", 401);
+  }
+
+  console.log(user);
 });
 
 app.post("/signup", async (req, res) => {

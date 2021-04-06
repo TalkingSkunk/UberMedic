@@ -99,6 +99,7 @@ function Dispatch() {
     setRegisteredPt(e.target.value);
   };
   const handleRegisteredPt = async (e) => {
+    console.log("sending registeredPt", registeredPt);
     await socket.emit(
       "fetchRegisteredPt",
       JSON.stringify({
@@ -129,10 +130,7 @@ function Dispatch() {
       address: street,
     });
     // send dest coords to medicside
-    socket.emit(
-      "medicDest",
-      JSON.stringify({ lng: result[0], lat: result[1] })
-    );
+    // socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
 
     console.log("sending destination coords to medicside");
     //send dest coords to dispatch map for ambulance id [2021]

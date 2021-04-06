@@ -41,16 +41,8 @@ const Map = () => {
     } = usePosition(watch, {enableHighAccuracy: true})
 
 
-    // const broadcastCoords = async () =>{
 
-        
-    //     const { status, message }= await fetchJSON( `http://localhost:8080/coords-send/${thisAmb}/${parseFloat(longitude.toFixed(5))}/${parseFloat(latitude.toFixed(5))}` )
-        
-    //     // identify the ambulance ID >> track and send coords to dispatch
-    //     // setMedicDispatch({...medicDispatch, [id]: { lngMedic: longitude, latMedic: latitude }})
-
-    // }
-
+    
     useEffect(()=>{
         console.log(`MAP.JS: usePosition() gives lng: ${longitude}, lat: ${latitude}`)
 
@@ -67,11 +59,11 @@ const Map = () => {
 
 
     useEffect(()=>{
-        socket.on('medicDestOut', data=>{
-            const coords = JSON.parse(data)
-            console.log('receiving dest coords, medicside', coords)
-            setLngDest(coords.lng)
-            setLatDest(coords.lat)
+        socket.on('callDetailsOut', data=>{
+            const callDets = JSON.parse(data)
+            console.log('receiving dest coords, medicside', callDets.destLngLat)
+            setLngDest(callDets.destLngLat[0])
+            setLatDest(callDets.destLngLat[1])
         })
     },[])
 
