@@ -19,7 +19,7 @@ const App = () => {
   if (!mountedComponent) return <div />;
 
   return (
-    <ThemeProvider theme={themeMode}>
+    <ThemeProvider style={{ backgroundCOlor: "#a2a0a3" }} theme={themeMode}>
       <>
         <GlobalStyles />
         <Toggle theme={theme} toggleTheme={themeToggler} />

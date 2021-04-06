@@ -26,9 +26,8 @@ import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "ws://localhost:8080";
 
-
 function Dispatch() {
-  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
+  const socket = socketIOClient(ENDPOINT, { transports: ["websocket"] });
   // relay dispatch destination coords to dispatch map marker
   const { medDest } = useContext(MedicDispatchContext);
   const [medicDispatch, setMedicDispatch] = medDest;
@@ -38,7 +37,6 @@ function Dispatch() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-
   useEffect(() => {
     socket.emit("dispatchlol", "hello from Dispatchside");
   }, []);
@@ -46,7 +44,7 @@ function Dispatch() {
   let sendtothisAmb = 3000;
 
   // call details states
-  const [deployUnits, setDeployUnits] = useState([])
+  const [deployUnits, setDeployUnits] = useState([]);
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postal, setPostal] = useState("");
@@ -74,42 +72,45 @@ function Dispatch() {
     setPostal(e.target.value);
   };
   const updateCallerName = (e) => {
-    setCallerName(e.target.value)
-  }
-  const updateCallerNum = (e)=>{
-    setCallerNum(e.target.value)
-  }
-  const updateCtas = (e)=>{
-    setCtas(e.target.value)
-  }
-  const updateCC = (e)=>{
-    setCC(e.target.value)
-  }
-  const updateNotes = (e)=>{
-    setNotes(e.target.value)
-  }
-  const updatePolice = (e)=>{
-    setPolice(e.target.innerText)
-  }
-  const updateFire = (e)=>{
-    setFire(e.target.innerText)
-  }
+    setCallerName(e.target.value);
+  };
+  const updateCallerNum = (e) => {
+    setCallerNum(e.target.value);
+  };
+  const updateCtas = (e) => {
+    setCtas(e.target.value);
+  };
+  const updateCC = (e) => {
+    setCC(e.target.value);
+  };
+  const updateNotes = (e) => {
+    setNotes(e.target.value);
+  };
+  const updatePolice = (e) => {
+    setPolice(e.target.innerText);
+  };
+  const updateFire = (e) => {
+    setFire(e.target.innerText);
+  };
 
   // check for registered pt
-  const updateRegisteredPt = (e)=>{
-    setRegisteredPt(e.target.value)
-  }
-  const handleRegisteredPt = async (e)=>{
-    console.log('sending registeredPt', registeredPt)
-    await socket.emit('fetchRegisteredPt', JSON.stringify({
-      registeredId: registeredPt
-    }))
-    console.log('sent request for registered info')
-    socket.on('fetchRegisteredPtOut', data=>{
-      const patient = JSON.parse(data)
-      if (patient !== null){
-        console.log("this is the patient received", patient)
-        setRegisteredPtExist(patient.firstName)
+  const updateRegisteredPt = (e) => {
+    setRegisteredPt(e.target.value);
+  };
+  const handleRegisteredPt = async (e) => {
+    console.log("sending registeredPt", registeredPt);
+    await socket.emit(
+      "fetchRegisteredPt",
+      JSON.stringify({
+        registeredId: registeredPt,
+      })
+    );
+    console.log("sent request for registered info");
+    socket.on("fetchRegisteredPtOut", (data) => {
+      const patient = JSON.parse(data);
+      if (patient !== null) {
+        console.log("this is the patient received", patient);
+        setRegisteredPtExist(patient.firstName);
       } else {
         setRegisteredPtExist("N/A");
       }
@@ -135,38 +136,33 @@ function Dispatch() {
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } });
   };
 
-
   // available unit section
-  const [ availUnits, setAvailUnits ] = useState([])
-  useEffect(()=>{
-    socket.emit('fetchUnits')
-  },[])
-  useEffect(()=>{
-    socket.on('fetchUnitsOut', data=>{
-        const populateUnits = JSON.parse(data)
-        console.log('populating available units, dispatchside', populateUnits)
-        setAvailUnits(populateUnits)
-    })
-  },[])
+  const [availUnits, setAvailUnits] = useState([]);
+  useEffect(() => {
+    socket.emit("fetchUnits");
+  }, []);
+  useEffect(() => {
+    socket.on("fetchUnitsOut", (data) => {
+      const populateUnits = JSON.parse(data);
+      console.log("populating available units, dispatchside", populateUnits);
+      setAvailUnits(populateUnits);
+    });
+  }, []);
   //clickety click listgroupitem makes them active
   const handleActive = (e) => {
-    if(e.target.classList.contains('active')){
-        e.target.classList.remove('active')
-        const offUnit = e.target.dataset.unit
-        setDeployUnits((oldArray) =>
-        oldArray.filter((unit) => unit !== offUnit)
-      )
+    if (e.target.classList.contains("active")) {
+      e.target.classList.remove("active");
+      const offUnit = e.target.dataset.unit;
+      setDeployUnits((oldArray) => oldArray.filter((unit) => unit !== offUnit));
     } else {
-        e.target.classList.add('active')
-        const onUnit = e.target.dataset.unit
-        setDeployUnits((oldArray) => [...oldArray, onUnit]);
+      e.target.classList.add("active");
+      const onUnit = e.target.dataset.unit;
+      setDeployUnits((oldArray) => [...oldArray, onUnit]);
     }
-  }
+  };
   useEffect(() => {
     console.log("units to be deployed:", deployUnits);
   }, [deployUnits]);
-
-
 
   //one button to rule them all
   const handleSendCall = async (e) => {
@@ -200,7 +196,7 @@ function Dispatch() {
       })
     );
 
-    setDeployUnits([])
+    setDeployUnits([]);
     setStreet("");
     setCity("");
     setIntersection("");
@@ -214,14 +210,12 @@ function Dispatch() {
     setFire("");
     setRegisteredPt("");
 
-    const availunitsTag = document.querySelectorAll('.availunits')
-    availunitsTag.forEach((item)=>{
-      item.classList.remove('active')
-      console.log('actives removed')
-    })
+    const availunitsTag = document.querySelectorAll(".availunits");
+    availunitsTag.forEach((item) => {
+      item.classList.remove("active");
+      console.log("actives removed");
+    });
   };
-
-
 
   return (
     <div>
@@ -362,16 +356,38 @@ function Dispatch() {
             </Row>
 
             <div>
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Police {police}</button>
+              <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Police {police}
+              </button>
               <ul class="dropdown-menu">
-                <li class="dropdown-item" onClick={updatePolice}>Deploy</li>
-                <li class="dropdown-item" onClick={updatePolice}>N/A</li>
+                <li class="dropdown-item" onClick={updatePolice}>
+                  Deploy
+                </li>
+                <li class="dropdown-item" onClick={updatePolice}>
+                  N/A
+                </li>
               </ul>
 
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Fire {fire}</button>
+              <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Fire {fire}
+              </button>
               <ul class="dropdown-menu">
-                <li class="dropdown-item" onClick={updateFire}>Deploy</li>
-                <li class="dropdown-item" onClick={updateFire}>N/A</li>
+                <li class="dropdown-item" onClick={updateFire}>
+                  Deploy
+                </li>
+                <li class="dropdown-item" onClick={updateFire}>
+                  N/A
+                </li>
               </ul>
             </div>
           </Card.Body>
@@ -384,38 +400,37 @@ function Dispatch() {
           </Card.Header>
           <Card.Body>
             <ListGroup as="ul">
-
-
-              {availUnits.map(data=>{
-                  return (
-                      <>
-                          <li className="list-group-item availunits" aria-current="true" onClick={handleActive} data-unit={data.unit}>
-                              [{data.unit}]: Status [ {data.availability} ]
-                          </li>
-                      </>
-                  )
+              {availUnits.map((data) => {
+                return (
+                  <>
+                    <li
+                      className="list-group-item availunits"
+                      aria-current="true"
+                      onClick={handleActive}
+                      data-unit={data.unit}
+                    >
+                      [{data.unit}]: Status [ {data.availability} ]
+                    </li>
+                  </>
+                );
               })}
-
-
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
             <Button variant="danger" onClick={handleSendCall}>
-                  SEND CALL NOW
+              SEND CALL NOW
             </Button>
           </Card.Footer>
         </Card>
 
-            {/* ACTIVE CALLS */}
-            <Card className="text-center">
+        {/* ACTIVE CALLS */}
+        <Card className="text-center">
           <Card.Header style={{ fontWeight: "bolder" }}>
             Active Calls
           </Card.Header>
           <Card.Body>
             <ListGroup as="ul">
-
               <ActiveCalls />
-              
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
@@ -426,7 +441,7 @@ function Dispatch() {
 
       {/* this is a really cool map */}
       <CardDeck>
-        <Card className="text-center">
+        <Card className="text-center" style={{ height: "480px" }}>
           <Card.Header style={{ fontWeight: "bolder" }}>
             NEAREST AMBULANCE
           </Card.Header>

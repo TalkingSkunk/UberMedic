@@ -20,7 +20,6 @@ export const GlobalStyles = createGlobalStyle`
   .card {
     background: ${({ theme }) => theme.body};
   }
-
   `;
 
 //   .map-container{
