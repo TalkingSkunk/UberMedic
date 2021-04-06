@@ -321,21 +321,30 @@ function Dispatch() {
             <Row style={{ marginBottom: "30px" }}>
               <div>
                 <Col>
-                  <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
-                    {" "}
-                    CTAS{" "}
-                  </label>
-                  <input
-                    style={{ marginRight: "10px" }}
-                    onChange={updateCtas}
-                  ></input>
+                  <div>
+                    <label
+                      style={{ marginRight: "88px", fontWeight: "bolder" }}
+                    >
+                      {" "}
+                      CTAS{" "}
+                    </label>
+                    <input
+                      style={{ marginRight: "10px" }}
+                      onChange={updateCtas}
+                    ></input>
 
-                  <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
-                    {" "}
-                    Chief Complaint{" "}
-                  </label>
+                    <label
+                      style={{ marginRight: "10px", fontWeight: "bolder" }}
+                    >
+                      {" "}
+                      Chief Complaint{" "}
+                    </label>
 
-                  <input onChange={updateCC}></input>
+                    <input
+                      style={{ marginLeft: "5px" }}
+                      onChange={updateCC}
+                    ></input>
+                  </div>
                 </Col>
                 <Col>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
@@ -390,7 +399,7 @@ function Dispatch() {
           <Card.Header style={{ fontWeight: "bolder" }}>
             Closest Available Unit
           </Card.Header>
-          <Card.Body>
+          <Card.Body style={{ height: "fit-content" }}>
             <ListGroup as="ul">
               <AvailUnits />
             </ListGroup>
@@ -412,24 +421,18 @@ function Dispatch() {
               <ActiveCalls />
             </ListGroup>
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
         </Card>
       </CardDeck>
 
       {/* this is a really cool map */}
       <CardDeck>
-        <Card className="text-center">
+        <Card className="text-center" style={{ height: "fit-content" }}>
           <Card.Header style={{ fontWeight: "bolder" }}>
             NEAREST AMBULANCE
           </Card.Header>
-          <Card.Body>
+          <Card.Body style={{ marginTop: "-14px" }}>
             <DispatcherMap />
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
         </Card>
       </CardDeck>
 
@@ -442,9 +445,6 @@ function Dispatch() {
           <Card.Body>
             <MedReq />
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
         </Card>
 
         {/* CALLER HISTORY */}
@@ -460,9 +460,6 @@ function Dispatch() {
               <ListGroup.Item>Morbi leo risus</ListGroup.Item>
             </ListGroup>
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
         </Card>
 
         {/* REGISTERED PATIENTS PROGRAM */}
@@ -494,9 +491,6 @@ function Dispatch() {
               <Card.Text>Unregistered ID!</Card.Text>
             )}
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
         </Card>
       </CardDeck>
     </div>

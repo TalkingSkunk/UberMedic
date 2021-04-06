@@ -6,10 +6,12 @@ import MedicWrapper from "./Medic/Wrapper/Wrapper";
 import Login from "./loginPage";
 import { MedicDispatchProvider } from "./utils/MedicDispatchContext";
 
+
 const App = () => {
   /////stateful
   return (
     <div>
+      
       <MedicDispatchProvider>
         <BrowserRouter>
           <Route path="/dispatcher" exact component={DispatcherWrapper} />
@@ -19,6 +21,7 @@ const App = () => {
           <Route path="/" exact component={Login} />
         </BrowserRouter>
       </MedicDispatchProvider>
+ 
     </div>
   );
 };

@@ -178,6 +178,8 @@ const Map = () => {
         Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} */}
     {/* </div> */}
         <div className="map-container" ref={mapContainer} />
+        
+       
       </Col>
       </Card>
     );

@@ -323,5 +323,3 @@ app.post("/signup", async (req, res) => {
   });
   console.log(result);
 });
-
-// listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
