@@ -50,12 +50,12 @@ function Dispatch() {
   const [intersection, setIntersection] = useState("");
   const [callerName, setCallerName] = useState("");
   const [callerNum, setCallerNum] = useState("");
-  const [ctas, setCtas] = useState("delta");
-  const [cc, setCC] = useState("blunt trauma");
-  const [notes, setNotes] = useState("buzz #1234 and beware of the dog");
-  const [police, setPolice] = useState("Attending");
+  const [ctas, setCtas] = useState("");
+  const [cc, setCC] = useState("");
+  const [notes, setNotes] = useState("");
+  const [police, setPolice] = useState("N/A");
   const [fire, setFire] = useState("N/A");
-  const [additional, setAdditional] = useState("N/A");
+  // const [additional, setAdditional] = useState("N/A");
   const [registeredPt, setRegisteredPt] = useState("");
   const [registeredPtExist, setRegisteredPtExist] = useState("");
 
@@ -87,14 +87,14 @@ function Dispatch() {
     setNotes(e.target.value)
   }
   const updatePolice = (e)=>{
-    setPolice(e.target.value)
+    setPolice(e.target.innerText)
   }
   const updateFire = (e)=>{
-    setFire(e.target.value)
+    setFire(e.target.innerText)
   }
-  const updateAdditional = (e)=>{
-    setAdditional(e.target.value)
-  }
+  // const updateAdditional = (e)=>{
+  //   setAdditional(e.target.innerText)
+  // }
   const updateRegisteredPt = (e)=>{
     setRegisteredPt(e.target.value)
   }
@@ -134,6 +134,8 @@ function Dispatch() {
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } });
   };
 
+
+
   //one button to rule them all
   const handleSendCall = async (e) => {
     e.preventDefault();
@@ -161,7 +163,7 @@ function Dispatch() {
         notes: notes,
         police: police,
         fire: fire,
-        additional: additional,
+        // additional: additional,
         registeredPt: registeredPt,
       })
     );
@@ -178,7 +180,7 @@ function Dispatch() {
     setNotes("");
     setPolice("");
     setFire("");
-    setAdditional("");
+    // setAdditional("");
     setRegisteredPt("");
   };
 
@@ -321,28 +323,38 @@ function Dispatch() {
                     {" "}
                     CTAS{" "}
                   </label>
-                  <input style={{ marginRight: "10px" }}></input>
+                  <input style={{ marginRight: "10px" }} onChange={updateCtas}></input>
 
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Chief Complaint{" "}
                   </label>
 
-                  <input></input>
+                  <input onChange={updateCC}></input>
                 </Col>
                 <Col>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Additional Notes{" "}
                   </label>
-                  <input></input>
+                  <input onChange={updateNotes}></input>
                 </Col>
               </div>
             </Row>
 
             <div>
-              <Button variant="primary">POLICE</Button>
-              <Button variant="danger">FIREFIGHTER</Button>
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Police {police}</button>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item" onClick={updatePolice}>Deploy</li>
+                <li class="dropdown-item" onClick={updatePolice}>N/A</li>
+              </ul>
+
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Fire {fire}</button>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item" onClick={updateFire}>Deploy</li>
+                <li class="dropdown-item" onClick={updateFire}>N/A</li>
+              </ul>
+
               <Button variant="warning" onClick={handleSendCall}>
                 SEND
               </Button>

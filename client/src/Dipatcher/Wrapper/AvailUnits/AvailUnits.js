@@ -39,6 +39,7 @@ const AvailUnits = () =>{
         } else {
             e.target.classList.add('active')
             const isUnit = e.target.dataset.unit
+
             socket.emit('onUnit', JSON.stringify(isUnit))
         }
     }

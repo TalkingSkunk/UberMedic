@@ -203,7 +203,6 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   notes: callPack.notes,
                   police: callPack.police,
                   fire: callPack.fire,
-                  additional: callPack.additional,
                   registeredPt: callPack.registeredPt
                }).then((err, result)=>{
                   console.log('call details doc id', result._id)

@@ -114,9 +114,6 @@ const CallDetailsForm = () => {
           <label htmlFor="fire">Fire</label>
           <input type="text" id="fire" name="fire" value={fire} readOnly required />
           <br/>
-          <label htmlFor="medic">Additional Crew</label>
-          <input type="text" id="medic" name="medic" value={additional} readOnly required />
-          <br/>
           <label htmlFor="registeredPt">Registered Patient</label>
           <input type="text" id="registeredPt" name="registeredPt" value={registeredPt} readOnly required />
         </form>
