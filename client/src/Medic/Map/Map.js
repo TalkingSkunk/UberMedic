@@ -89,22 +89,6 @@ const Map = () => {
     // destination lng, lat
     let medicDestination
 
-    //receive destination coords
-    // const fetchDestCoords = async () =>{
-    //     const { status, coords: {lngDest,latDest} } = await fetchJSON( `http://localhost:8080/destination-get/${thisAmb}` )
-    //     console.log ( 'fetching coords for destination', lngDest, latDest)
-    //     if (lngDest !==0 && latDest !==0){
-    //         setlngDest(lngDest)
-    //         setlatDest(latDest)
-    //     }
-    // }
-    // useEffect(()=>{
-    //     setInterval(
-    //         fetchDestCoords
-    //     , 2000)
-    // },[])
-
-
     const [lngDest, setLngDest] = useState(0)
     const [latDest, setLatDest] = useState(0)
   
