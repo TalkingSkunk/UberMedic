@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    validate: {
+      validator: function (el) {
+        this.id > 50000 ? (this.role = "medical") : (this.role = "dispatcher");
+      },
+    },
   },
   createdAt: {
     type: Date,

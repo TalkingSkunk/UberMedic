@@ -19,14 +19,15 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     /////////////fetch db check for correspondence
-    ////go to server first, server talks to database
     const result = await fetch("/login", {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(inputs),
     });
+
+    console.log(result, "SUBMIT");
   };
 
   return (

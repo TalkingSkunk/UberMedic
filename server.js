@@ -307,7 +307,7 @@ console.log("yoyoma");
 // })
 
 app.post("/login", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   const user = await db.User.findOne({
     id: req.body.id,
@@ -320,7 +320,7 @@ app.post("/login", async (req, res) => {
     throw new Error("Incorrect ID number or password", 401);
   }
 
-  res.send(req.body.role);
+  res.send();
 });
 
 app.post("/signup", async (req, res) => {
