@@ -30,12 +30,10 @@ function Login() {
       body: JSON.stringify(inputs),
     }).then((r) => r.json());
 
-    console.log("SUBMIT", result);
-
-    if (result) {
+    if (result.data) {
       setAuth(true);
       setRouter(result.data.role);
-    } else alert("USER NOT FOUND");
+    } else alert("USER NOT FOUND! INVALID ID PASSWORD COMBINATION");
   };
 
   return (

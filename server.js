@@ -1,5 +1,4 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
-const { signUp } = require("./app/db/authController");
 
 const path = require("path");
 const express = require("express");
@@ -285,7 +284,6 @@ console.log("yoyoma");
 //    const coords = medicDispatchCoords[id] || {lng:0,lat:0}
 //    res.send({status:true, coords})
 // })
-//////////////////////////////////////
 
 app.post("/login", async (req, res) => {
   const user = await db.User.findOne({
@@ -296,9 +294,10 @@ app.post("/login", async (req, res) => {
     !user ||
     !(await user.correctPassword(req.body.password, user.password))
   ) {
-    throw new Error("Incorrect ID number or password", 401);
+    console.error("Incorrect ID number or password");
   }
-  console.log(user);
+  // console.log(user);
+
   res.send({ data: user });
 });
 
