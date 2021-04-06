@@ -7,7 +7,7 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
-import fetchJSON from "../../utils/API"
+// import fetchJSON from "../../utils/API"
 
 const ENDPOINT = "ws://localhost:8080";
 
@@ -88,22 +88,6 @@ const Map = () => {
 
     // destination lng, lat
     let medicDestination
-
-    //receive destination coords
-    // const fetchDestCoords = async () =>{
-    //     const { status, coords: {lngDest,latDest} } = await fetchJSON( `http://localhost:8080/destination-get/${thisAmb}` )
-    //     console.log ( 'fetching coords for destination', lngDest, latDest)
-    //     if (lngDest !==0 && latDest !==0){
-    //         setlngDest(lngDest)
-    //         setlatDest(latDest)
-    //     }
-    // }
-    // useEffect(()=>{
-    //     setInterval(
-    //         fetchDestCoords
-    //     , 2000)
-    // },[])
-
 
     const [lngDest, setLngDest] = useState(0)
     const [latDest, setLatDest] = useState(0)

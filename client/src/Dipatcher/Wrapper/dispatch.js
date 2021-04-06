@@ -20,8 +20,8 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./medReq/medReq";
-import AvailUnits from "./AvailUnits/AvailUnits";
+import MedReq from "./MedReq/MedReq";
+
 import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "ws://localhost:8080";
@@ -44,7 +44,7 @@ function Dispatch() {
   let sendtothisAmb = 3000;
 
   // call details states
-  const [deployedUnit, setDeployedUnit] = useState([]);
+  const [deployUnits, setDeployUnits] = useState([]);
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postal, setPostal] = useState("");
@@ -54,9 +54,8 @@ function Dispatch() {
   const [ctas, setCtas] = useState("");
   const [cc, setCC] = useState("");
   const [notes, setNotes] = useState("");
-  const [police, setPolice] = useState("N/A");
-  const [fire, setFire] = useState("N/A");
-  // const [additional, setAdditional] = useState("N/A");
+  const [police, setPolice] = useState("");
+  const [fire, setFire] = useState("");
   const [registeredPt, setRegisteredPt] = useState("");
   const [registeredPtExist, setRegisteredPtExist] = useState("");
 
@@ -93,9 +92,8 @@ function Dispatch() {
   const updateFire = (e) => {
     setFire(e.target.innerText);
   };
-  // const updateAdditional = (e)=>{
-  //   setAdditional(e.target.innerText)
-  // }
+
+  // check for registered pt
   const updateRegisteredPt = (e) => {
     setRegisteredPt(e.target.value);
   };
@@ -138,10 +136,39 @@ function Dispatch() {
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } });
   };
 
+  // available unit section
+  const [availUnits, setAvailUnits] = useState([]);
+  useEffect(() => {
+    socket.emit("fetchUnits");
+  }, []);
+  useEffect(() => {
+    socket.on("fetchUnitsOut", (data) => {
+      const populateUnits = JSON.parse(data);
+      console.log("populating available units, dispatchside", populateUnits);
+      setAvailUnits(populateUnits);
+    });
+  }, []);
+  //clickety click listgroupitem makes them active
+  const handleActive = (e) => {
+    if (e.target.classList.contains("active")) {
+      e.target.classList.remove("active");
+      const offUnit = e.target.dataset.unit;
+      setDeployUnits((oldArray) => oldArray.filter((unit) => unit !== offUnit));
+    } else {
+      e.target.classList.add("active");
+      const onUnit = e.target.dataset.unit;
+      setDeployUnits((oldArray) => [...oldArray, onUnit]);
+    }
+  };
+  useEffect(() => {
+    console.log("units to be deployed:", deployUnits);
+  }, [deployUnits]);
+
   //one button to rule them all
   const handleSendCall = async (e) => {
     e.preventDefault();
 
+    console.log("sending call details to medicside");
     // turn dest input to coords
     const destLngLat = await getCoords({
       city: city,
@@ -152,7 +179,7 @@ function Dispatch() {
     await socket.emit(
       "callDetails",
       JSON.stringify({
-        deployedUnit: deployedUnit,
+        deployedUnit: deployUnits,
         streetDest: street,
         cityDest: city,
         postalDest: postal,
@@ -165,12 +192,11 @@ function Dispatch() {
         notes: notes,
         police: police,
         fire: fire,
-        // additional: additional,
         registeredPt: registeredPt,
       })
     );
 
-    console.log("sending call details to medicside");
+    setDeployUnits([]);
     setStreet("");
     setCity("");
     setIntersection("");
@@ -182,32 +208,17 @@ function Dispatch() {
     setNotes("");
     setPolice("");
     setFire("");
-    // setAdditional("");
     setRegisteredPt("");
+
+    const availunitsTag = document.querySelectorAll(".availunits");
+    availunitsTag.forEach((item) => {
+      item.classList.remove("active");
+      console.log("actives removed");
+    });
   };
 
-  //listen for choice of unit
-  useEffect(() => {
-    socket.on("offUnitOut", (data) => {
-      console.log("this is offunit", JSON.parse(data));
-      setDeployedUnit((oldArray) =>
-        oldArray.filter((unit) => unit !== JSON.parse(data))
-      );
-    });
-  }, []);
-  useEffect(() => {
-    socket.on("onUnitOut", (data) => {
-      console.log("this is onunit", JSON.parse(data));
-      setDeployedUnit((oldArray) => [...oldArray, JSON.parse(data)]);
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log("units to be deployed:", deployedUnit);
-  }, [deployedUnit]);
-
   return (
-    <div style={{ margin: "40px" }}>
+    <div>
       <CardDeck>
         {/* INCIDENT LOCATION CARD */}
         <Card className="text-center">
@@ -317,42 +328,30 @@ function Dispatch() {
             <ModalInFunctionalComponent />
           </Card.Header>
           <Card.Body>
-            <Row style={{ marginTop: "-10px" }}></Row>
+            <Row style={{ marginTop: "-3px" }}></Row>
             <Row style={{ marginBottom: "30px" }}>
               <div>
                 <Col>
-                  <div>
-                    <div>
-                      <label style={{ fontWeight: "bolder" }}> CTAS </label>
-                    </div>
-                    <div>
-                      <input
-                        style={{ marginRight: "10px" }}
-                        onChange={updateCtas}
-                      ></input>
-                    </div>
-                    <div>
-                      <label style={{ fontWeight: "bolder" }}>
-                        {" "}
-                        Chief Complaint{" "}
-                      </label>
-                    </div>
-                    <div>
-                      <input
-                        style={{ marginLeft: "5px" }}
-                        onChange={updateCC}
-                      ></input>
-                    </div>
-                  </div>
-                </Col>
+                  <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
+                    {" "}
+                    CTAS{" "}
+                  </label>
+                  <input type="text" value={ctas} onChange={updateCtas} />
 
-                <div>
+                  <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
+                    {" "}
+                    Chief Complaint{" "}
+                  </label>
+
+                  <input type="text" value={cc} onChange={updateCC} />
+                </Col>
+                <Col>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Additional Notes{" "}
                   </label>
-                </div>
-                <input onChange={updateNotes}></input>
+                  <input type="text" value={notes} onChange={updateNotes} />
+                </Col>
               </div>
             </Row>
 
@@ -394,14 +393,27 @@ function Dispatch() {
           </Card.Body>
         </Card>
 
-        {/* NEAREST AMBULANCE */}
+        {/* AVAILABLE UNITS */}
         <Card className="text-center">
           <Card.Header style={{ fontWeight: "bolder" }}>
             Closest Available Unit
           </Card.Header>
-          <Card.Body style={{ height: "fit-content" }}>
+          <Card.Body>
             <ListGroup as="ul">
-              <AvailUnits />
+              {availUnits.map((data) => {
+                return (
+                  <>
+                    <li
+                      className="list-group-item availunits"
+                      aria-current="true"
+                      onClick={handleActive}
+                      data-unit={data.unit}
+                    >
+                      [{data.unit}]: Status [ {data.availability} ]
+                    </li>
+                  </>
+                );
+              })}
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
@@ -421,6 +433,9 @@ function Dispatch() {
               <ActiveCalls />
             </ListGroup>
           </Card.Body>
+          <Card.Footer className="text-muted">
+            Submitted/not submitted
+          </Card.Footer>
         </Card>
       </CardDeck>
 
@@ -430,9 +445,12 @@ function Dispatch() {
           <Card.Header style={{ fontWeight: "bolder" }}>
             NEAREST AMBULANCE
           </Card.Header>
-          <Card.Body style={{ marginTop: "-14px" }}>
+          <Card.Body>
             <DispatcherMap />
           </Card.Body>
+          <Card.Footer className="text-muted">
+            Submitted/not submitted
+          </Card.Footer>
         </Card>
       </CardDeck>
 
@@ -445,6 +463,9 @@ function Dispatch() {
           <Card.Body>
             <MedReq />
           </Card.Body>
+          <Card.Footer className="text-muted">
+            Submitted/not submitted
+          </Card.Footer>
         </Card>
 
         {/* CALLER HISTORY */}
@@ -460,6 +481,9 @@ function Dispatch() {
               <ListGroup.Item>Morbi leo risus</ListGroup.Item>
             </ListGroup>
           </Card.Body>
+          <Card.Footer className="text-muted">
+            Submitted/not submitted
+          </Card.Footer>
         </Card>
 
         {/* REGISTERED PATIENTS PROGRAM */}
@@ -491,6 +515,9 @@ function Dispatch() {
               <Card.Text>Unregistered ID!</Card.Text>
             )}
           </Card.Body>
+          <Card.Footer className="text-muted">
+            Submitted/not submitted
+          </Card.Footer>
         </Card>
       </CardDeck>
     </div>

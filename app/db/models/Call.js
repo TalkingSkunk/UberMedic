@@ -16,47 +16,47 @@ const patientSchema = new Schema({
    firstName: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    lastName: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    dobYMD: {
       type:Number,
       trim: true,
-      required:true,
+      
    },
    healthID: {
       type:Number,
       trim: true,
-      required:true,
+      
    },
    streetAddress: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    cityAddress: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    provAddress: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    postalCode: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    pickupLocation: {
       type:String,
       trim: true,
-      required:true,
+      
    },
 })
 
@@ -64,22 +64,22 @@ const procedureSchema = new Schema({
    time: {
       type:Number,
       trim: true,
-      required:true,
+      
    },
    code: {
       type:Number,
       trim: true,
-      required:true,
+      
    },
    doneBy: {
       type:Number,
       trim: true,
-      required:true,
+      
    },
    result:{
       type:String,
       trim: true,
-      required:true,
+      
    },
 })
 
@@ -104,18 +104,18 @@ const ambulanceReportSchema = new Schema({
    allergy: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    appearance: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    procedures: [procedureSchema],
    footnote: {
       type:String,
       trim: true,
-      required:true,
+      
    },
 }, {timestamps: true}) // timestamps property (time report is created/updated) passed in as the second argument (opitional object) inside the Schema constructor
 
@@ -224,22 +224,22 @@ const callSchema = new Schema ({
    postalDest: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    intersection: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    callerName: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    callerNum: {
       type:Number,
       trim: true,
-      required:true,
+      
    },
    destLngLat: {
       type:Array,
@@ -258,17 +258,17 @@ const callSchema = new Schema ({
    notes: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    police: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    fire: {
       type:String,
       trim: true,
-      required:true,
+      
    },
    registeredPt:{
       type:Number,
@@ -282,7 +282,11 @@ const callSchema = new Schema ({
    arrivedHosp: [arrivedHospSchema],
    toc: [tocSchema],
    clearCall: [clearCallSchema],
-   ambulanceReport: [ambulanceReportSchema]
+   ambulanceReport: [ambulanceReportSchema],
+   status:{
+      type:String,
+      trim:true
+   }
 })
 
 

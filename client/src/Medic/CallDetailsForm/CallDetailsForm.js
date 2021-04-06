@@ -27,7 +27,6 @@ const CallDetailsForm = () => {
       setNotes(callDets.notes)
       setPolice(callDets.police)
       setFire(callDets.fire)
-      setAdditional(callDets.additional)
       setRegisteredPt(callDets.registeredPt)
     })
   },[])
@@ -46,7 +45,6 @@ const CallDetailsForm = () => {
   const [notes, setNotes] = useState("")
   const [police, setPolice] = useState("N/A")
   const [fire, setFire] = useState("N/A")
-  const [additional, setAdditional] = useState("N/A")
   const [registeredPt, setRegisteredPt] = useState("N/A")
 
   //button turnstile
@@ -123,8 +121,7 @@ const CallDetailsForm = () => {
           <label htmlFor="fire" style={{ fontWeight:"bolder", marginRight:"123px"}}>Fire</label>
           <input type="text" id="fire" name="fire" style={{marginBottom:"5px"}} value={fire} readOnly required />
           
-          <label htmlFor="medic" style={{ fontWeight:"bolder", marginRight:"29px"}}>Additional Crew</label>
-          <input type="text" id="medic" name="medic" style={{marginBottom:"5px"}} value={additional} readOnly required />
+
           
           <label htmlFor="registeredPt" style={{ fontWeight:"bolder", marginRight:"10px"}}>Registered Patient</label>
           <input type="text" id="registeredPt" name="registeredPt" style={{marginBottom:"5px"}}  value={registeredPt} readOnly required />

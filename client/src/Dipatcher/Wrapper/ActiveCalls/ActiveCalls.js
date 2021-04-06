@@ -19,6 +19,22 @@ const ActiveCalls = () =>{
 
     const [ activeCalls, setActiveCalls ] = useState([])
 
+    // activeCalls.filter((call=>{
+    //     call.toc 
+    // }).toc !== []){
+    //     activeCalls.
+    // }
+
+    // const [callStatus, setCallStatus] = useState([
+    //     'acknowledge',
+    //     'mobile',
+    //     'arrivedDest',
+    //     'ptContact',
+    //     'departDest',
+    //     'arrivedHosp',
+    //     'toc'
+    // ])
+
 
     return(
         <ListGroup>
@@ -26,7 +42,7 @@ const ActiveCalls = () =>{
                 return (
                     <>
                         <li class="list-group-item" aria-current="true" data-unit={data.unit}>
-                            [{data.unit}]: {data.availability}
+                            [{data.unit}]: 
                         </li>
                     </>
                 )
