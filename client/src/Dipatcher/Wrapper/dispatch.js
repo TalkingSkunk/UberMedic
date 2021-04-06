@@ -317,42 +317,49 @@ function Dispatch() {
             <ModalInFunctionalComponent />
           </Card.Header>
           <Card.Body>
-            <Row style={{ marginTop: "-3px" }}></Row>
+            <Row style={{ marginTop: "-10px" }}></Row>
             <Row style={{ marginBottom: "30px" }}>
               <div>
                 <Col>
                   <div>
+                    <div>
                     <label
-                      style={{ marginRight: "88px", fontWeight: "bolder" }}
+                      style={{ fontWeight: "bolder" }}
                     >
                       {" "}
                       CTAS{" "}
                     </label>
+                    </div> 
+                    <div>
                     <input
                       style={{ marginRight: "10px" }}
                       onChange={updateCtas}
                     ></input>
-
+                    </div>
+                    <div>
                     <label
                       style={{ marginRight: "10px", fontWeight: "bolder" }}
                     >
                       {" "}
                       Chief Complaint{" "}
                     </label>
-
+                    </div>
+                    <div>
                     <input
                       style={{ marginLeft: "5px" }}
                       onChange={updateCC}
                     ></input>
+                    </div>
                   </div>
                 </Col>
-                <Col>
+               
+                <div>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Additional Notes{" "}
                   </label>
+                  </div>
                   <input onChange={updateNotes}></input>
-                </Col>
               </div>
             </Row>
 
