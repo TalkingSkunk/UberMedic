@@ -20,15 +20,14 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./MedReq/MedReq";
+import MedReq from "./medReq/medReq";
 import AvailUnits from "./AvailUnits/AvailUnits";
 import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "ws://localhost:8080";
 
-
 function Dispatch() {
-  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
+  const socket = socketIOClient(ENDPOINT, { transports: ["websocket"] });
   // relay dispatch destination coords to dispatch map marker
   const { medDest } = useContext(MedicDispatchContext);
   const [medicDispatch, setMedicDispatch] = medDest;
@@ -37,7 +36,6 @@ function Dispatch() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
 
   useEffect(() => {
     socket.emit("dispatchlol", "hello from Dispatchside");
@@ -75,43 +73,46 @@ function Dispatch() {
     setPostal(e.target.value);
   };
   const updateCallerName = (e) => {
-    setCallerName(e.target.value)
-  }
-  const updateCallerNum = (e)=>{
-    setCallerNum(e.target.value)
-  }
-  const updateCtas = (e)=>{
-    setCtas(e.target.value)
-  }
-  const updateCC = (e)=>{
-    setCC(e.target.value)
-  }
-  const updateNotes = (e)=>{
-    setNotes(e.target.value)
-  }
-  const updatePolice = (e)=>{
-    setPolice(e.target.innerText)
-  }
-  const updateFire = (e)=>{
-    setFire(e.target.innerText)
-  }
+    setCallerName(e.target.value);
+  };
+  const updateCallerNum = (e) => {
+    setCallerNum(e.target.value);
+  };
+  const updateCtas = (e) => {
+    setCtas(e.target.value);
+  };
+  const updateCC = (e) => {
+    setCC(e.target.value);
+  };
+  const updateNotes = (e) => {
+    setNotes(e.target.value);
+  };
+  const updatePolice = (e) => {
+    setPolice(e.target.innerText);
+  };
+  const updateFire = (e) => {
+    setFire(e.target.innerText);
+  };
   // const updateAdditional = (e)=>{
   //   setAdditional(e.target.innerText)
   // }
-  const updateRegisteredPt = (e)=>{
-    setRegisteredPt(e.target.value)
-  }
-  const handleRegisteredPt = async (e)=>{
-    console.log('sending registeredPt', registeredPt)
-    await socket.emit('fetchRegisteredPt', JSON.stringify({
-      registeredId: registeredPt
-    }))
-    console.log('sent request for registered info')
-    socket.on('fetchRegisteredPtOut', data=>{
-      const patient = JSON.parse(data)
-      if (patient !== null){
-        console.log("this is the patient received", patient)
-        setRegisteredPtExist(patient.firstName)
+  const updateRegisteredPt = (e) => {
+    setRegisteredPt(e.target.value);
+  };
+  const handleRegisteredPt = async (e) => {
+    console.log("sending registeredPt", registeredPt);
+    await socket.emit(
+      "fetchRegisteredPt",
+      JSON.stringify({
+        registeredId: registeredPt,
+      })
+    );
+    console.log("sent request for registered info");
+    socket.on("fetchRegisteredPtOut", (data) => {
+      const patient = JSON.parse(data);
+      if (patient !== null) {
+        console.log("this is the patient received", patient);
+        setRegisteredPtExist(patient.firstName);
       } else {
         setRegisteredPtExist("N/A");
       }
@@ -136,8 +137,6 @@ function Dispatch() {
     //send dest coords to dispatch map for ambulance id [2021]
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } });
   };
-
-
 
   //one button to rule them all
   const handleSendCall = async (e) => {
@@ -326,7 +325,10 @@ function Dispatch() {
                     {" "}
                     CTAS{" "}
                   </label>
-                  <input style={{ marginRight: "10px" }} onChange={updateCtas}></input>
+                  <input
+                    style={{ marginRight: "10px" }}
+                    onChange={updateCtas}
+                  ></input>
 
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
@@ -346,16 +348,38 @@ function Dispatch() {
             </Row>
 
             <div>
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Police {police}</button>
+              <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Police {police}
+              </button>
               <ul class="dropdown-menu">
-                <li class="dropdown-item" onClick={updatePolice}>Deploy</li>
-                <li class="dropdown-item" onClick={updatePolice}>N/A</li>
+                <li class="dropdown-item" onClick={updatePolice}>
+                  Deploy
+                </li>
+                <li class="dropdown-item" onClick={updatePolice}>
+                  N/A
+                </li>
               </ul>
 
-              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Fire {fire}</button>
+              <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Fire {fire}
+              </button>
               <ul class="dropdown-menu">
-                <li class="dropdown-item" onClick={updateFire}>Deploy</li>
-                <li class="dropdown-item" onClick={updateFire}>N/A</li>
+                <li class="dropdown-item" onClick={updateFire}>
+                  Deploy
+                </li>
+                <li class="dropdown-item" onClick={updateFire}>
+                  N/A
+                </li>
               </ul>
             </div>
           </Card.Body>
@@ -368,28 +392,24 @@ function Dispatch() {
           </Card.Header>
           <Card.Body>
             <ListGroup as="ul">
-
               <AvailUnits />
-
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
             <Button variant="danger" onClick={handleSendCall}>
-                  SEND CALL NOW
+              SEND CALL NOW
             </Button>
           </Card.Footer>
         </Card>
 
-            {/* ACTIVE CALLS */}
-            <Card className="text-center">
+        {/* ACTIVE CALLS */}
+        <Card className="text-center">
           <Card.Header style={{ fontWeight: "bolder" }}>
             Active Calls
           </Card.Header>
           <Card.Body>
             <ListGroup as="ul">
-
               <ActiveCalls />
-              
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">

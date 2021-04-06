@@ -17,8 +17,6 @@ const App = () => {
           <Route path="/medical" exact component={MedicWrapper} />
 
           <Route path="/" exact component={Login} />
-          <Route path="/login" exact component={Login} />
-          {/* <Route path="/signup" exact component={authController.signUp} /> */}
         </BrowserRouter>
       </MedicDispatchProvider>
     </div>
