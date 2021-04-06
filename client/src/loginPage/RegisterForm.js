@@ -10,6 +10,7 @@ function RegisterForm() {
     password: "",
     passwordConfirm: "",
     id: "",
+    role: "",
   });
 
   const handleInputChange = (e) => {
@@ -27,6 +28,17 @@ function RegisterForm() {
   };
 
   const handleSubmit = async () => {
+    const checkId = await function () {
+      console.log(inputs.id);
+      if (inputs.id * 1 > 50000) {
+        setInputs({ ...inputs, role: "medical" });
+        console.log(inputs.role);
+      } else if (inputs.id * 1 < 50000) {
+        setInputs({ ...inputs, role: "dispatcher" });
+        console.log(inputs.role);
+      }
+    };
+
     try {
       /////create new User
       const newUser = await fetch("/signup", {
