@@ -1,5 +1,4 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
-const { signUp } = require("./app/db/authController");
 
 const path = require("path");
 const express = require("express");
@@ -226,22 +225,15 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                })
             })
 
-            // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
-
-
-            socket.on ('disconnect', reason => {
-               console.log('user has disconnected :(')
-            })
-         
-         
-         })
-         
-
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
-
+ 
+      socket.on("disconnect", (reason) => {
+        console.log("user has disconnected :(");
+      });
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 console.log("yoyoma");
 
@@ -272,8 +264,6 @@ console.log("yoyoma");
 // })
 
 app.post("/login", async (req, res) => {
-  console.log(req.body);
-
   const user = await db.User.findOne({
     id: req.body.id,
   });
@@ -282,10 +272,11 @@ app.post("/login", async (req, res) => {
     !user ||
     !(await user.correctPassword(req.body.password, user.password))
   ) {
-    throw new Error("Incorrect ID number or password", 401);
+    console.error("Incorrect ID number or password");
   }
+  // console.log(user);
 
-  res.send(req.body.role);
+  res.send({ data: user });
 });
 
 app.post("/signup", async (req, res) => {
@@ -309,5 +300,3 @@ app.post("/signup", async (req, res) => {
   });
   console.log(result);
 });
-
-// listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter

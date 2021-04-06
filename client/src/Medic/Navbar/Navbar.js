@@ -54,10 +54,10 @@ const Navbar = () => {
                         </div>
                         <div className="modal-footer">
                         <button type="button" className="btn btn-warning" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>BHP</button>
-                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>Police</button>
-                        <button type="button" className="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>Fire</button>
-                        <button type="button" className="btn btn-secdonary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>PCP Backup</button>
-                        <button type="button" className="btn btn-dark" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>ACP Backup</button>
+                        <button type="button"  className="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>Police</button>
+                        <button type="button"  className="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>Fire</button>
+                        <button type="button"  className="btn btn-secdonary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>PCP Backup</button>
+                        <button type="button"  className="btn btn-dark" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmReq" onClick={handleReq}>ACP Backup</button>
                         </div>
                     </div>
                     </div>

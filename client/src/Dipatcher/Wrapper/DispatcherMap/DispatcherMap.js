@@ -1,22 +1,18 @@
-import socketIOClient from 'socket.io-client'
-import React, { useRef, useEffect, useState, useContext } from 'react';
-import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+import socketIOClient from "socket.io-client";
+import React, { useRef, useEffect, useState, useContext } from "react";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl-csp";
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
-import * as MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import MapboxWorker from "worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker";
+import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col } from "react-bootstrap";
-import {MedicDispatchContext} from "../../../utils/MedicDispatchContext";
+import { MedicDispatchContext } from "../../../utils/MedicDispatchContext";
 
 // import fetchJSON from "../../../utils/API"
 const ENDPOINT = "ws://localhost:8080";
-
-
 mapboxgl.workerClass = MapboxWorker;
-mapboxgl.accessToken = 'pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg';
-
-
-
+mapboxgl.accessToken =
+  "pk.eyJ1IjoidGFsa2luZ3NrdW5rIiwiYSI6ImNrbXYyYTAyNDAwejMydm52aThnZ3BvY3kifQ.ER8YYxoj5YJD_-8m1hNdxg";
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const DispatcherMap = () => {

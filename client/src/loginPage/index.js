@@ -1,10 +1,13 @@
 import { Button, FormGroup } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Form } from "react-bootstrap";
+import { Router, Route, Redirect } from "react-router-dom";
 
 import RegisterForm from "./RegisterForm";
 
 function Login() {
+  const [auth, setAuth] = useState(false);
+  const [router, setRouter] = useState("");
   const [inputs, setInputs] = useState({
     id: "",
     password: "",
@@ -19,18 +22,24 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     /////////////fetch db check for correspondence
-    ////go to server first, server talks to database
     const result = await fetch("/login", {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify(inputs),
-    });
+    }).then((r) => r.json());
+
+    if (result.data) {
+      setAuth(true);
+      setRouter(result.data.role);
+    } else alert("USER NOT FOUND! INVALID ID PASSWORD COMBINATION");
   };
 
   return (
     <div className="container" style={{ marginTop: "50px" }}>
+      {auth ? <Redirect to={router} /> : ""}
+
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formBasicId">
           <Form.Label>ID/OASIS number</Form.Label>

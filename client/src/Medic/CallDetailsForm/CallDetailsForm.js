@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Col, Card } from "react-bootstrap";
+import '../CallDetailsForm/CallDetailsForm'
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "ws://localhost:8080";
 
@@ -69,52 +70,71 @@ const CallDetailsForm = () => {
 
 
   return(
+<Col >
 
-      <Col xs={12} md={6}>
+    <Card style={{height:"fit-content", width: "fit-content"}}>
+    <h3  style={{fontWeight: "bolder"}}>DISPATCH INFORMATION</h3>
 
+<div className ="column">
+        <div className = 'some-page-wrapper'>
         <form action="" id="readOnlyFromDispatch">
-          <label htmlFor="callID">Call ID</label>
-          <input type="text" id="callID" name="callID" value={callId} readOnly required />
-          <br/>
-          <label htmlFor="deployedUnit">Deployed Units</label>
-          <input type="text" id="deployedUnit" name="callID" value={deployedUnit} readOnly required />
-          <br/>
-          <label htmlFor="street">Street</label>
-          <input type="text" id="street" name="street" value={street} readOnly required />
-          <br/>
-          <label htmlFor="city">City</label>
-          <input type="text" id="city" name="city" value={city} readOnly required />
-          <br/>
-          <label htmlFor="postal">Postal</label>
-          <input type="text" id="postal" name="postal" value={postal} readOnly required />
-          <br/>
-          <label htmlFor="callername">Caller Name</label>
-          <input type="text" id="callername" name="callername" value={callerName} readOnly required />
-          <br/>
-          <label htmlFor="callernum">Caller Num</label>
-          <input type="text" id="callernum" name="callernum" value={callerNum} readOnly required />
-          <br/>
-          <label htmlFor="ctas">CTAS</label>
-          <input type="text" id="ctas" name="ctas" value={ctas} readOnly required />
-          <br/>
-          <label htmlFor="cc">Chief Complaint</label>
-          <input type="text" id="cc" name="cc" value={cc} readOnly required />
-          <br/>
-          <label htmlFor="notes">Notes</label>
-          <input type="text" id="notes" name="notes" value={notes} readOnly required />
-          <br/>
-          <label htmlFor="intersection">Intersection</label>
-          <input type="text" id="intersection" name="intersection" value={intersection} readOnly required />
-          <br/>
-          <label htmlFor="police">Police</label>
-          <input type="text" id="police" name="police" value={police} readOnly required />
-          <br/>
-          <label htmlFor="fire">Fire</label>
-          <input type="text" id="fire" name="fire" value={fire} readOnly required />
-          <br/>
-          <label htmlFor="registeredPt">Registered Patient</label>
-          <input type="text" id="registeredPt" name="registeredPt" value={registeredPt} readOnly required />
+          <Col>
+          <label htmlFor="callID" style={{ fontWeight:"bolder", marginRight:"100px"}} >Call ID</label>
+          <input type="text" id="callID" name="callID"  style={{marginBottom:"5px"}} value={callId} readOnly required />
+
+          <label htmlFor="deployedUnit" style={{ fontWeight:"bolder", marginRight:"32px"}} >Deployed Units</label>
+          <input type="text" id="deployedUnit" name="callID" style={{marginBottom:"5px"}} value={deployedUnit} readOnly required />
+          
+          <label htmlFor="street" style={{ fontWeight:"bolder", marginRight:"102px"}} >Street</label>
+          <input type="text" id="street" name="street" style={{marginBottom:"5px"}}  value={street} readOnly required />
+          
+          <label htmlFor="city" style={{ fontWeight:"bolder", marginRight:"119px"}} >City</label>
+          <input type="text" id="city" name="city" style={{marginBottom:"5px"}} value={city} readOnly required />
+          
+          <label htmlFor="postal" style={{ fontWeight:"bolder", marginRight:"102px"}} >Postal</label>
+          <input type="text" id="postal" name="postal" style={{marginBottom:"5px"}} value={postal} readOnly required />
+          
+          <label htmlFor="callername" style={{ fontWeight:"bolder", marginRight:"56px"}} >Caller Name</label>
+          <input type="text" id="callername" name="callername" style={{marginBottom:"5px"}} value={callerName} readOnly required />
+          
+          <label htmlFor="callernum" style={{ fontWeight:"bolder", marginRight:"64px"}} >Caller Num</label>
+          <input type="text" id="callernum" name="callernum" style={{marginBottom:"5px"}} value={callerNum} readOnly required />
+          
+         
+          
+          <label htmlFor="ctas" style={{ fontWeight:"bolder", marginRight:"109px"}} >CTAS</label>
+          <input type="text" id="ctas" name="ctas" style={{marginBottom:"5px"}} value={ctas} readOnly required />
+          
+
+          <label htmlFor="cc" style={{ fontWeight:"bolder", marginRight:"26px"}} >Chief Complaint</label>
+          <input type="text" id="cc" name="cc" style={{marginBottom:"5px"}}  value={cc} readOnly required />
+          
+          <label htmlFor="notes" style={{ fontWeight:"bolder", marginRight:"105px"}} >Notes</label>
+          <input type="text" id="notes" name="notes" style={{marginBottom:"5px"}} value={notes} readOnly required />
+          
+          <label htmlFor="intersection" style={{ fontWeight:"bolder", marginRight:"57px"}} >Intersection</label>
+          <input type="text" id="intersection" name="intersection" style={{marginBottom:"5px"}} value={intersection} readOnly required />
+          
+          <label htmlFor="police" style={{ fontWeight:"bolder", marginRight:"104px"}} >Police</label>
+          <input type="text" id="police" name="police" style={{marginBottom:"5px"}} value={police} readOnly required />
+          
+          <label htmlFor="fire" style={{ fontWeight:"bolder", marginRight:"123px"}}>Fire</label>
+          <input type="text" id="fire" name="fire" style={{marginBottom:"5px"}} value={fire} readOnly required />
+          
+          <label htmlFor="medic" style={{ fontWeight:"bolder", marginRight:"29px"}}>Additional Crew</label>
+          <input type="text" id="medic" name="medic" style={{marginBottom:"5px"}} value={additional} readOnly required />
+          
+          <label htmlFor="registeredPt" style={{ fontWeight:"bolder", marginRight:"10px"}}>Registered Patient</label>
+          <input type="text" id="registeredPt" name="registeredPt" style={{marginBottom:"5px"}}  value={registeredPt} readOnly required />
+      
+
+  
+          </Col>
+
+         
+      
         </form>
+        </div>
 
 
         {/* button turnstile */}
@@ -135,7 +155,10 @@ const CallDetailsForm = () => {
               </div>
           </div>
         </div>
-      </Col>
+        </div>
+       
+        </Card>
+              </Col>
   );
 }
 
