@@ -21,7 +21,7 @@ import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
 import MedReq from "./MedReq/MedReq";
-import AvailUnits from "./AvailUnits/AvailUnits";
+
 import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "ws://localhost:8080";
@@ -46,7 +46,7 @@ function Dispatch() {
   let sendtothisAmb = 3000;
 
   // call details states
-  const [deployedUnit, setDeployedUnit] = useState([]);
+  const [deployUnits, setDeployUnits] = useState([])
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postal, setPostal] = useState("");
@@ -56,9 +56,8 @@ function Dispatch() {
   const [ctas, setCtas] = useState("");
   const [cc, setCC] = useState("");
   const [notes, setNotes] = useState("");
-  const [police, setPolice] = useState("N/A");
-  const [fire, setFire] = useState("N/A");
-  // const [additional, setAdditional] = useState("N/A");
+  const [police, setPolice] = useState("");
+  const [fire, setFire] = useState("");
   const [registeredPt, setRegisteredPt] = useState("");
   const [registeredPtExist, setRegisteredPtExist] = useState("");
 
@@ -95,9 +94,8 @@ function Dispatch() {
   const updateFire = (e)=>{
     setFire(e.target.innerText)
   }
-  // const updateAdditional = (e)=>{
-  //   setAdditional(e.target.innerText)
-  // }
+
+  // check for registered pt
   const updateRegisteredPt = (e)=>{
     setRegisteredPt(e.target.value)
   }
@@ -138,11 +136,43 @@ function Dispatch() {
   };
 
 
+  // available unit section
+  const [ availUnits, setAvailUnits ] = useState([])
+  useEffect(()=>{
+    socket.emit('fetchUnits')
+  },[])
+  useEffect(()=>{
+    socket.on('fetchUnitsOut', data=>{
+        const populateUnits = JSON.parse(data)
+        console.log('populating available units, dispatchside', populateUnits)
+        setAvailUnits(populateUnits)
+    })
+  },[])
+  //clickety click listgroupitem makes them active
+  const handleActive = (e) => {
+    if(e.target.classList.contains('active')){
+        e.target.classList.remove('active')
+        const offUnit = e.target.dataset.unit
+        setDeployUnits((oldArray) =>
+        oldArray.filter((unit) => unit !== offUnit)
+      )
+    } else {
+        e.target.classList.add('active')
+        const onUnit = e.target.dataset.unit
+        setDeployUnits((oldArray) => [...oldArray, onUnit]);
+    }
+  }
+  useEffect(() => {
+    console.log("units to be deployed:", deployUnits);
+  }, [deployUnits]);
+
+
 
   //one button to rule them all
   const handleSendCall = async (e) => {
     e.preventDefault();
 
+    console.log("sending call details to medicside");
     // turn dest input to coords
     const destLngLat = await getCoords({
       city: city,
@@ -153,7 +183,7 @@ function Dispatch() {
     await socket.emit(
       "callDetails",
       JSON.stringify({
-        deployedUnit: deployedUnit,
+        deployedUnit: deployUnits,
         streetDest: street,
         cityDest: city,
         postalDest: postal,
@@ -166,12 +196,11 @@ function Dispatch() {
         notes: notes,
         police: police,
         fire: fire,
-        // additional: additional,
         registeredPt: registeredPt,
       })
     );
 
-    console.log("sending call details to medicside");
+    setDeployUnits([])
     setStreet("");
     setCity("");
     setIntersection("");
@@ -183,29 +212,16 @@ function Dispatch() {
     setNotes("");
     setPolice("");
     setFire("");
-    // setAdditional("");
     setRegisteredPt("");
+
+    const availunitsTag = document.querySelectorAll('.availunits')
+    availunitsTag.forEach((item)=>{
+      item.classList.remove('active')
+      console.log('actives removed')
+    })
   };
 
-  //listen for choice of unit
-  useEffect(() => {
-    socket.on("offUnitOut", (data) => {
-      console.log("this is offunit", JSON.parse(data));
-      setDeployedUnit((oldArray) =>
-        oldArray.filter((unit) => unit !== JSON.parse(data))
-      );
-    });
-  }, []);
-  useEffect(() => {
-    socket.on("onUnitOut", (data) => {
-      console.log("this is onunit", JSON.parse(data));
-      setDeployedUnit((oldArray) => [...oldArray, JSON.parse(data)]);
-    });
-  }, []);
 
-  useEffect(() => {
-    console.log("units to be deployed:", deployedUnit);
-  }, [deployedUnit]);
 
   return (
     <div>
@@ -326,21 +342,21 @@ function Dispatch() {
                     {" "}
                     CTAS{" "}
                   </label>
-                  <input style={{ marginRight: "10px" }} onChange={updateCtas}></input>
+                  <input type="text" value={ctas} onChange={updateCtas} />
 
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Chief Complaint{" "}
                   </label>
 
-                  <input onChange={updateCC}></input>
+                  <input type="text" value={cc} onChange={updateCC} />
                 </Col>
                 <Col>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Additional Notes{" "}
                   </label>
-                  <input onChange={updateNotes}></input>
+                  <input type="text" value={notes} onChange={updateNotes} />
                 </Col>
               </div>
             </Row>
@@ -361,7 +377,7 @@ function Dispatch() {
           </Card.Body>
         </Card>
 
-        {/* NEAREST AMBULANCE */}
+        {/* AVAILABLE UNITS */}
         <Card className="text-center">
           <Card.Header style={{ fontWeight: "bolder" }}>
             Closest Available Unit
@@ -369,7 +385,17 @@ function Dispatch() {
           <Card.Body>
             <ListGroup as="ul">
 
-              <AvailUnits />
+
+              {availUnits.map(data=>{
+                  return (
+                      <>
+                          <li className="list-group-item availunits" aria-current="true" onClick={handleActive} data-unit={data.unit}>
+                              [{data.unit}]: Status [ {data.availability} ]
+                          </li>
+                      </>
+                  )
+              })}
+
 
             </ListGroup>
           </Card.Body>

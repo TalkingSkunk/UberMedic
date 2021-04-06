@@ -204,9 +204,10 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   police: callPack.police,
                   fire: callPack.fire,
                   registeredPt: callPack.registeredPt
-               }).then((err, result)=>{
-                  console.log('call details doc id', result._id)
-                  db.Call.find({_id: result._id}).then(doc=>{
+               }).then(( result )=>{
+                  console.log('thsi is result of saved doc', result)
+                  console.log('call details doc id', callId)
+                  db.Call.find({_id: callId}).then(doc=>{
                      console.log('sending call details to medicside', doc)
                      io.emit('callDetailsOut', JSON.stringify(doc))
                   })
@@ -219,15 +220,14 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   io.emit('fetchActiveCallsOut', JSON.stringify(call))
                })
             })
+            db.Call.watch().on('change', ()=>{
+               db.Call.find({ clearCall:[] }).then(call=>{
+                  io.emit('fetchActiveCallsOut', JSON.stringify(call))
+               })
+            })
 
             // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
 
-
-            // relay medic destination coords to medicside (to be destroyed future)
-            // socket.on('medicDest', data=>{
-            //    console.log('relay medic destination to medicside', JSON.parse(data))
-            //    io.emit('medicDestOut', data)
-            // })
 
             socket.on ('disconnect', reason => {
                console.log('user has disconnected :(')

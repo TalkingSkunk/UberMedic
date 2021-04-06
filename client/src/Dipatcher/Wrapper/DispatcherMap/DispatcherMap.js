@@ -57,23 +57,6 @@ const DispatcherMap = () => {
     },[])
 
 
-
-
-
-    // const fetchCoords = async () =>{
-    //     const { status, coords: {lng,lat} } = await fetchJSON( `http://localhost:8080/coords-get/3000` )
-    //     console.log ( 'fetching coords from medic', lng, lat)
-    //     setlngMed(lng)
-    //     setlatMed(lat)
-    // }
-
-    // useEffect(()=>{
-    //     setInterval(
-    //         fetchCoords
-    //     , 3000)
-    // },[])
-
-
     //The state stores the longitude, latitude, and zoom for the map. These values will all change as your user interacts with the map.
     const mapContainer = useRef();
     const [lng, setLng] = useState(-79.4718);
@@ -108,6 +91,7 @@ const DispatcherMap = () => {
                 draggable: false,
                 }).setLngLat([lngDest, latDest])
                 .addTo(map)
+            map.flyTo({center: [lngDest, latDest], zoom: 16})
         }
 
 

@@ -19,14 +19,6 @@ const AvailUnits = () =>{
         })
     },[])
 
-    // useEffect(()=>{
-    //     socket.on('medReqOut', data=>{
-    //         console.log('receiving medic requests, dispatchside', JSON.parse(data))
-    //         const medReqArray = JSON.parse(data)
-    //         setMedReqOut(medReqArray)
-    //     })
-    // },[])
-
     const [ availUnits, setAvailUnits ] = useState([])
 
     //clickety click listgroupitem makes them active
@@ -43,36 +35,6 @@ const AvailUnits = () =>{
         }
     }
 
-    const [ selectUnit, setSelectUnit ] = useState("")
-
-    
-
-    // const handleApprove = (e)=>{
-    //     // clear request after approve from the list
-    //     // setMedReqOut(prevReq => [...prevReq, {id: dataOut.id, for: dataOut.for}])
-    //     // const revisedComments = state.comments.filter( (_,idx)=>idx!==action.value )
-    //     const isUnit = e.target.dataset.unit
-    //     const isFor = e.target.dataset.for
-    //     socket.emit('approveReq', JSON.stringify({
-    //         unit: isUnit,
-    //         isFor: isFor,
-    //         status: "approved"
-    //     }))
-    //     setShow(false);
-    // }
-
-    // const handleClose = (e) => {
-    //     const isUnit = e.target.dataset.unit
-    //     const isFor = e.target.dataset.for
-    //     socket.emit('rejectReq', JSON.stringify({
-    //         unit: isUnit,
-    //         isFor: isFor,
-    //         status: "rejected"
-    //     }))
-    //     setShow(false);
-    // }
-
-
 
     return(
         <ListGroup>
@@ -80,7 +42,7 @@ const AvailUnits = () =>{
                 return (
                     <>
                         <li class="list-group-item" aria-current="true" onClick={handleActive} data-unit={data.unit}>
-                            [{data.unit}] Status >> {data.availability}
+                            [{data.unit}]: Status [ {data.availability} ]
                         </li>
                     </>
                 )
