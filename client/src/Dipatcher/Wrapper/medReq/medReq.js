@@ -7,6 +7,7 @@ const ENDPOINT = "http://localhost:8080";
 
 const MedReq = () => {
   const socket = socketIOClient(ENDPOINT);
+  const [medReqOut, setMedReqOut] = useState([]);
 
   useEffect(() => {
     socket.emit("fetchRequests");
@@ -26,9 +27,6 @@ const MedReq = () => {
       setMedReqOut(medReqArray);
     });
   }, []);
-  const [medReqOut, setMedReqOut] = useState([]);
-
-    const [ medReqOut, setMedReqOut ] = useState([])
 
   const handleApprove = (e) => {
     // clear request after approve from the list
@@ -65,6 +63,7 @@ const MedReq = () => {
   const [show, setShow] = useState(false);
   const [modalUnit, setModalUnit] = useState("");
   const [modalFor, setModalFor] = useState("");
+  const [reqContent, setReqContent] = useState("");
 
   // when the request list is clicked... show modal
   const handleShow = (e) => {
