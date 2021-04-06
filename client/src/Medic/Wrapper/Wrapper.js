@@ -2,8 +2,12 @@ import React, { useEffect, useState, useContext }  from 'react';
 import CallDetailsForm from "../CallDetailsForm/CallDetailsForm";
 import Map from '../Map/Map';
 import Navbar from '../Navbar/Navbar';
+import Check from '../Check/Check'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import { Container, Row, CardDeck } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import '../Wrapper/Wrapper.css'
 // import { MedicDispatchProvider, MedicDispatchContext } from "../../utils/MedicDispatchContext";
 // import DispatcherMap from "../DispatcherMap/DispatcherMap"
@@ -37,8 +41,12 @@ function MedicWrapper(){
                     <Navbar />
                  <CardDeck>
                     <CallDetailsForm />
+                    <Col>
                     <Map />
+                    <Button style={{marginTop:"20px"}} >Acknowledge</Button>
+                    </Col>
                     </CardDeck>
+                 
                 </Row>
 
                 </body>

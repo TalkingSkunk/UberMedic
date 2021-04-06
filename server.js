@@ -1,5 +1,9 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
+<<<<<<< HEAD
 const { signUp } = require("./client/src/loginPage/controller/authController");
+=======
+const { signUp } = require("./app/db/authController");
+>>>>>>> develop
 
 const path = require("path");
 const express = require("express");
@@ -10,7 +14,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const mongoose = require("mongoose");
 
 var cors = require("cors");
+<<<<<<< HEAD
 const db = require("./app/db/models/");
+=======
+const db = require("./app/db/models");
+const { brotliDecompress } = require("zlib");
+const { sign } = require("crypto");
+>>>>>>> develop
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -37,6 +47,15 @@ const PORT = process.env.PORT || 8080;
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
+<<<<<<< HEAD
+=======
+//    },
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+>>>>>>> develop
 //    },
 //    {
 //       unit: 1517,
@@ -49,12 +68,15 @@ const PORT = process.env.PORT || 8080;
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
+<<<<<<< HEAD
 //    },
 //    {
 //       unit: 1517,
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
+=======
+>>>>>>> develop
 //    },
 // ])
 
@@ -79,7 +101,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
          })
       
          io.on('connection', (socket)=>{
-            console.log('user connected')
+            // console.log('user connected')
          
             socket.on('dispatchlol', msg=>console.log(msg))
             socket.on('mediclol', msg=>console.log(msg))
@@ -182,6 +204,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             })
             // relay call details to medicside
             socket.on('callDetails', data=>{
+<<<<<<< HEAD
                console.log('relay call details to medicside', JSON.parse(data))
                const callPack = JSON.parse(data)
                //save to db
@@ -222,43 +245,46 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
 
 
                // io.emit('callDetailsOut', data)
+=======
+               console.log('receiving call details, serverside', JSON.parse(data))
+               const callPack = JSON.parse(data)
+               const callId = mongoose.Types.ObjectId();
+               //save to db
+               db.Call.create({
+                  _id: callId,
+                  deployedUnit: callPack.deployedUnit,
+                  streetDest: callPack.streetDest,
+                  cityDest: callPack.cityDest,
+                  postalDest: callPack.postalDest,
+                  intersection: callPack.intersection,
+                  callerName: callPack.callerName,
+                  callerNum: callPack.callerNum,
+                  destLngLat: callPack.destLngLat,
+                  ctas: callPack.ctas,
+                  cc: callPack.cc,
+                  notes: callPack.notes,
+                  police: callPack.police,
+                  fire: callPack.fire,
+                  additional: callPack.additional,
+                  registeredPt: callPack.registeredPt
+               }).then((err, result)=>{
+                  console.log('call details doc id', result._id)
+                  db.Call.find({_id: result._id}).then(doc=>{
+                     console.log('sending call details to medicside', doc)
+                     io.emit('callDetailsOut', JSON.stringify(doc))
+                  })
+               })         
+>>>>>>> develop
             })            
-
             // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
 
 
-
-
-
-
-
-
             // relay medic destination coords to medicside (to be destroyed future)
-            socket.on('medicDest', data=>{
-               console.log('relay medic destination to medicside', JSON.parse(data))
-               io.emit('medicDestOut', data)
-            })
+            // socket.on('medicDest', data=>{
+            //    console.log('relay medic destination to medicside', JSON.parse(data))
+            //    io.emit('medicDestOut', data)
+            // })
 
-         
-            
-            // socket.on('destination', async (coords)=>{
-            //    // to all sockets
-            //    console.log('receiving messsage from dispatch')
-            //    io.emit ('returnLocation', coords)
-               // let data = {
-               //    callID: 112,
-               //    unitNumber: 2021,
-               //    CTAS: 'ECHO',
-               //    CC: 'chest pain',
-               //    location: '1234 sunnyside dr',
-               //    intersection: 'bathurst and bloor',
-               //    police: 'on scene',
-               //    fire: 'on scene',
-               //    medic: 'on scene',
-               //    coords: coords,
-               // }
-         
-         
             socket.on ('disconnect', reason => {
                console.log('user has disconnected :(')
             })
@@ -305,11 +331,33 @@ console.log ('yoyoma')
 app.post("/login", (req, res) => {
   console.log("login");
 });
+<<<<<<< HEAD
 
 app.post("/signup", (req, res) => {
   // console.log("test server");
   // console.log(req.body, "  SERVER");
   signUp(req.body);
+=======
+app.post("/signup", async (req, res) => {
+  // console.log(req.body, "  SERVER");
+  console.log(req.body);
+  //put the user model into the models folder
+  ////creating new user
+  const result = await db.User.create({
+    name: req.body.name,
+    id: req.body.id,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+  });
+
+  res.status(200).json({
+    status: "Success",
+    data: {
+      result,
+    },
+  });
+  console.log(result);
+>>>>>>> develop
 });
 
 // listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter
