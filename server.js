@@ -274,10 +274,10 @@ app.post("/login", async (req, res) => {
     !user ||
     !(await user.correctPassword(req.body.password, user.password))
   ) {
-    throw new Error("Incorrect email or password", 401);
+    throw new Error("Incorrect ID number or password", 401);
   }
 
-  console.log(user);
+  res.send(req.body.role);
 });
 
 app.post("/signup", async (req, res) => {
@@ -290,6 +290,7 @@ app.post("/signup", async (req, res) => {
     id: req.body.id,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+    role: req.body.role,
   });
 
   res.status(200).json({

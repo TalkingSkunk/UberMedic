@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema({
       message: "passwords are not the same",
     },
   },
+  role: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
