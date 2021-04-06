@@ -6,6 +6,7 @@ import MedicWrapper from "./Medic/Wrapper/Wrapper";
 import Login from "./loginPage";
 import { MedicDispatchProvider } from "./utils/MedicDispatchContext";
 
+
 const App = () => {
   /////stateful
   return (

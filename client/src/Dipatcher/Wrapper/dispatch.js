@@ -22,10 +22,13 @@ import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
 import MedReq from "./medReq/medReq";
 import AvailUnits from "./AvailUnits/AvailUnits";
+import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
+
 
 function Dispatch() {
+  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
   // relay dispatch destination coords to dispatch map marker
   const { medDest } = useContext(MedicDispatchContext);
   const [medicDispatch, setMedicDispatch] = medDest;
@@ -35,7 +38,7 @@ function Dispatch() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const socket = socketIOClient(ENDPOINT);
+
   useEffect(() => {
     socket.emit("dispatchlol", "hello from Dispatchside");
   }, []);
@@ -50,12 +53,12 @@ function Dispatch() {
   const [intersection, setIntersection] = useState("");
   const [callerName, setCallerName] = useState("");
   const [callerNum, setCallerNum] = useState("");
-  const [ctas, setCtas] = useState("delta");
-  const [cc, setCC] = useState("blunt trauma");
-  const [notes, setNotes] = useState("buzz #1234 and beware of the dog");
-  const [police, setPolice] = useState("Attending");
+  const [ctas, setCtas] = useState("");
+  const [cc, setCC] = useState("");
+  const [notes, setNotes] = useState("");
+  const [police, setPolice] = useState("N/A");
   const [fire, setFire] = useState("N/A");
-  const [additional, setAdditional] = useState("N/A");
+  // const [additional, setAdditional] = useState("N/A");
   const [registeredPt, setRegisteredPt] = useState("");
   const [registeredPtExist, setRegisteredPtExist] = useState("");
 
@@ -87,14 +90,14 @@ function Dispatch() {
     setNotes(e.target.value)
   }
   const updatePolice = (e)=>{
-    setPolice(e.target.value)
+    setPolice(e.target.innerText)
   }
   const updateFire = (e)=>{
-    setFire(e.target.value)
+    setFire(e.target.innerText)
   }
-  const updateAdditional = (e)=>{
-    setAdditional(e.target.value)
-  }
+  // const updateAdditional = (e)=>{
+  //   setAdditional(e.target.innerText)
+  // }
   const updateRegisteredPt = (e)=>{
     setRegisteredPt(e.target.value)
   }
@@ -128,11 +131,13 @@ function Dispatch() {
     });
     // send dest coords to medicside
     // socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
-    
-    console.log('sending destination coords to medicside')
+
+    console.log("sending destination coords to medicside");
     //send dest coords to dispatch map for ambulance id [2021]
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } });
   };
+
+
 
   //one button to rule them all
   const handleSendCall = async (e) => {
@@ -161,7 +166,7 @@ function Dispatch() {
         notes: notes,
         police: police,
         fire: fire,
-        additional: additional,
+        // additional: additional,
         registeredPt: registeredPt,
       })
     );
@@ -178,7 +183,7 @@ function Dispatch() {
     setNotes("");
     setPolice("");
     setFire("");
-    setAdditional("");
+    // setAdditional("");
     setRegisteredPt("");
   };
 
@@ -317,35 +322,44 @@ function Dispatch() {
             <Row style={{ marginBottom: "30px" }}>
               <div>
                 <Col>
-                  <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
+                <div>
+                  <label style={{ marginRight: "88px", fontWeight: "bolder" }}>
                     {" "}
                     CTAS{" "}
                   </label>
-                  <input style={{ marginRight: "10px" }}></input>
-
+                  <input style={{ marginLeft: "10px" }} onChange={updateCtas}></input>
+                  </div>
+                  <div>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Chief Complaint{" "}
                   </label>
 
-                  <input></input>
+                  <input style ={{marginLeft: "5px" }} onChange={updateCC}></input>
+                  </div>
                 </Col>
                 <Col>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Additional Notes{" "}
                   </label>
-                  <input></input>
+                  <input onChange={updateNotes}></input>
                 </Col>
               </div>
             </Row>
 
             <div>
-              <Button variant="primary">POLICE</Button>
-              <Button variant="danger">FIREFIGHTER</Button>
-              <Button variant="warning" onClick={handleSendCall}>
-                SEND
-              </Button>
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Police {police}</button>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item" onClick={updatePolice}>Deploy</li>
+                <li class="dropdown-item" onClick={updatePolice}>N/A</li>
+              </ul>
+
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Fire {fire}</button>
+              <ul class="dropdown-menu">
+                <li class="dropdown-item" onClick={updateFire}>Deploy</li>
+                <li class="dropdown-item" onClick={updateFire}>N/A</li>
+              </ul>
             </div>
           </Card.Body>
         </Card>
@@ -355,29 +369,46 @@ function Dispatch() {
           <Card.Header style={{ fontWeight: "bolder" }}>
             Closest Available Unit
           </Card.Header>
-          <Card.Body>
+          <Card.Body style ={{height: "fit-content"}}>
             <ListGroup as="ul">
+
               <AvailUnits />
+
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
-            Submitted/not submitted
+            <Button variant="danger" onClick={handleSendCall}>
+                  SEND CALL NOW
+            </Button>
           </Card.Footer>
+        </Card>
+
+            {/* ACTIVE CALLS */}
+            <Card className="text-center">
+          <Card.Header style={{ fontWeight: "bolder" }}>
+            Active Calls
+          </Card.Header>
+          <Card.Body>
+            <ListGroup as="ul">
+
+              <ActiveCalls />
+              
+            </ListGroup>
+          </Card.Body>
+         
         </Card>
       </CardDeck>
 
       {/* this is a really cool map */}
       <CardDeck>
-        <Card className="text-center">
+        <Card className="text-center" style= {{height: "fit-content"}}>
           <Card.Header style={{ fontWeight: "bolder" }}>
             NEAREST AMBULANCE
           </Card.Header>
-          <Card.Body>
-            <DispatcherMap />
+          <Card.Body style ={{ marginTop: "-14px"}}>
+            <DispatcherMap   />
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
+         
         </Card>
       </CardDeck>
 
@@ -390,9 +421,7 @@ function Dispatch() {
           <Card.Body>
             <MedReq />
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
+         
         </Card>
 
         {/* CALLER HISTORY */}
@@ -408,9 +437,7 @@ function Dispatch() {
               <ListGroup.Item>Morbi leo risus</ListGroup.Item>
             </ListGroup>
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
+         
         </Card>
 
         {/* REGISTERED PATIENTS PROGRAM */}
@@ -442,9 +469,7 @@ function Dispatch() {
               <Card.Text>Unregistered ID!</Card.Text>
             )}
           </Card.Body>
-          <Card.Footer className="text-muted">
-            Submitted/not submitted
-          </Card.Footer>
+          
         </Card>
       </CardDeck>
     </div>

@@ -29,6 +29,14 @@ const userSchema = new mongoose.Schema({
       message: "passwords are not the same",
     },
   },
+  role: {
+    type: String,
+    validate: {
+      validator: function (el) {
+        this.id > 50000 ? (this.role = "medical") : (this.role = "dispatcher");
+      },
+    },
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -49,6 +57,10 @@ userSchema.pre("save", async function (next) {
     console.log(new Error("ERROR----ENCRYPTION FAILED"));
   }
 });
+
+userSchema.methods.correctPassword = async function (inputPsw, userPsw) {
+  return await bcrypt.compare(inputPsw, userPsw);
+};
 
 const User = mongoose.model("User", userSchema);
 

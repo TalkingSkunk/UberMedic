@@ -10,6 +10,7 @@ function RegisterForm() {
     password: "",
     passwordConfirm: "",
     id: "",
+    role: "",
   });
 
   const handleInputChange = (e) => {

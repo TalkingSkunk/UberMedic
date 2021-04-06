@@ -3,11 +3,12 @@ import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
 
 
 const MedReq = () =>{    
-    const socket = socketIOClient(ENDPOINT)
+
+  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
     useEffect(()=>{
         socket.emit('fetchRequests')

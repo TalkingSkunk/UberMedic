@@ -1,13 +1,5 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
-<<<<<<< HEAD
-<<<<<<< HEAD
-const { signUp } = require("./client/src/loginPage/controller/authController");
-=======
 const { signUp } = require("./app/db/authController");
->>>>>>> develop
-=======
-const { signUp } = require("./app/db/authController");
->>>>>>> develop
 
 const path = require("path");
 const express = require("express");
@@ -18,19 +10,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const mongoose = require("mongoose");
 
 var cors = require("cors");
-<<<<<<< HEAD
-<<<<<<< HEAD
-const db = require("./app/db/models/");
-=======
 const db = require("./app/db/models");
 const { brotliDecompress } = require("zlib");
 const { sign } = require("crypto");
->>>>>>> develop
-=======
-const db = require("./app/db/models");
-const { brotliDecompress } = require("zlib");
-const { sign } = require("crypto");
->>>>>>> develop
+const User = require("./app/db/models/User");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -46,7 +29,6 @@ const PORT = process.env.PORT || 8080;
 // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
 // db.MobileUnit.insertMany([
 
-<<<<<<< HEAD
 //    {
 //       unit: 1517,
 //       medic1: 44112,
@@ -58,53 +40,24 @@ const PORT = process.env.PORT || 8080;
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
-<<<<<<< HEAD
-=======
-//    },
-=======
->>>>>>> develop
-//    {
-//       unit: 1517,
-//       medic1: 44112,
-//       medic2: 94409,
-//       availability: "available",
->>>>>>> develop
 //    },
 //    {
 //       unit: 1517,
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
-<<<<<<< HEAD
-=======
 //    },
 //    {
 //       unit: 1517,
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
->>>>>>> develop
 //    },
 //    {
 //       unit: 1517,
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> develop
-//    },
-//    {
-//       unit: 1517,
-//       medic1: 44112,
-//       medic2: 94409,
-//       availability: "available",
-<<<<<<< HEAD
-=======
->>>>>>> develop
-=======
->>>>>>> develop
 //    },
 // ])
 
@@ -118,7 +71,6 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-
 // connect to db ; async task ; don't listen for requests until connection to db is complete
 mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true } )
       .then( (result)=> { //takes in result as parameter to be used as necessary
@@ -232,62 +184,13 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             })
             // relay call details to medicside
             socket.on('callDetails', data=>{
-<<<<<<< HEAD
-<<<<<<< HEAD
-               console.log('relay call details to medicside', JSON.parse(data))
-               const callPack = JSON.parse(data)
-               //save to db
-               // db.MedReq.create({
-               //    unit: medReqpack.unit,
-               //    reqFor: medReqpack.reqFor,
-               //    status: "active",
-               // }).then(()=>{
-               //    db.MedReq.find({status: "active"}).then(request=>{
-               //       console.log('sending medic reqs to dispatchside', request)
-               //       io.emit('medReqOut', JSON.stringify(request))
-               //    })
-               // })
-               db.Call.create({
-                  deployedUnit: callPack.deployedUnit,
-
-               }).then(()=>{
-                  db.Call.find
-               })
-               // await socket.emit('callDetails', JSON.stringify({
-               //    streetDest: street,
-               //    cityDest: city,
-               //    postalDest: postal,
-               //    intersection: intersection,
-               //    callerName: callerName,
-               //    callerNum: callerNum,
-               //    destLngLat: [destLngLat[0], destLngLat[1]],
-               //    ctas: ctas,
-               //    cc: cc,
-               //    notes: notes,
-               //    police: police,
-               //    fire: fire,
-               //    additional: additional,   
-               //    registeredPt: registeredPt
-               //  }))            
-
-               
-
-
-               // io.emit('callDetailsOut', data)
-=======
                console.log('receiving call details, serverside', JSON.parse(data))
                const callPack = JSON.parse(data)
                const callId = mongoose.Types.ObjectId();
                //save to db
-=======
-               console.log('receiving call details, serverside', JSON.parse(data))
-               const callPack = JSON.parse(data)
-               const callId = mongoose.Types.ObjectId();
-               //save to db
->>>>>>> develop
                db.Call.create({
                   _id: callId,
-                  deployedUnit: callPack.deployedUnit,
+                  deployedUnit: callPack.deployedUnit,      
                   streetDest: callPack.streetDest,
                   cityDest: callPack.cityDest,
                   postalDest: callPack.postalDest,
@@ -300,7 +203,6 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   notes: callPack.notes,
                   police: callPack.police,
                   fire: callPack.fire,
-                  additional: callPack.additional,
                   registeredPt: callPack.registeredPt
                }).then((err, result)=>{
                   console.log('call details doc id', result._id)
@@ -309,11 +211,15 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                      io.emit('callDetailsOut', JSON.stringify(doc))
                   })
                })         
-<<<<<<< HEAD
->>>>>>> develop
-=======
->>>>>>> develop
             })            
+            // find from db active calls
+            socket.on('fetchActiveCalls', ()=>{
+               db.Call.find({ clearCall: [] }).then(call=>{
+                  console.log('sending active calls to dispatchside', call)
+                  io.emit('fetchActiveCallsOut', JSON.stringify(call))
+               })
+            })
+
             // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
 
 
@@ -337,8 +243,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
     })
 
 
-
-console.log ('yoyoma')
+console.log("yoyoma");
 
 // const medicDispatchCoords = {}
 // // medic sends coord to dispatch map
@@ -366,19 +271,23 @@ console.log ('yoyoma')
 //    res.send({status:true, coords})
 // })
 
-app.post("/login", (req, res) => {
-  console.log("login");
-});
-<<<<<<< HEAD
-<<<<<<< HEAD
+app.post("/login", async (req, res) => {
+  // console.log(req.body);
 
-app.post("/signup", (req, res) => {
-  // console.log("test server");
-  // console.log(req.body, "  SERVER");
-  signUp(req.body);
-=======
-=======
->>>>>>> develop
+  const user = await db.User.findOne({
+    id: req.body.id,
+  });
+
+  if (
+    !user ||
+    !(await user.correctPassword(req.body.password, user.password))
+  ) {
+    throw new Error("Incorrect ID number or password", 401);
+  }
+
+  res.send();
+});
+
 app.post("/signup", async (req, res) => {
   // console.log(req.body, "  SERVER");
   console.log(req.body);
@@ -389,6 +298,7 @@ app.post("/signup", async (req, res) => {
     id: req.body.id,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+    role: req.body.role,
   });
 
   res.status(200).json({
@@ -398,10 +308,4 @@ app.post("/signup", async (req, res) => {
     },
   });
   console.log(result);
-<<<<<<< HEAD
->>>>>>> develop
-=======
->>>>>>> develop
 });
-
-// listen for 'connection' event between browser and server >> callback fxn; pass the instance of the socket(object for each browser) 'socket' as parameter

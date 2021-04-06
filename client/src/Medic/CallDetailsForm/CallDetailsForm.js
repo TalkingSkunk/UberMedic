@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Col, Card } from "react-bootstrap";
+import { Col, Card, Row } from "react-bootstrap";
+import '../CallDetailsForm/CallDetailsForm'
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
 
 
 const CallDetailsForm = () => {
-  const socket = socketIOClient(ENDPOINT)
 
+  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
 
   useEffect(()=>{
@@ -73,11 +74,13 @@ const CallDetailsForm = () => {
   return(
 
     <Card style={{height:"fit-content", width: "fit-content"}}>
+    <Col >
     <h3  style={{fontWeight: "bolder"}}>DISPATCH INFORMATION</h3>
-<Col >
 
-        <form action="" id="readOnlyFromDispatch">
-          <label htmlFor="callID" style={{ fontWeight:"bolder", marginRight:"100px"}} >Call ID</label>
+<div className ="column">
+        <div className = 'some-page-wrapper'>
+        <form action="" id="readOnlyFromDispatch">          
+          <label htmlFor="callID" style={{ fontWeight:"bolder", marginRight:"100px"}} >Call ID</label>  
           <input type="text" id="callID" name="callID"  style={{marginBottom:"5px"}} value={callId} readOnly required />
           <br/>
           <label htmlFor="deployedUnit" style={{ fontWeight:"bolder", marginRight:"32px"}} >Deployed Units</label>
@@ -121,7 +124,9 @@ const CallDetailsForm = () => {
           <br/>
           <label htmlFor="registeredPt" style={{ fontWeight:"bolder", marginRight:"10px"}}>Registered Patient</label>
           <input type="text" id="registeredPt" name="registeredPt" style={{marginBottom:"5px"}}  value={registeredPt} readOnly required />
+       
         </form>
+        </div>
 
 
         {/* button turnstile */}
@@ -141,6 +146,7 @@ const CallDetailsForm = () => {
               </div>
               </div>
           </div>
+        </div>
         </div>
         </Col>
         </Card>

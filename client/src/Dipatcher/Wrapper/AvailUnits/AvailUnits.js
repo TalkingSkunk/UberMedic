@@ -3,11 +3,10 @@ import React, {useEffect, useState} from 'react'
 import ListGroup from "react-bootstrap/ListGroup";
 // import Button from "react-bootstrap/Button";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
-
+const ENDPOINT = "ws://localhost:8080";
 
 const AvailUnits = () =>{    
-    const socket = socketIOClient(ENDPOINT)
+    const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
     useEffect(()=>{
         socket.emit('fetchUnits')
@@ -39,6 +38,7 @@ const AvailUnits = () =>{
         } else {
             e.target.classList.add('active')
             const isUnit = e.target.dataset.unit
+
             socket.emit('onUnit', JSON.stringify(isUnit))
         }
     }

@@ -270,11 +270,6 @@ const callSchema = new Schema ({
       trim: true,
       required:true,
    },
-   additional: {
-      type:String,
-      trim: true,
-      required:true,
-   },
    registeredPt:{
       type:Number,
       trim:true
