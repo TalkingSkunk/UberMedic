@@ -22,11 +22,13 @@ import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
 import MedReq from "./MedReq/MedReq";
 import AvailUnits from "./AvailUnits/AvailUnits";
+import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "ws://localhost:8080";
 
 
 function Dispatch() {
+  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
   // relay dispatch destination coords to dispatch map marker
   const { medDest } = useContext(MedicDispatchContext);
   const [medicDispatch, setMedicDispatch] = medDest;
@@ -37,7 +39,6 @@ function Dispatch() {
   const handleShow = () => setShow(true);
 
 
-  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
   useEffect(() => {
     socket.emit("dispatchlol", "hello from Dispatchside");
   }, []);
@@ -371,7 +372,26 @@ function Dispatch() {
           </Card.Header>
           <Card.Body>
             <ListGroup as="ul">
+
               <AvailUnits />
+
+            </ListGroup>
+          </Card.Body>
+          <Card.Footer className="text-muted">
+            Submitted/not submitted
+          </Card.Footer>
+        </Card>
+
+            {/* ACTIVE CALLS */}
+            <Card className="text-center">
+          <Card.Header style={{ fontWeight: "bolder" }}>
+            Active Calls
+          </Card.Header>
+          <Card.Body>
+            <ListGroup as="ul">
+
+              <ActiveCalls />
+              
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">

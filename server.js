@@ -212,6 +212,14 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   })
                })         
             })            
+            // find from db active calls
+            socket.on('fetchActiveCalls', ()=>{
+               db.Call.find({ clearCall: [] }).then(call=>{
+                  console.log('sending active calls to dispatchside', call)
+                  io.emit('fetchActiveCallsOut', JSON.stringify(call))
+               })
+            })
+
             // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
 
 
