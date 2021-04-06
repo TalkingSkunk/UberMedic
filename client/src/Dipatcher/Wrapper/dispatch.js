@@ -20,7 +20,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./MedReq/MedReq";
+import MedReq from "./medReq/medReq";
 import AvailUnits from "./AvailUnits/AvailUnits";
 import socketIOClient from "socket.io-client";
 const ENDPOINT = "http://localhost:8080";
@@ -128,8 +128,8 @@ function Dispatch() {
     });
     // send dest coords to medicside
     // socket.emit("medicDest", JSON.stringify ({ lng: result[0], lat: result[1] }) )
-    
-    console.log('sending destination coords to medicside')
+
+    console.log("sending destination coords to medicside");
     //send dest coords to dispatch map for ambulance id [2021]
     setMedicDispatch({ 2021: { lngDest: result[0], latDest: result[1] } });
   };
