@@ -26,7 +26,6 @@ const CallDetailsForm = () => {
       setNotes(callDets.notes)
       setPolice(callDets.police)
       setFire(callDets.fire)
-      setAdditional(callDets.additional)
       setRegisteredPt(callDets.registeredPt)
     })
   },[])
@@ -45,7 +44,6 @@ const CallDetailsForm = () => {
   const [notes, setNotes] = useState("")
   const [police, setPolice] = useState("N/A")
   const [fire, setFire] = useState("N/A")
-  const [additional, setAdditional] = useState("N/A")
   const [registeredPt, setRegisteredPt] = useState("N/A")
 
   //button turnstile

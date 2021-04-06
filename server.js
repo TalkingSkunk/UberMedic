@@ -188,7 +188,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                const callPack = JSON.parse(data)
                const callId = mongoose.Types.ObjectId();
                //save to db
-               db.Call.create({
+               db.Call.save({
                   _id: callId,
                   deployedUnit: callPack.deployedUnit,      
                   streetDest: callPack.streetDest,
@@ -204,8 +204,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                   police: callPack.police,
                   fire: callPack.fire,
                   registeredPt: callPack.registeredPt
-               }).then(( result )=>{
-                  console.log('thsi is result of saved doc', result)
+               }).then(()=>{
+                  // console.log('thsi is result of saved doc', result)
                   console.log('call details doc id', callId)
                   db.Call.find({_id: callId}).then(doc=>{
                      console.log('sending call details to medicside', doc)
