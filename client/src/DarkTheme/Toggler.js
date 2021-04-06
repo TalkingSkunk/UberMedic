@@ -12,7 +12,11 @@ const Button = styled.button`
   }
 /`;
 const Toggle = ({ theme, toggleTheme }) => {
-  return <Button onClick={toggleTheme}>Switch Theme</Button>;
+  return (
+    <Button style={{ color: "white" }} onClick={toggleTheme}>
+      Switch Theme
+    </Button>
+  );
 };
 Toggle.propTypes = {
   theme: string.isRequired,
