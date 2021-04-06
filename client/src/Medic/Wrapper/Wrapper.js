@@ -20,7 +20,7 @@ function MedicWrapper(){
     return(
 
             <Container>
-              <body>
+              <body style={{margin:"20px"}}>
                 {/* {isMedic
                     ? <Row>
                         <Navbar />
@@ -33,7 +33,7 @@ function MedicWrapper(){
                 } */}
 
                 <Row>
-                <h1 style={{textAlign:"center"}}>RoadRunner App</h1>
+                <h1 style={{textAlign:"center"}}>UberMedic</h1>
                     <Navbar />
                  <CardDeck>
                     <CallDetailsForm />

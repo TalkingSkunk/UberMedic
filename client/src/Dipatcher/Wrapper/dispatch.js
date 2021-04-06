@@ -208,7 +208,7 @@ function Dispatch() {
   }, [deployedUnit]);
 
   return (
-    <div>
+    <div style={{margin: "40px"}}>
       <CardDeck>
         {/* INCIDENT LOCATION CARD */}
         <Card className="text-center">
