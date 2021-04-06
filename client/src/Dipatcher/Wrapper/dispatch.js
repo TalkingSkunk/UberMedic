@@ -20,12 +20,15 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./medReq/medReq";
+import MedReq from "./MedReq/MedReq";
 import AvailUnits from "./AvailUnits/AvailUnits";
+import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
+
 
 function Dispatch() {
+  const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
   // relay dispatch destination coords to dispatch map marker
   const { medDest } = useContext(MedicDispatchContext);
   const [medicDispatch, setMedicDispatch] = medDest;
@@ -35,7 +38,7 @@ function Dispatch() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const socket = socketIOClient(ENDPOINT);
+
   useEffect(() => {
     socket.emit("dispatchlol", "hello from Dispatchside");
   }, []);
@@ -354,10 +357,6 @@ function Dispatch() {
                 <li class="dropdown-item" onClick={updateFire}>Deploy</li>
                 <li class="dropdown-item" onClick={updateFire}>N/A</li>
               </ul>
-
-              <Button variant="warning" onClick={handleSendCall}>
-                SEND
-              </Button>
             </div>
           </Card.Body>
         </Card>
@@ -369,7 +368,28 @@ function Dispatch() {
           </Card.Header>
           <Card.Body>
             <ListGroup as="ul">
+
               <AvailUnits />
+
+            </ListGroup>
+          </Card.Body>
+          <Card.Footer className="text-muted">
+            <Button variant="danger" onClick={handleSendCall}>
+                  SEND CALL NOW
+            </Button>
+          </Card.Footer>
+        </Card>
+
+            {/* ACTIVE CALLS */}
+            <Card className="text-center">
+          <Card.Header style={{ fontWeight: "bolder" }}>
+            Active Calls
+          </Card.Header>
+          <Card.Body>
+            <ListGroup as="ul">
+
+              <ActiveCalls />
+              
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">

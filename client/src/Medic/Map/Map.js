@@ -9,7 +9,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
 import fetchJSON from "../../utils/API"
 
-const ENDPOINT = "http://localhost:8080"
+const ENDPOINT = "ws://localhost:8080";
+
 
 
 mapboxgl.workerClass = MapboxWorker;
@@ -20,7 +21,8 @@ mapboxgl.accessToken =
 
 // This defines Map then specifies that it should be rendered in the <div> with the ID of app.
 const Map = () => {
-    const socket = socketIOClient(ENDPOINT)
+
+    const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
 
     useEffect(()=>{
       socket.emit("mediclol", "hello from Medicside")
@@ -113,7 +115,7 @@ const Map = () => {
 
         const map = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v10',
+            style: 'mapbox://styles/mapbox/dark-v10',
             center: [lng, lat],
             zoom: zoom
         });
@@ -130,7 +132,7 @@ const Map = () => {
         })
 
         medicPosition = new mapboxgl.Marker({
-            color: "#000066",
+            color: "#87CEFA",
             draggable: false,
             }).setLngLat([lng, lat])
             .addTo(map)
@@ -138,7 +140,7 @@ const Map = () => {
 
         if (lngDest && latDest) {
             medicDestination = new mapboxgl.Marker({
-                color: "#000066",
+                color: "#FF0000",	
                 draggable: false,
                 }).setLngLat([lngDest, latDest])
                 .addTo(map)

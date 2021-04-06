@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Card } from "react-bootstrap";
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "ws://localhost:8080";
+
 
 const Navbar = () => {
 
-    const socket = socketIOClient(ENDPOINT)
-
+    const socket = socketIOClient(ENDPOINT, {transports: ['websocket']})
+    
     const handleReq = (e) => {
         e.preventDefault();
         setRequestFor(e.target.innerText)

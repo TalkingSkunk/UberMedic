@@ -71,212 +71,177 @@ if (!process.env.MONGODB_URI) {
 }
 
 const uri = process.env.MONGODB_URI;
-
 // connect to db ; async task ; don't listen for requests until connection to db is complete
-mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-  })
-  .then((result) => {
-    //takes in result as parameter to be used as necessary
-    console.log("connected to db");
-    // listen for requests (assumes use of localhost)
-    server.listen(PORT, () => {
-      console.log(`listening on *:${PORT}`);
-    });
+mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true } )
+      .then( (result)=> { //takes in result as parameter to be used as necessary
+         console.log('connected to db')
+         // listen for requests (assumes use of localhost)
+         server.listen(PORT, () => {
+            console.log (`listening on *:${PORT}`)
+         })
+      
+         io.on('connection', (socket)=>{
+            // console.log('user connected')
+         
+            socket.on('dispatchlol', msg=>console.log(msg))
+            socket.on('mediclol', msg=>console.log(msg))
+         
+            // relay medic coords to dispatchside
+            socket.on('medicCoords', data=>{
+               console.log('relay medic coords to dispatchside', JSON.parse(data))
+               io.emit('medicCoordsOut', data)
+            })
+            // relay dispatch choice of unit to dispatchside
+            socket.on('offUnit', data=>{
+               io.emit('offUnitOut', data)
+               console.log('dispatch removed unit:', JSON.parse(data))
+            })
+            socket.on('onUnit', data=>{
+               io.emit('onUnitOut', data)
+               console.log('dispatch added unit:', JSON.parse(data))
+            })
+            // relay availablt units to dispatchside
+            // socket.on('availUnits',)
+            // initial populate of available units to dispatchside
+            socket.on('fetchUnits', () => {
+               db.MobileUnit.find({ availability: {$in:["available", "en route to CTAS Alpha-Charlie"]} }).sort({availability: 1}).then(request=>{
+                  console.log('fetching available units to dispatchside', request)
+                  io.emit('fetchUnitsOut', JSON.stringify(request))
+               })
+            })
+            // relay medic reqs to dispatchside
+            socket.on('medReq', data=>{
+               console.log('save medic requests to db', JSON.parse(data))
+               const medReqpack = JSON.parse(data)
+               db.MedReq.create({
+                  unit: medReqpack.unit,
+                  reqFor: medReqpack.reqFor,
+                  status: "active",
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('medReqOut', JSON.stringify(request))
+                  })
+               })
+            })
+            // initial populate of medic requests to dispatchside
+            socket.on('fetchRequests', ()=>{
+               db.MedReq.find({status: "active"}).then(request=>{
+                  console.log('sending medic reqs to dispatchside', request)
+                  io.emit('fetchRequestsOut', JSON.stringify(request))
+               })
+            })
+            // db.MedReq.watch().on('change',(change)=>{
+            //    console.log('change to medreqs', change)
+            // })
+            // approve medic req
+            socket.on('approveReq', data=>{
+               console.log('approve medic requests, dispatchside', JSON.parse(data))
+               const handleReq = JSON.parse(data)
+               db.MedReq.findOneAndUpdate({
+                  unit: handleReq.unit,
+                  reqFor: handleReq.isFor,
+                  status: "active"
+               }, {
+                  $set: {
+                     status: handleReq.status
+                  }
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('fetchRequestsOut', JSON.stringify(request))
+                  })
+               })
+            })
+            // reject medic req
+            socket.on('rejectReq', data=>{
+               console.log('reject medic requests, dispatchside', JSON.parse(data))
+               const handleReq = JSON.parse(data)
+               db.MedReq.findOneAndUpdate({
+                  unit: handleReq.unit,
+                  reqFor: handleReq.isFor,
+                  status: "active"
+               }, {
+                  $set: {
+                     status: handleReq.status
+                  }
+               }).then(()=>{
+                  db.MedReq.find({status: "active"}).then(request=>{
+                     console.log('sending medic reqs to dispatchside', request)
+                     io.emit('fetchRequestsOut', JSON.stringify(request))
+                  })
+               })
+            })
+            //return request for registered patient name to dispatchside
+            socket.on('fetchRegisteredPt', data=>{
+               console.log('receiving request for registered Pt info from dispatchside', JSON.parse(data))
+               const id = JSON.parse(data)
+               db.RegisteredPt.find({id: id.registeredId})
+               .then(patient=>{
+                  console.log('this is registered patient', patient)
+                  io.emit('fetchRegisteredPtOut', JSON.stringify(patient[0]))
+               })
+            })
+            // relay call details to medicside
+            socket.on('callDetails', data=>{
+               console.log('receiving call details, serverside', JSON.parse(data))
+               const callPack = JSON.parse(data)
+               const callId = mongoose.Types.ObjectId();
+               //save to db
+               db.Call.create({
+                  _id: callId,
+                  deployedUnit: callPack.deployedUnit,      
+                  streetDest: callPack.streetDest,
+                  cityDest: callPack.cityDest,
+                  postalDest: callPack.postalDest,
+                  intersection: callPack.intersection,
+                  callerName: callPack.callerName,
+                  callerNum: callPack.callerNum,
+                  destLngLat: callPack.destLngLat,
+                  ctas: callPack.ctas,
+                  cc: callPack.cc,
+                  notes: callPack.notes,
+                  police: callPack.police,
+                  fire: callPack.fire,
+                  registeredPt: callPack.registeredPt
+               }).then((err, result)=>{
+                  console.log('call details doc id', result._id)
+                  db.Call.find({_id: result._id}).then(doc=>{
+                     console.log('sending call details to medicside', doc)
+                     io.emit('callDetailsOut', JSON.stringify(doc))
+                  })
+               })         
+            })            
+            // find from db active calls
+            socket.on('fetchActiveCalls', ()=>{
+               db.Call.find({ clearCall: [] }).then(call=>{
+                  console.log('sending active calls to dispatchside', call)
+                  io.emit('fetchActiveCallsOut', JSON.stringify(call))
+               })
+            })
 
-    io.on("connection", (socket) => {
-      console.log("user connected");
+            // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
 
-      socket.on("dispatchlol", (msg) => console.log(msg));
-      socket.on("mediclol", (msg) => console.log(msg));
 
-      // relay medic coords to dispatchside
-      socket.on("medicCoords", (data) => {
-        console.log("relay medic coords to dispatchside", JSON.parse(data));
-        io.emit("medicCoordsOut", data);
-      });
-      // relay dispatch choice of unit to dispatchside
-      socket.on("offUnit", (data) => {
-        io.emit("offUnitOut", data);
-        console.log("dispatch removed unit:", JSON.parse(data));
-      });
-      socket.on("onUnit", (data) => {
-        io.emit("onUnitOut", data);
-        console.log("dispatch added unit:", JSON.parse(data));
-      });
-      // relay availablt units to dispatchside
-      // socket.on('availUnits',)
-      // initial populate of available units to dispatchside
-      socket.on("fetchUnits", () => {
-        db.MobileUnit.find({
-          availability: {
-            $in: ["available", "en route to CTAS Alpha-Charlie"],
-          },
-        })
-          .sort({ availability: 1 })
-          .then((request) => {
-            console.log("fetching available units to dispatchside", request);
-            io.emit("fetchUnitsOut", JSON.stringify(request));
-          });
-      });
-      // relay medic reqs to dispatchside
-      socket.on("medReq", (data) => {
-        console.log("save medic requests to db", JSON.parse(data));
-        const medReqpack = JSON.parse(data);
-        db.MedReq.create({
-          unit: medReqpack.unit,
-          reqFor: medReqpack.reqFor,
-          status: "active",
-        }).then(() => {
-          db.MedReq.find({ status: "active" }).then((request) => {
-            console.log("sending medic reqs to dispatchside", request);
-            io.emit("medReqOut", JSON.stringify(request));
-          });
-        });
-      });
-      // initial populate of medic requests to dispatchside
-      socket.on("fetchRequests", () => {
-        db.MedReq.find({ status: "active" }).then((request) => {
-          console.log("sending medic reqs to dispatchside", request);
-          io.emit("fetchRequestsOut", JSON.stringify(request));
-        });
-      });
-      // db.MedReq.watch().on('change',(change)=>{
-      //    console.log('change to medreqs', change)
-      // })
-      // approve medic req
-      socket.on("approveReq", (data) => {
-        console.log("approve medic requests, dispatchside", JSON.parse(data));
-        const handleReq = JSON.parse(data);
-        db.MedReq.findOneAndUpdate(
-          {
-            unit: handleReq.unit,
-            reqFor: handleReq.isFor,
-            status: "active",
-          },
-          {
-            $set: {
-              status: handleReq.status,
-            },
-          }
-        ).then(() => {
-          db.MedReq.find({ status: "active" }).then((request) => {
-            console.log("sending medic reqs to dispatchside", request);
-            io.emit("fetchRequestsOut", JSON.stringify(request));
-          });
-        });
-      });
-      // reject medic req
-      socket.on("rejectReq", (data) => {
-        console.log("reject medic requests, dispatchside", JSON.parse(data));
-        const handleReq = JSON.parse(data);
-        db.MedReq.findOneAndUpdate(
-          {
-            unit: handleReq.unit,
-            reqFor: handleReq.isFor,
-            status: "active",
-          },
-          {
-            $set: {
-              status: handleReq.status,
-            },
-          }
-        ).then(() => {
-          db.MedReq.find({ status: "active" }).then((request) => {
-            console.log("sending medic reqs to dispatchside", request);
-            io.emit("fetchRequestsOut", JSON.stringify(request));
-          });
-        });
-      });
-      //return request for registered patient name to dispatchside
-      socket.on("fetchRegisteredPt", (data) => {
-        console.log(
-          "receiving request for registered Pt info from dispatchside",
-          JSON.parse(data)
-        );
-        const id = JSON.parse(data);
-        db.RegisteredPt.find({ id: id.registeredId }).then((patient) => {
-          console.log("this is registered patient", patient);
-          io.emit("fetchRegisteredPtOut", JSON.stringify(patient[0]));
-        });
-      });
-      // relay call details to medicside
-      socket.on("callDetails", (data) => {
-        console.log("relay call details to medicside", JSON.parse(data));
-        const callPack = JSON.parse(data);
-        //save to db
-        // db.MedReq.create({
-        //    unit: medReqpack.unit,
-        //    reqFor: medReqpack.reqFor,
-        //    status: "active",
-        // }).then(()=>{
-        //    db.MedReq.find({status: "active"}).then(request=>{
-        //       console.log('sending medic reqs to dispatchside', request)
-        //       io.emit('medReqOut', JSON.stringify(request))
-        //    })
-        // })
-        db.Call.create({
-          deployedUnit: callPack.deployedUnit,
-        }).then(() => {
-          db.Call.find;
-        });
-        // await socket.emit('callDetails', JSON.stringify({
-        //    streetDest: street,
-        //    cityDest: city,
-        //    postalDest: postal,
-        //    intersection: intersection,
-        //    callerName: callerName,
-        //    callerNum: callerNum,
-        //    destLngLat: [destLngLat[0], destLngLat[1]],
-        //    ctas: ctas,
-        //    cc: cc,
-        //    notes: notes,
-        //    police: police,
-        //    fire: fire,
-        //    additional: additional,
-        //    registeredPt: registeredPt
-        //  }))
+            // relay medic destination coords to medicside (to be destroyed future)
+            // socket.on('medicDest', data=>{
+            //    console.log('relay medic destination to medicside', JSON.parse(data))
+            //    io.emit('medicDestOut', data)
+            // })
 
-        // io.emit('callDetailsOut', data)
-      });
+            socket.on ('disconnect', reason => {
+               console.log('user has disconnected :(')
+            })
+         
+         
+         })
+         
 
-      // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
 
-      // relay medic destination coords to medicside (to be destroyed future)
-      socket.on("medicDest", (data) => {
-        console.log("relay medic destination to medicside", JSON.parse(data));
-        io.emit("medicDestOut", data);
-      });
-
-      // socket.on('destination', async (coords)=>{
-      //    // to all sockets
-      //    console.log('receiving messsage from dispatch')
-      //    io.emit ('returnLocation', coords)
-      // let data = {
-      //    callID: 112,
-      //    unitNumber: 2021,
-      //    CTAS: 'ECHO',
-      //    CC: 'chest pain',
-      //    location: '1234 sunnyside dr',
-      //    intersection: 'bathurst and bloor',
-      //    police: 'on scene',
-      //    fire: 'on scene',
-      //    medic: 'on scene',
-      //    coords: coords,
-      // }
-
-      socket.on("disconnect", (reason) => {
-        console.log("user has disconnected :(");
-      });
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
 console.log("yoyoma");
 
