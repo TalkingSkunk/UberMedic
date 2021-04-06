@@ -209,17 +209,14 @@ const callSchema = new Schema ({
    },
    deployedUnit: {
       type: Array,
-      required:true,
    },
    streetDest: {
       type:String,
       trim: true,
-      required:true,
    },
    cityDest: {
       type:String,
       trim: true,
-      required:true,
    },
    postalDest: {
       type:String,
@@ -248,12 +245,10 @@ const callSchema = new Schema ({
    ctas: {
       type:String,
       trim: true,
-      required:true,
    },
    cc: {
       type:String,
       trim: true,
-      required:true,
    },
    notes: {
       type:String,

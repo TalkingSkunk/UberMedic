@@ -187,7 +187,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                const callPack = JSON.parse(data)
                const callId = mongoose.Types.ObjectId();
                //save to db
-               db.Call.save({
+               db.Call.create({
                   _id: callId,
                   deployedUnit: callPack.deployedUnit,      
                   streetDest: callPack.streetDest,
