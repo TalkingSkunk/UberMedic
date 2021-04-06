@@ -7,7 +7,7 @@ import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Col, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {usePosition} from 'use-position'
-import fetchJSON from "../../utils/API"
+// import fetchJSON from "../../utils/API"
 
 const ENDPOINT = "ws://localhost:8080";
 
