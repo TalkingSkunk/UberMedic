@@ -1,6 +1,10 @@
 require("dotenv").config(); // looks for .env ; process.env gets it's values
 <<<<<<< HEAD
+<<<<<<< HEAD
 const { signUp } = require("./client/src/loginPage/controller/authController");
+=======
+const { signUp } = require("./app/db/authController");
+>>>>>>> develop
 =======
 const { signUp } = require("./app/db/authController");
 >>>>>>> develop
@@ -15,7 +19,13 @@ const mongoose = require("mongoose");
 
 var cors = require("cors");
 <<<<<<< HEAD
+<<<<<<< HEAD
 const db = require("./app/db/models/");
+=======
+const db = require("./app/db/models");
+const { brotliDecompress } = require("zlib");
+const { sign } = require("crypto");
+>>>>>>> develop
 =======
 const db = require("./app/db/models");
 const { brotliDecompress } = require("zlib");
@@ -36,11 +46,29 @@ const PORT = process.env.PORT || 8080;
 // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
 // db.MobileUnit.insertMany([
 
+<<<<<<< HEAD
 //    {
 //       unit: 1517,
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
+//    },
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+<<<<<<< HEAD
+=======
+//    },
+=======
+>>>>>>> develop
+//    {
+//       unit: 1517,
+//       medic1: 44112,
+//       medic2: 94409,
+//       availability: "available",
+>>>>>>> develop
 //    },
 //    {
 //       unit: 1517,
@@ -62,6 +90,10 @@ const PORT = process.env.PORT || 8080;
 //       medic1: 44112,
 //       medic2: 94409,
 //       availability: "available",
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> develop
 //    },
 //    {
 //       unit: 1517,
@@ -69,12 +101,8 @@ const PORT = process.env.PORT || 8080;
 //       medic2: 94409,
 //       availability: "available",
 <<<<<<< HEAD
-//    },
-//    {
-//       unit: 1517,
-//       medic1: 44112,
-//       medic2: 94409,
-//       availability: "available",
+=======
+>>>>>>> develop
 =======
 >>>>>>> develop
 //    },
@@ -205,6 +233,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
             // relay call details to medicside
             socket.on('callDetails', data=>{
 <<<<<<< HEAD
+<<<<<<< HEAD
                console.log('relay call details to medicside', JSON.parse(data))
                const callPack = JSON.parse(data)
                //save to db
@@ -250,6 +279,12 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                const callPack = JSON.parse(data)
                const callId = mongoose.Types.ObjectId();
                //save to db
+=======
+               console.log('receiving call details, serverside', JSON.parse(data))
+               const callPack = JSON.parse(data)
+               const callId = mongoose.Types.ObjectId();
+               //save to db
+>>>>>>> develop
                db.Call.create({
                   _id: callId,
                   deployedUnit: callPack.deployedUnit,
@@ -274,6 +309,9 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                      io.emit('callDetailsOut', JSON.stringify(doc))
                   })
                })         
+<<<<<<< HEAD
+>>>>>>> develop
+=======
 >>>>>>> develop
             })            
             // relay medic coords progress to dispatchside (colorcode and legend (e.g. arrivedHosp))
@@ -332,12 +370,15 @@ app.post("/login", (req, res) => {
   console.log("login");
 });
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 app.post("/signup", (req, res) => {
   // console.log("test server");
   // console.log(req.body, "  SERVER");
   signUp(req.body);
 =======
+=======
+>>>>>>> develop
 app.post("/signup", async (req, res) => {
   // console.log(req.body, "  SERVER");
   console.log(req.body);
@@ -357,6 +398,9 @@ app.post("/signup", async (req, res) => {
     },
   });
   console.log(result);
+<<<<<<< HEAD
+>>>>>>> develop
+=======
 >>>>>>> develop
 });
 
