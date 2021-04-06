@@ -10,9 +10,6 @@ const mongoose = require("mongoose");
 
 var cors = require("cors");
 const db = require("./app/db/models");
-const { brotliDecompress } = require("zlib");
-const { sign } = require("crypto");
-const User = require("./app/db/models/User");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -24,6 +21,10 @@ const io = require("socket.io")(server, {
 app.use(cors());
 
 const PORT = process.env.PORT || 8080;
+
+if (process.env.NODE_ENV === 'production'){
+   app.use(express.static('client/build'))
+}
 
 // mock database to placeholder documents (do not uncomment unless you want to add placeholder docs into collection of your choice!)
 // db.MobileUnit.insertMany([
@@ -119,7 +120,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useCreat
                }).then(()=>{
                   db.MedReq.find({status: "active"}).then(request=>{
                      console.log('sending medic reqs to dispatchside', request)
-                     io.emit('medReqOut', JSON.stringify(request))
+                     io.emit('fetchRequestsOut', JSON.stringify(request))
                   })
                })
             })

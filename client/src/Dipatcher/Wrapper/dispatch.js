@@ -20,7 +20,7 @@ import Modal from "react-bootstrap/Modal";
 import ModalInFunctionalComponent from "../Wrapper/modal/modal";
 import DispatcherMap from "./DispatcherMap/DispatcherMap";
 import getCoords from "../API/index";
-import MedReq from "./MedReq/MedReq";
+import MedReq from "./MedReq/medReq";
 
 import ActiveCalls from "./ActiveCalls/ActiveCalls";
 import socketIOClient from "socket.io-client";
