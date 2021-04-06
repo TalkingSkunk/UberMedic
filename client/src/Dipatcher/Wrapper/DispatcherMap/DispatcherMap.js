@@ -88,14 +88,14 @@ const DispatcherMap = () => {
 
         const map = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v10',
+            style: 'mapbox://styles/mapbox/dark-v10',
             center: [lng, lat],
             zoom: zoom
         });
 
         if (lngMed !== 0 && latMed !== 0 ){
             const medicMarker = new mapboxgl.Marker({
-                color: "#008000",
+                color: "#87CEFA",
                 draggable: false,
                 }).setLngLat([lngMed, latMed])
                 .addTo(map)
@@ -104,7 +104,7 @@ const DispatcherMap = () => {
         
         if (lngDest !== 0 && latDest !== 0 ){
             const medicDestMarker = new mapboxgl.Marker({
-                color: "#C0C0C0",
+                color: "#FF0000",
                 draggable: false,
                 }).setLngLat([lngDest, latDest])
                 .addTo(map)

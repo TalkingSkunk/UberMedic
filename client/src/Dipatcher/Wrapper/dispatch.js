@@ -357,10 +357,6 @@ function Dispatch() {
                 <li class="dropdown-item" onClick={updateFire}>Deploy</li>
                 <li class="dropdown-item" onClick={updateFire}>N/A</li>
               </ul>
-
-              <Button variant="warning" onClick={handleSendCall}>
-                SEND
-              </Button>
             </div>
           </Card.Body>
         </Card>
@@ -378,7 +374,9 @@ function Dispatch() {
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
-            Submitted/not submitted
+            <Button variant="danger" onClick={handleSendCall}>
+                  SEND CALL NOW
+            </Button>
           </Card.Footer>
         </Card>
 

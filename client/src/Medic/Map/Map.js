@@ -115,7 +115,7 @@ const Map = () => {
 
         const map = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v10',
+            style: 'mapbox://styles/mapbox/dark-v10',
             center: [lng, lat],
             zoom: zoom
         });
@@ -132,7 +132,7 @@ const Map = () => {
         })
 
         medicPosition = new mapboxgl.Marker({
-            color: "#000066",
+            color: "#87CEFA",
             draggable: false,
             }).setLngLat([lng, lat])
             .addTo(map)
@@ -140,7 +140,7 @@ const Map = () => {
 
         if (lngDest && latDest) {
             medicDestination = new mapboxgl.Marker({
-                color: "#000066",
+                color: "#FF0000",	
                 draggable: false,
                 }).setLngLat([lngDest, latDest])
                 .addTo(map)
