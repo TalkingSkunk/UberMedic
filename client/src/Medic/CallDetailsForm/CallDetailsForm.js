@@ -121,8 +121,7 @@ const CallDetailsForm = () => {
           <label htmlFor="fire" style={{ fontWeight:"bolder", marginRight:"123px"}}>Fire</label>
           <input type="text" id="fire" name="fire" style={{marginBottom:"5px"}} value={fire} readOnly required />
           
-          <label htmlFor="medic" style={{ fontWeight:"bolder", marginRight:"29px"}}>Additional Crew</label>
-          <input type="text" id="medic" name="medic" style={{marginBottom:"5px"}} value={additional} readOnly required />
+
           
           <label htmlFor="registeredPt" style={{ fontWeight:"bolder", marginRight:"10px"}}>Registered Patient</label>
           <input type="text" id="registeredPt" name="registeredPt" style={{marginBottom:"5px"}}  value={registeredPt} readOnly required />
