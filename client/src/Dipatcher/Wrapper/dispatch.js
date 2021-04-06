@@ -322,23 +322,20 @@ function Dispatch() {
               <div>
                 <Col>
                   <div>
-
                     <div>
-                      <div>
                     <label
-                      style={{ marginRight: "10px", fontWeight: "bolder" }}
+                      style={{ fontWeight: "bolder" }}
                     >
                       {" "}
                       CTAS{" "}
                     </label>
-                    </div>
+                    </div> 
+                    <div>
                     <input
                       style={{ marginRight: "10px" }}
                       onChange={updateCtas}
                     ></input>
                     </div>
-
-
                     <div>
                     <label
                       style={{  fontWeight: "bolder" }}
@@ -347,29 +344,22 @@ function Dispatch() {
                       Chief Complaint{" "}
                     </label>
                     </div>
-
-
                     <div>
                     <input
                       style={{ marginLeft: "5px" }}
                       onChange={updateCC}
                     ></input>
                     </div>
-
-
                   </div>
                 </Col>
-            
+               
                 <div>
-                  <div>
                   <label style={{ marginRight: "10px", fontWeight: "bolder" }}>
                     {" "}
                     Additional Notes{" "}
                   </label>
                   </div>
                   <input onChange={updateNotes}></input>
-                  </div>
-                
               </div>
             </Row>
 
