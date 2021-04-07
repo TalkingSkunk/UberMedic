@@ -1,10 +1,20 @@
 # UBERMEDIC
 
+## Login Instruction
+* Please use for dispatchside:
+    -   username: 12345
+    -   password: password
+* Please use for medicside:
+    -   username: 55555
+    -   password: password
+
+
 ## Future Developements
 
 * multiple units connections
 * color code units on map to show status( busy, available, en route)
-* 
+* Provide Medic with additional section for inputting the Ambulance Call Report
+* Continue working on functionality overall and UI
 
 **HEROKU Deployment URL**
 https://ubermedic.herokuapp.com/
