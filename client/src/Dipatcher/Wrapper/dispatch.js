@@ -546,10 +546,7 @@ const handleShow = (e) => {
           </Card.Header>
           <Card.Body>
             <ListGroup>
-              <ListGroup.Item>Cras justo odio</ListGroup.Item>
-              <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-              <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-              <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+
             </ListGroup>
           </Card.Body>
           <Card.Footer className="text-muted">
