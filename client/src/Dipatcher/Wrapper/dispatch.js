@@ -180,7 +180,7 @@ function Dispatch() {
       address: street,
     });
 
-    await socket.emit(
+    socket.emit(
       "callDetails",
       JSON.stringify({
         deployedUnit: deployUnits,
