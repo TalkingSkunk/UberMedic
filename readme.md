@@ -20,7 +20,7 @@
 https://ubermedic.herokuapp.com/
 
 **GitHub Repository URL**
-https://github.com/TalkingSkunk/project3v2
+https://github.com/TalkingSkunk/UberMedic
 
 
 
